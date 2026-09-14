@@ -920,24 +920,28 @@ handles the background mounting and qtree creation.
 
 ## Networks in Kubevirt
 
-### VM Network 1 - NNCP & NAD
-
+VM Network 1 - NNCP & NAD
+```text
 External Net via VLANID40 + DHCP via DNSMASQ in libvirt on storm4 (192.168.70.0/24) -
 DHCP is external!
 Netname in KVM: virsh net-edit --network vtn-net
 Repeat for all 3 Nodes: Yes
+```
+```text
 -------------------------------
 NNCP:             NNCP - /var/ocp-airgap-poc/day2/nncp-vlan40.yaml
 NAD:              NAD  - /var/ocp-airgap-poc/day2/nad-vlan40.yaml
+```
 
 ### VM Network 2 - Internal for VM’s, NAD
 
 Repeat for all 3 Nodes: Yes
 -------------------------------
-Just one NAD for an internal Network (East-West) so that VM’S can talk to each other
+Just one NAD for an internal Network (East-West) so that VM’S can talk to each other:
+```text
 NAD Name:
 nad-internal-vm
-
+```
 ## External Identity Provider htpasswd
 
 URL: OCP Docu - Configuring identity providers
@@ -1077,14 +1081,13 @@ To automate worker provisioning, the platform leverages the native OpenShift Mac
 and the BareMetal Operator (Metal3). The workflow is as follows:
 
     1. BareMetalHost (BMH) Custom Resource:
-        You define the physical or virtual worker machines in OpenShift as BareMetalHost
-        resources. This object contains the MAC address of the VM's boot interface and the
-        Redfish API URL exposed by sushy-emulator.
+       You define the physical or virtual worker machines in OpenShift as BareMetalHost
+       resources. This object contains the MAC address of the VM's boot interface and the
+       Redfish API URL exposed by BMC vbmc.
 
     2. MachineSet Scaling:
-        When you scale the MachineSet from 0 to 1 (or more), the Machine API controller
-        generates a Machine request, claims an available BareMetalHost, and uses
-        sushy-emulator to automatically provision RHCOS onto the VM.
+       When you scale the MachineSet from 0 to 1 (or more), the Machine API controller
+       generates a Machine request, claims an available BareMetalHost.
 
 ## Master nodes from unmanaged to managed
 
@@ -1130,15 +1133,15 @@ spec:
 What does it:
 
     1. provisioningNetwork: Managed: Tells the BareMetal Operator to actively run its own
-        DHCP/TFTP servers to network-boot (PXE) your new workers.
+       DHCP/TFTP servers to network-boot (PXE) your new workers.
     2. provisioningInterface enp9s0: every interface!: Binds the DHCP and TFTP services
-        specifically to the isolated provisioning network interface on your master nodes.
+       specifically to the isolated provisioning network interface on your master nodes.
 
    3. provisioningNetworkCIDR: 172.22.0.0/24: Defines the subnet range of our isolated
-       network.
+      network.
    4. provisioningIPRange: 172.22.0.10,172.22.0.100: Tells the internal Ironic service
-       which dynamic IP addresses it can hand out to the new hosts while they are PXE
-       booting and installing RHCOS.
+      which dynamic IP addresses it can hand out to the new hosts while they are PXE
+      booting and installing RHCOS.
 
 Verify Operator and DHCP/TFTP Health
 ```text
