@@ -110,7 +110,7 @@ vtn-net            active   yes   yes
 
 ---
 
-## Prerequisites
+## Prerequisites for the RHEL9 Bastion Host
 
 The PoC assumes the following components are available:
 
@@ -133,18 +133,11 @@ The PoC assumes the following components are available:
 - Red Hat pull secret for disconnected mirroring
 - Sufficient local storage for mirrored images and workspace data
 
-The examples use a working directory similar to:
-
-```text
-/var/poc-polizei
-```
-
 For reuse, it is recommended to replace this path with a customer-neutral project directory such as:
 
 ```text
 /var/ocp-airgap-poc
 ```
-
 ---
 
 ## Suggested Repository Structure
