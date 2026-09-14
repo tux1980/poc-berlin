@@ -505,7 +505,7 @@ File for image download:
 /var/ocp-airgap-poc/imageset-config.yaml >> File, maybe update the “maxVersion” to the actual
 minor Version!!
 
-### Image Mirror with oc.mirror
+### Image Mirror with oc-mirror
 
 First time to replicate!
 ```text
@@ -556,13 +556,11 @@ Files:
 #du -sh /var/ocp-airgap-poc/data /var/ocp-airgap-poc/workspace
 ```
 
-## Pack your registry workspace and take it!
+## Pack your registry workspace and take it to the PoC!
 
 Copy Registry the external USB Disk!
 ```text
-#cp -r /var/ocp-airgap-poc/workspace /wolli-usb-disk
-#cp /var/ocp-airgap-poc/imageset-config.yaml /wolli-usb-disk
-#cp /var/ocp-airgap-poc/auth.json /wolli-usb-disk
+#cp -r /var/ocp-airgap-poc/* /external-usb-disk/ocp-airgap-poc
 ```
 
 Mirror external Bastion Host! Maybe the NAME is gonna change!
@@ -870,18 +868,19 @@ Export kubeconfig! (On Storm4)
 
 URL: NetApp Storage in CoE!
 User:      admin
-Pass:      redhat02
+Pass:      ********
 
 ### NetApp, create a Volume and assign
-
-Name Volume:                ocp_nfs_pool_poc_pb
-Storage VM:                main
-M-IF:                     10.32.97.3
-Driver:                    ontap-nas
-Junction Path (Mount Path):  /ocp_nfs_pool_poc_pb
-Export Policy:             default (0.0.0.0/0)
-vs-user:                   vsadmin-pocpb
-vs-password:               redhat123
+```text
+Name Volume:                  ocp_nfs_pool_poc_pb
+Storage VM:                   main
+M-IF:                         10.32.97.3
+Driver:                       ontap-nas
+Junction Path (Mount Path):   /ocp_nfs_pool_poc_pb
+Export Policy:                default (0.0.0.0/0)
+vs-user:                      vsadmin-pocpb
+vs-password:                  *********
+```
 
 Folder:
 /var/ocp-airgap-poc/day2
@@ -954,7 +953,7 @@ URL: OCP Docu - Configuring identity providers
 
 /var/ocp-airgap-poc/day2
 ```text
-#htpasswd -c -B -b /tmp/htpasswd wmarx redhat123
+#htpasswd -c -B -b /tmp/htpasswd wmarx *********
 #htpasswd B -b /tmp/htpasswd sabrina redhat12
 ```
 
