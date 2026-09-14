@@ -6,3 +6,7 @@ harddisk-test/
 auth.json
 certs/domain.key
 *.key
+day2/bmh-redfish.yaml
+day2/trident-secret.yaml
+installer/
+auth-test.json
