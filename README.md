@@ -160,10 +160,10 @@ Net3: provisioning-net           (BMH / Metal3, OpenShift)
 # virsh domiflist --domain ocp4-node1
  Interface Type            Source              Model MAC
 ----------------------------------------------------------------------
- network           ocp-net                     virtio 52:54:00:aa:bb:01
- network           ocp-net                     virtio 52:54:00:aa:bb:21
- network           vtn-net                     virtio 52:54:00:5c:b6:a3
- network           provisioning-net            virtio 52:54:00:02:2d:fd
+ network                   ocp-net             virtio 52:54:00:aa:bb:01
+ network                   ocp-net             virtio 52:54:00:aa:bb:21
+ network                   vtn-net             virtio 52:54:00:5c:b6:a3
+ network                   provisioning-net    virtio 52:54:00:02:2d:fd
 ```
 
 ```text
@@ -190,18 +190,16 @@ Net3: provisioning-net           (BMH / Metal3, OpenShift)
 # virsh domiflist --domain ocp4-node4 (Optional, this node is not there yet!)
  Interface Type            Source              Model MAC
 ----------------------------------------------------------------------
- network ocp-net                               virtio 52:54:00:01:c6:89
- network ocp-net                               virtio 52:54:00:aa:bb:24
- network vtn-net                               virtio 52:54:00:db:03:17
- network provisioning-net                      virtio 52:54:00:b2:03:ce
+ network                   ocp-net             virtio 52:54:00:01:c6:89
+ network                   ocp-net             virtio 52:54:00:aa:bb:24
+ network                   vtn-net             virtio 52:54:00:db:03:17
+ network                   provisioning-net    virtio 52:54:00:b2:03:ce
 
 #virsh domiflist --domain ocp4-node5 (Optional, this node is not there yet!)
  Interface Type            Source              Model MAC
 ----------------------------------------------------------------------
  network                   ocp-net             virtio 52:54:00:dd:ed:70
  network                   ocp-net             virtio 52:54:00:aa:bb:25
-```
-
  network                   vtn-net             virtio 52:54:00:d4:b4:1c
  network                   provisioning-net    virtio 52:54:00:c9:c6:76
 
