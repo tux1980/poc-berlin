@@ -74,7 +74,7 @@ Directory: Location for everything which we need for the PoC!
 ### Provisioning-Network (Day2 Directory!)
 
 ```text
-#virsh net-define /var/ocp-airgap-poc/day2/provisioning-net.xmlvirt-net.xm
+#virsh net-define /var/ocp-airgap-poc/day2/provisioning-net.xmlvirt-net.xml
 #virsh net-start vtn-net
 #virsh net-autostart vtn-net
 ```
