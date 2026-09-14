@@ -162,28 +162,28 @@ Net3: provisioning-net           (BMH / Metal3, OpenShift)
 ----------------------------------------------------------------------
  network           ocp-net                     virtio 52:54:00:aa:bb:01
  network           ocp-net                     virtio 52:54:00:aa:bb:21
- network           vtn-net                    virtio 52:54:00:5c:b6:a3
- network  provisioning-net  virtio 52:54:00:02:2d:fd
+ network           vtn-net                     virtio 52:54:00:5c:b6:a3
+ network           provisioning-net            virtio 52:54:00:02:2d:fd
 ```
 
 ```text
 # virsh domiflist --domain ocp4-node2
  Interface Type            Source              Model MAC
 ----------------------------------------------------------------------
- network ocp-net                               virtio 52:54:00:aa:bb:02
- network ocp-net                               virtio 52:54:00:aa:bb:22
- network vtn-net                               virtio 52:54:00:ab:fe:cb
- network provisioning-net                       virtio 52:54:00:fb:3e:4b
+ network                   ocp-net             virtio 52:54:00:aa:bb:02
+ network                   ocp-net             virtio 52:54:00:aa:bb:22
+ network                   vtn-net             virtio 52:54:00:ab:fe:cb
+ network                   provisioning-net    virtio 52:54:00:fb:3e:4b
 ```
 
 ```text
 # virsh domiflist --domain ocp4-node3
  Interface Type            Source              Model MAC
 ----------------------------------------------------------------------
- network ocp-net                               virtio 52:54:00:aa:bb:03
- network ocp-net                               virtio 52:54:00:aa:bb:23
- network vtn-net                               virtio 52:54:00:64:e5:9d
- network provisioning-net                       virtio 52:54:00:62:ba:2c
+ network                   ocp-net             virtio 52:54:00:aa:bb:03
+ network                   ocp-net             virtio 52:54:00:aa:bb:23
+ network                   vtn-net             virtio 52:54:00:64:e5:9d
+ network                   provisioning-net    virtio 52:54:00:62:ba:2c
 ```
 
 ```text
@@ -193,16 +193,17 @@ Net3: provisioning-net           (BMH / Metal3, OpenShift)
  network ocp-net                               virtio 52:54:00:01:c6:89
  network ocp-net                               virtio 52:54:00:aa:bb:24
  network vtn-net                               virtio 52:54:00:db:03:17
- network provisioning-net                       virtio 52:54:00:b2:03:ce
-# virsh domiflist --domain ocp4-node5 (Optional, this node is not there yet!)
+ network provisioning-net                      virtio 52:54:00:b2:03:ce
+
+#virsh domiflist --domain ocp4-node5 (Optional, this node is not there yet!)
  Interface Type            Source              Model MAC
 ----------------------------------------------------------------------
- network ocp-net                               virtio 52:54:00:dd:ed:70
- network ocp-net                               virtio 52:54:00:aa:bb:25
+ network                   ocp-net             virtio 52:54:00:dd:ed:70
+ network                   ocp-net             virtio 52:54:00:aa:bb:25
 ```
 
-network vtn-net                      virtio 52:54:00:d4:b4:1c
-network provisioning-net              virtio 52:54:00:c9:c6:76
+ network                   vtn-net             virtio 52:54:00:d4:b4:1c
+ network                   provisioning-net    virtio 52:54:00:c9:c6:76
 
 Fast Check for all nodes in regards of ALL, incl. the two install leg interfaces (the later bond
 interface in OpenShift:
@@ -229,7 +230,7 @@ Status Check all Networks in KVM
 Expected Outcome:
 ocp-net               active yes        yes
 provisioning-net      active yes        yes
-vtn-net              active yes        yes
+vtn-net               active yes        yes
 
 ## Create Network Bond with VLAN ovp-net & vtn-net
 
@@ -324,9 +325,9 @@ or port 22)"
 
 ## Architectural Summary
 
-- Nodes:                     3 Compact Nodes (Master + Worker role combined)
+- Nodes:                       3 Compact Nodes (Master + Worker role combined)
 - Ingress Virtual IPs (VIPs):  192.168.60.20
-- API VIP:                   192.168.60.10
+- API VIP:                     192.168.60.10
 - Node IPs:
            - ocp4-node1.pb-poc.ocp.polizei.test: 192.168.60.11 (Rendezvous Host!!)
            - ocp4-node2.pb-poc.ocp.polizei.test: 192.168.60.12
