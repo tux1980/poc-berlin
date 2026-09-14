@@ -5,8 +5,7 @@
 > This README is a Markdown representation of the original PoC document.
 > The original wording, explanations, environment values and commands are intentionally retained.
 > The PoC working directory used throughout this README is **`/var/ocp-airgap-poc`**.
->
-> Formatting has been adapted for GitHub readability; technical content is not generalized.
+
 
 ---
 
