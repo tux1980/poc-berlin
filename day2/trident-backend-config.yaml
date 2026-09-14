@@ -1,0 +1,13 @@
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: netapp-nfs-backend
+  namespace: trident
+spec:
+  version: 1
+  storageDriverName: ontap-nas-economy
+  managementLIF: 10.32.97.3
+  svm: main
+  credentials:
+    name: netapp-backend-creds
+  systemNASVolume: ocp_nfs_pool_poc_pb  # Your pre-created volume name

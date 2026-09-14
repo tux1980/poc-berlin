@@ -1,0 +1,90 @@
+apiVersion: v1beta1
+kind: AgentConfig
+metadata:
+  name: pb-poc
+rendezvousIP: 192.168.60.11
+hosts:
+  - hostname: ocp4-node1.pb-poc.ocp.polizei.test
+    role: master
+    rootDeviceHints:
+      deviceName: "/dev/vda"
+    interfaces:
+      - name: enp1s0
+        macAddress: 52:54:00:aa:bb:01
+    networkConfig:
+      interfaces:
+        - name: enp1s0
+          type: ethernet
+          state: up
+          mac-address: 52:54:00:aa:bb:01
+          ipv4:
+            enabled: true
+            address:
+              - ip: 192.168.60.11
+                prefix-length: 24
+            dhcp: false
+      dns-resolver:
+        config:
+          server:
+            - 192.168.60.1
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 192.168.60.1
+            next-hop-interface: enp1s0
+  - hostname: ocp4-node2.pb-poc.ocp.polizei.test
+    role: master
+    rootDeviceHints:
+      deviceName: "/dev/vda"
+    interfaces:
+      - name: enp1s0
+        macAddress: 52:54:00:aa:bb:02
+    networkConfig:
+      interfaces:
+        - name: enp1s0
+          type: ethernet
+          state: up
+          mac-address: 52:54:00:aa:bb:02
+          ipv4:
+            enabled: true
+            address:
+              - ip: 192.168.60.12
+                prefix-length: 24
+            dhcp: false
+      dns-resolver:
+        config:
+          server:
+            - 192.168.60.1
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 192.168.60.1
+            next-hop-interface: enp1s0
+  - hostname: ocp4-node3.pb-poc.ocp.polizei.test
+    role: master
+    rootDeviceHints:
+      deviceName: "/dev/vda"
+    interfaces:
+      - name: enp1s0
+        macAddress: 52:54:00:aa:bb:03
+    networkConfig:
+      interfaces:
+        - name: enp1s0
+          type: ethernet
+          state: up
+          mac-address: 52:54:00:aa:bb:03
+          ipv4:
+            enabled: true
+            address:
+              - ip: 192.168.60.13
+                prefix-length: 24
+            dhcp: false
+      dns-resolver:
+        config:
+          server:
+            - 192.168.60.1
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 192.168.60.1
+            next-hop-interface: enp1s0

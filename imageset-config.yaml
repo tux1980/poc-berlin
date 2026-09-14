@@ -1,0 +1,22 @@
+apiVersion: mirror.openshift.io/v2alpha1
+kind: ImageSetConfiguration
+mirror:
+  platform:
+    channels:
+      - name: stable-4.22
+        minVersion: 4.22.10
+        maxVersion: 4.22.12
+  operators:
+    - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.22
+      packages:
+        - name: kubevirt-hyperconverged
+        - name: kubernetes-nmstate-operator
+        - name: nfd
+        - name: cluster-kube-descheduler-operator
+        - name: mtv-operator
+        - name: redhat-oadp-operator
+        - name: netapp-trident
+ # additionalImages:
+ #   - name: quay.io/openshift-release-dev/ocp-release:4.22.9-x86_64
+ #   - name: quay.io/openshift-release-dev/ocp-release:4.22.10-x86_64
+

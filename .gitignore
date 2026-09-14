@@ -1,0 +1,8 @@
+workspace/
+data/
+harddisk-test/
+*.tar.gz
+*.iso
+auth.json
+certs/domain.key
+*.key

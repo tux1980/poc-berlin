@@ -1,0 +1,25 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: policy-vlan40
+spec:
+  desiredState:
+    interfaces:
+      - name: ovs-br10
+        type: ovs-bridge
+        state: up
+        ipv4:
+          enabled: true
+          dhcp: true # Merged inside the ovs-br10 interface mapping
+        bridge:
+          options:
+            stp: false # Correct OVS STP boolean syntax
+          port:
+            - name: enp8s0
+    ovn:
+      bridge-mappings:
+        - bridge: ovs-br10
+          localnet: vlan40-nncp-localnet
+          state: present
+  nodeSelector:
+    node-role.kubernetes.io/worker: ''

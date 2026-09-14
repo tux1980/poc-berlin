@@ -1,0 +1,94 @@
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: ocp4-node1.pb-poc.ocp.polizei.test
+  namespace: openshift-machine-api
+  annotations:
+    inspect.metal3.io: disabled # Skips hardware inspection to prevent unexpected reboots
+spec:
+  online: true
+  externallyProvisioned: true # Crucial for active control-plane nodes deployed via Agent Installer
+  #bootMACAddress: "52:54:00:02:2d:fd"
+  bmc:
+    address: "ipmi://192.168.60.1:6234" # VirtualBMC endpoint on storm4
+    credentialsName: ocp4-node1-bmc-secret
+  bootMode: UEFI
+  automatedCleaningMode: disabled
+  rootDeviceHints:
+    deviceName: "/dev/vda"
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: ocp4-node2.pb-poc.ocp.polizei.test
+  namespace: openshift-machine-api
+  annotations:
+    inspect.metal3.io: disabled
+spec:
+  online: true
+  externallyProvisioned: true
+  #bootMACAddress: "52:54:00:fb:3e:4b"
+  bmc:
+    address: "ipmi://192.168.60.1:6235"
+    credentialsName: ocp4-node2-bmc-secret
+  bootMode: UEFI
+  automatedCleaningMode: disabled
+  rootDeviceHints:
+    deviceName: "/dev/vda"
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: ocp4-node3.pb-poc.ocp.polizei.test
+  namespace: openshift-machine-api
+  annotations:
+    inspect.metal3.io: disabled
+spec:
+  online: true
+  externallyProvisioned: true
+  #bootMACAddress: "52:54:00:62:ba:2c"
+  bmc:
+    address: "ipmi://192.168.60.1:6236"
+    credentialsName: ocp4-node3-bmc-secret
+  bootMode: UEFI
+  automatedCleaningMode: disabled
+  rootDeviceHints:
+    deviceName: "/dev/vda"
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: ocp4-node4
+  namespace: openshift-machine-api
+  annotations:
+    inspect.metal3.io: disabled
+spec:
+  online: true
+  externallyProvisioned: false # Must be false or omitted so BMO can provision and manage its lifecycle dynamically
+  bootMACAddress: "52:54:00:b2:03:ce"
+  bmc:
+    address: "ipmi://192.168.60.1:6237"
+    credentialsName: ocp4-node4-bmc-secret
+  bootMode: UEFI # Adjust to "legacy" if your worker VMs are configured with SeaBIOS
+  automatedCleaningMode: disabled
+  rootDeviceHints:
+    deviceName: "/dev/vda"
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: ocp4-node5
+  namespace: openshift-machine-api
+  annotations:
+    inspect.metal3.io: disabled
+spec:
+  online: true
+  externallyProvisioned: false
+  bootMACAddress: "52:54:00:c9:c6:76"
+  bmc:
+    address: "ipmi://192.168.60.1:6238"
+    credentialsName: ocp4-node5-bmc-secret
+  bootMode: UEFI
+  automatedCleaningMode: disabled
+  rootDeviceHints:
+    deviceName: "/dev/vda"

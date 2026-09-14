@@ -1,0 +1,25 @@
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  annotations:
+    include.release.openshift.io/ibm-cloud-managed: "true"
+    include.release.openshift.io/self-managed-high-availability: "true"
+    release.openshift.io/create-only: "true"
+  creationTimestamp: "2026-09-04T17:03:56Z"
+  generation: 1
+  name: cluster
+  ownerReferences:
+  - apiVersion: config.openshift.io/v1
+    kind: ClusterVersion
+    name: version
+    uid: 11225e63-3240-408b-b6eb-8451d20fd017
+  resourceVersion: "1652"
+  uid: 73cc0e82-8d0c-4013-97ad-8c55f5f00316
+spec:
+  identityProviders:
+  - htpasswd:
+      fileData:
+        name: htpasswd-secret 
+    mappingMethod: claim
+    name: poc-pb-users
+    type: HTPasswd

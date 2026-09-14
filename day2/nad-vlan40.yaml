@@ -1,0 +1,13 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: vlan40-net
+  namespace: vm
+spec:
+  config: '{
+    "cniVersion": "0.3.1",
+    "name": "vlan40-nncp-localnet",
+    "type": "ovn-k8s-cni-overlay",
+    "topology": "localnet",
+    "netAttachDefName": "vm/vlan40-net"
+  }'

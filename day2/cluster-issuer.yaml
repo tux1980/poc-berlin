@@ -1,0 +1,32 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned-root-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pb-poc-root-ca
+  namespace: openshift-ingress
+spec:
+  isCA: true
+  commonName: "pb-poc-root-ca"
+  secretName: pb-poc-root-ca-secret
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: selfsigned-root-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: pb-poc-trust-issuer
+  namespace: openshift-ingress
+spec:
+  ca:
+    secretName: pb-poc-root-ca-secret

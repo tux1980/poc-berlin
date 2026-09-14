@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: apps-wildcard-cert
+  namespace: openshift-ingress
+spec:
+  secretName: apps-wildcard-tls
+  issuerRef:
+    name: pb-poc-trust-issuer
+    kind: Issuer
+  commonName: "*.apps.pb-poc.ocp.polizei.test"
+  dnsNames:
+  - "*.apps.pb-poc.ocp.polizei.test"

@@ -1,0 +1,22 @@
+apiVersion: metal3.io/v1alpha1
+kind: Provisioning
+metadata:
+  creationTimestamp: "2026-09-04T17:04:18Z"
+  finalizers:
+  - provisioning.metal3.io
+  generation: 3
+  name: provisioning-configuration
+  resourceVersion: "781714"
+  uid: 6fd23fa3-701d-43f7-b12e-87a6341d7c77
+spec:
+  provisioningNetwork: Managed
+  provisioningInterface: enp9s0                # Interface on masters connected to provisioning-net
+  provisioningIP: 172.22.0.3                   # IP address assigned to enp9s0 on the master nodes
+  provisioningNetworkCIDR: 172.22.0.0/24       # CIDR of the provisioning network
+  provisioningDHCPRange: 172.22.0.10,172.22.0.100 # DHCP range for PXE discovery and booting
+  provisioningMacAddresses:
+  - "52:54:00:02:2d:fd"                        # Node 1 provisioning MAC
+  - "52:54:00:fb:3e:4b"                        # Node 2 provisioning MAC
+  - "52:54:00:62:ba:2c"                        # Node 3 provisioning MAC
+  preProvisioningOSDownloadURLs: {}
+  watchAllNamespaces: true

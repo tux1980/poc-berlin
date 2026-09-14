@@ -1,0 +1,184 @@
+apiVersion: v1beta1
+kind: AgentConfig
+metadata:
+  name: pb-poc
+rendezvousIP: 192.168.60.11
+hosts:
+  # =========================================================================
+  # Node 1 (Master 0) - ocp4-node1
+  # =========================================================================
+  - hostname: ocp4-node1.pb-poc.ocp.polizei.test
+    role: master
+    rootDeviceHints:
+      deviceName: "/dev/vda"
+    interfaces:
+      - name: enp1s0
+        macAddress: "52:54:00:aa:bb:01" # Leg 1 (KVM ocp-net)
+      - name: enp10s0
+        macAddress: "52:54:00:aa:bb:21" # Leg 2 (KVM ocp-net)
+      - name: enp8s0
+        macAddress: "52:54:00:5c:b6:a3" # KVM vtn-net
+      - name: enp9s0
+        macAddress: "52:54:00:02:2d:fd" # KVM provisioning-net
+    networkConfig:
+      interfaces:
+        # Explicitly configure extra interfaces to prevent default DHCP and DNS leak
+        - name: enp8s0
+          type: ethernet
+          state: up
+          ipv4:
+            enabled: false
+          ipv6:
+            enabled: false
+        - name: enp9s0
+          type: ethernet
+          state: up
+          ipv4:
+            enabled: false
+          ipv6:
+            enabled: false
+        # Configure LACP Bond for Machine Network
+        - name: bond0
+          type: bond
+          state: up
+          mac-address: "52:54:00:aa:bb:01"
+          ipv4:
+            enabled: true
+            address:
+              - ip: 192.168.60.11
+                prefix-length: 24
+            dhcp: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: "100"
+            port:
+              - enp1s0
+              - enp10s0
+      dns-resolver:
+        config:
+          server:
+            - 192.168.60.1
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 192.168.60.1
+            next-hop-interface: bond0
+
+  # =========================================================================
+  # Node 2 (Master 1) - ocp4-node2
+  # =========================================================================
+  - hostname: ocp4-node2.pb-poc.ocp.polizei.test
+    role: master
+    rootDeviceHints:
+      deviceName: "/dev/vda"
+    interfaces:
+      - name: enp1s0
+        macAddress: "52:54:00:aa:bb:02" # Leg 1 (KVM ocp-net)
+      - name: enp10s0
+        macAddress: "52:54:00:aa:bb:22" # Leg 2 (KVM ocp-net)
+      - name: enp8s0
+        macAddress: "52:54:00:ab:fe:cb" # KVM vtn-net
+      - name: enp9s0
+        macAddress: "52:54:00:fb:3e:4b" # KVM provisioning-net
+    networkConfig:
+      interfaces:
+        - name: enp8s0
+          type: ethernet
+          state: up
+          ipv4:
+            enabled: false
+          ipv6:
+            enabled: false
+        - name: enp9s0
+          type: ethernet
+          state: up
+          ipv4:
+            enabled: false
+          ipv6:
+            enabled: false
+        - name: bond0
+          type: bond
+          state: up
+          mac-address: "52:54:00:aa:bb:02"
+          ipv4:
+            enabled: true
+            address:
+              - ip: 192.168.60.12
+                prefix-length: 24
+            dhcp: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: "100"
+            port:
+              - enp1s0
+              - enp10s0
+      dns-resolver:
+        config:
+          server:
+            - 192.168.60.1
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 192.168.60.1
+            next-hop-interface: bond0
+
+  # =========================================================================
+  # Node 3 (Master 2) - ocp4-node3
+  # =========================================================================
+  - hostname: ocp4-node3.pb-poc.ocp.polizei.test
+    role: master
+    rootDeviceHints:
+      deviceName: "/dev/vda"
+    interfaces:
+      - name: enp1s0
+        macAddress: "52:54:00:aa:bb:03" # Leg 1 (KVM ocp-net)
+      - name: enp10s0
+        macAddress: "52:54:00:aa:bb:23" # Leg 2 (KVM ocp-net)
+      - name: enp8s0
+        macAddress: "52:54:00:64:e5:9d" # KVM vtn-net
+      - name: enp9s0
+        macAddress: "52:54:00:62:ba:2c" # KVM provisioning-net
+    networkConfig:
+      interfaces:
+        - name: enp8s0
+          type: ethernet
+          state: up
+          ipv4:
+            enabled: false
+          ipv6:
+            enabled: false
+        - name: enp9s0
+          type: ethernet
+          state: up
+          ipv4:
+            enabled: false
+          ipv6:
+            enabled: false
+        - name: bond0
+          type: bond
+          state: up
+          mac-address: "52:54:00:aa:bb:03"
+          ipv4:
+            enabled: true
+            address:
+              - ip: 192.168.60.13
+                prefix-length: 24
+            dhcp: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: "100"
+            port:
+              - enp1s0
+              - enp10s0
+      dns-resolver:
+        config:
+          server:
+            - 192.168.60.1
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 192.168.60.1
+            next-hop-interface: bond0
