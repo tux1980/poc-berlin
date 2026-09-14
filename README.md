@@ -4,7 +4,7 @@
 >
 > This README is a Markdown representation of the original PoC document we created to the PoC in Berlin.
 > The original wording, explanations, environment values and commands are "partially" intentionally retained.
-> The PoC working directory used throughout this README is **`/var/ocp-airgap-poc`**. This is a privat Repository.
+> The PoC working directory used throughout this README is **`/var/ocp-airgap-poc`**. This is a private Repository.
 
 
 ---
