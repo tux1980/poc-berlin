@@ -876,30 +876,25 @@ Export kubeconfig! (On Storm4)
 
   - Create NDS on Storm4, quick and dirty
 ```text
-             #mkdir -p /var/nfs/ocp-pv1 && sudo chmod 777 /var/nfs/ocp-pv1
-             #echo "/var/nfs/ocp-pv1 192.168.60.0/24(rw,sync,no_root_squash)" | sudo tee
-             -a /etc/exports
+#mkdir -p /var/nfs/ocp-pv1 && sudo chmod 777 /var/nfs/ocp-pv1
+#echo "/var/nfs/ocp-pv1 192.168.60.0/24(rw,sync,no_root_squash)" | sudo tee -a /etc/exports
 ```
 
   - Create Storage Class Roles ect….
 ```text
-             #oc apply -f /var/ocp-airgap-poc/day2/nfs-provisioner.yaml
+#oc apply -f /var/ocp-airgap-poc/day2/nfs-provisioner.yaml
+#oc adm policy add-scc-to-user hostmount-anyuid -z nfs-client-provisioner -n nfs-provisioner
 ```
-
-  - #oc adm policy add-scc-to-user hostmount-anyuid -z nfs-client-provisioner -n
-             nfs-provisioner
   - Deploy the Provisioner
 ```text
-             #oc apply -f /var/ocp-airgap-poc/day2/nfs-deployment.yaml
+#oc apply -f /var/ocp-airgap-poc/day2/nfs-deployment.yaml
 ```
 
   - Patch Storageclass
 
 ```text
-               #oc patch storageprofiles.cdi.kubevirt.io nfs-dynamic --type=merge -p '{"spec":
-               {"claimPropertySets": [{"accessModes":["ReadWriteMany"], "volumeMode":
-               "Filesystem"}]}}'
-               #Set Default for Cluster in the UI!
+#oc patch storageprofiles.cdi.kubevirt.io nfs-dynamic --type=merge -p '{"spec":{"claimPropertySets": [{"accessModes":["ReadWriteMany"], "volumeMode":"Filesystem"}]}}'
+#Set Default for Cluster in the UI!
 ```
 
 ### NetApp Storage
