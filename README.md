@@ -512,8 +512,7 @@ podman login storm4.ocp.polizei.test:5000 --tls-verify=false --authfile
 ## oc-mirror Binary installieren
 
 ```text
-#curl -O https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/oc-mirror.tar.gz && tar
--xzf oc-mirror.tar.gz -C /usr/local/bin/ && chmod +x /usr/local/bin/oc-mirror
+#curl -O https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/oc-mirror.tar.gz && tar -xzf oc-mirror.tar.gz -C /usr/local/bin/ && chmod +x /usr/local/bin/oc-mirror
 ```
 
 ## Start mirror to local Registry
@@ -521,18 +520,16 @@ podman login storm4.ocp.polizei.test:5000 --tls-verify=false --authfile
 ### Figure out the actual OpenShift release
 
 ```text
-#curl -sH "Accept: application/json"
-"https://api.openshift.com/api/upgrades_info/v1/graph?channel=stable-4.22" | jq -r
-'.nodes[].version' | sort -V | tail -n 1
+#curl -sH "Accept: application/json" "https://api.openshift.com/api/upgrades_info/v1/graph?channel=stable-4.22" | jq -r '.nodes[].version' | sort -V | tail -n 1
 ```
 
-Client Download See also OCP Mirror Red Hat (For installer, oc, oc mirror,....):
+Client Download See also OCP Mirror Red Hat (For installer, oc, oc mirror,....):  
 https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable-4.22/
 
-Server / Core OS Images:
+Server / Core OS Images:  
 https://mirror.openshift.com/pub/openshift-v4/amd64/dependencies/rhcos/4.22/latest/
 
-File for image download:
+File for image download:  
 /var/ocp-airgap-poc/imageset-config.yaml >> File, maybe update the “maxVersion” to the actual
 minor Version!!
 
