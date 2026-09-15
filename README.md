@@ -754,7 +754,7 @@ registry (storm4.ocp.polizei.test:5000)
 
 ### 4. Install ISO Image for Deployment
 
-### Cleanup with cleanup-installer.sh
+#### Cleanup with cleanup-installer.sh
 
 ```text
 #/var/ocp-airgap-poc/cleanup-installer.sh
@@ -765,7 +765,7 @@ registry (storm4.ocp.polizei.test:5000)
 - Create/Check the 150 GB vda Harddisks on all three nodes
 - Remove Entries from “known_hosts”
 
-### Install Script install-iso-file.sh - create ISO File!
+#### Install Script install-iso-file.sh - create ISO File!
 
 ```text
 #/var/ocp-airgap-poc/install-iso-file.sh
@@ -788,7 +788,7 @@ We have manually created 3 KVM hosts on our KVM Hypervisor in REL9.
 
 ## Start the 3 prepped KVM Hosts on RHEL9
 
-After doing step 4 above (Install Script install-iso-file.sh - create ISO File!)
+After doing step 4 above (Install Script install-iso-file.sh - create ISO File!)  
 “#/var/ocp-airgap-poc/install-iso-file.sh”
 
 Now just start the 3 servers to start the installation from the agent.x86_64.iso Boot Image we
@@ -828,7 +828,7 @@ Ignition and Bootservice check
 #sudo systemctl list-units --failed
 ```
 
-# After the Installation - Day2
+# After Installation, day2 operattions
 
 ## DNS-check against the DNS Resolver
 
