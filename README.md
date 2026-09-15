@@ -66,7 +66,7 @@ Directory: Location for everything which we need for the PoC!
 ### VM-Network
 
 ```text
-##virsh net-define /var/ocp-airgap-poc/vm-net.xml
+#virsh net-define /var/ocp-airgap-poc/vm-net.xml
 #virsh net-start vtn-net
 #virsh net-autostart vtn-net
 ```
@@ -74,18 +74,23 @@ Directory: Location for everything which we need for the PoC!
 ### Provisioning-Network (Day2 Directory!)
 
 ```text
-#virsh net-define /var/ocp-airgap-poc/day2/provisioning-net.xmlvirt-net.xml
+#virsh net-define /var/ocp-airgap-poc/day2/provisioning-net.xml
 #virsh net-start vtn-net
 #virsh net-autostart vtn-net
 ```
+## Now, we should have 3 libvirt nets
 
-Delete a network! (Detach the Interfaces afterwards manually…
+Net1: ocp-net                    (install / machine network for LACP Install!)
+Net2: vtn-net                    (install / for virtual machines)
+Net3: provisioning-net           (BMH / Metal3, OpenShift)
+
+Optional: Delete a network! (Detach the Interfaces afterwards manually…
 ```text
 #virsh net-destroy ocp-net 2>/dev/null
 #virsh net-undefine ocp-net 2>/dev/null
 ```
 
-And new again……
+Optional: And new again……
 ```text
 #virsh net-define /var/ocp-airgap-poc/ocp-net.xml
 #virsh net-start ocp-net
@@ -96,8 +101,35 @@ And new again……
 
 Hybrid Nodes (Compact Cluster Nodes, Control Plane & Worker)
 The MAC addresses we got from the VM Configuration!
-Example for the virsh attach-interface
 ```text
+OCP Net - Leg-1:
+#virsh attach-interface --domain ocp4-node1 --type network --source ocp-net --model
+virtio --mac 52:54:00:aa:bb:01 --config --live
+#virsh attach-interface --domain ocp4-node2 --type network --source ocp-net --model
+virtio --mac 52:54:00:aa:bb:02 --config --live
+#virsh attach-interface --domain ocp4-node3 --type network --source ocp-net --model
+virtio --mac 52:54:00:aa:bb:03 --config --live
+```
+```text
+OCP Net - Leg-2:
+#virsh attach-interface --domain ocp4-node1 --type network --source ocp-net --model
+virtio --mac 52:54:00:aa:bb:21 --config --live
+#virsh attach-interface --domain ocp4-node2 --type network --source ocp-net --model
+virtio --mac 52:54:00:aa:bb:22 --config --live
+#virsh attach-interface --domain ocp4-node3 --type network --source ocp-net --model
+virtio --mac 52:54:00:aa:bb:23 --config --live
+```
+```text
+VTN-Net:
+#virsh attach-interface --domain ocp4-node1 --type network --source vtn-net --model
+virtio --mac 52:54:00:5c:b6:a3 --config --live
+#virsh attach-interface --domain ocp4-node2 --type network --source vtn-net --model
+virtio --mac 52:54:00:ab:fe:cb --config --live
+#virsh attach-interface --domain ocp4-node3 --type network --source vtn-net --model
+virtio --mac 52:54:00:64:e5:9d --config --live
+```
+```text
+Provisioning Network:
 #virsh attach-interface --domain ocp4-node1 --type network --source provisioning-net --model
 virtio --mac 52:54:00:02:2d:fd --config --live
 #virsh attach-interface --domain ocp4-node2 --type network --source provisioning-net --model
@@ -106,17 +138,37 @@ virtio --mac 52:54:00:fb:3e:4b --config --live
 virtio --mac 52:54:00:62:ba:2c --config --live
 ```
 
-Two additional Worker Nodes (Optional)
+Optional: Two additional Worker Nodes
 ```text
+OCP Net - Leg-1:
+#virsh attach-interface --domain ocp4-node4 --type network --source ocp-net --model
+virtio --mac 52:54:00:01:c6:89 --config --live
+#virsh attach-interface --domain ocp4-node5 --type network --source ocp-net --model
+virtio --mac 52:54:00:dd:ed:70 --config --live
+```
+```text
+OCP Net - Leg-2:
+#virsh attach-interface --domain ocp4-node4 --type network --source ocp-net --model
+virtio --mac 52:54:00:aa:bb:24 --config --live
+#virsh attach-interface --domain ocp4-node5 --type network --source ocp-net --model
+virtio --mac 52:54:00:aa:bb:25 --config --live
+```
+```text
+VTN-Net:
+#virsh attach-interface --domain ocp4-node4 --type network --source vtn-net --model
+virtio --mac 52:54:00:db:03:17 --config --live
+#virsh attach-interface --domain ocp4-node5 --type network --source vtn-net --model
+virtio --mac 52:54:00:d4:b4:1c --config --live
+```
+```text
+# Provisioning Network:
 #virsh attach-interface --domain ocp4-node4 --type network --source provisioning-net --model
 virtio --mac 52:54:00:b2:03:ce --config
 #virsh attach-interface --domain ocp4-node5 --type network --source provisioning-net --model
 virtio --mac 52:54:00:c9:c6:76 --config
 ```
 
-Do the same for the 2 other libvert network, vm-net and ocp-net (two interfaces!)
-
-In the case - we have to detach these interfaces again:
+# Optional: Example - In the case - we have to detach these interfaces again...
 Figure out the MAC addresses:
 ```text
 #virsh domiflist ocp4-node1
@@ -130,29 +182,19 @@ Or do just:
 ```text
 #for node in ocp4-node1 ocp4-node2 ocp4-node3 ocp4-node4 ocp4-node5; do
   echo "------------"
-  virsh domiflist $node | awk -v n="$node" '/ocp-net|provisioning-net|vtn-net/ {printf "%-12s |
-%-18s | %s\n", n, $3, $5}'
+  virsh domiflist $node | awk -v n="$node" '/ocp-net|provisioning-net|vtn-net/ {printf "%-12s | %-18s | %s\n", n, $3, $5}'
 done; echo "------------"
 ```
 
-Remove the Interfaces (example):
+# Optional: Remove the Interfaces (example):
 ```text
-#virsh detach-interface --domain ocp4-node1 --type network --mac 52:54:00:d4:2a:a5
+#virsh detach-interface --domain ocp4-node1 --type network --mac 52:54:00:xx:xx:xx
 --config --live
-#virsh detach-interface --domain ocp4-node2 --type network --mac 52:54:00:38:d2:10
+#virsh detach-interface --domain ocp4-node2 --type network --mac 52:54:00:xx:xx:xx
+--config --live
+#virsh detach-interface --domain ocp4-node3 --type network --mac 52:54:00:xx:xx:xx
 --config --live
 ```
-
-```text
-#virsh detach-interface --domain ocp4-node3 --type network --mac 52:54:00:83:ff:f7 --config
---live
-```
-
-## Now, we should have 3 libvirt nets
-
-Net1: ocp-net                   (install / machine network for LACP Install!)
-Net2: vtn-net                  (install / for virtual machines)
-Net3: provisioning-net           (BMH / Metal3, OpenShift)
 
 ## Network Node Config (virsh)
 
