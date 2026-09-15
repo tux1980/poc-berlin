@@ -920,7 +920,6 @@ Folder:
 
 ### Apply the 3 Trident YAML Manifests
 
-1.
 ```text
 #oc apply -f trident-secret.yaml
 ```
@@ -930,7 +929,6 @@ Securely stores the ONTAP administrator credentials (username vsadmin-pocpb and
 password) in the cluster, allowing Astra Trident to authenticate against your NetApp SVM
 main.
 
-2.
 ```text
 #oc apply -f trident-backend-config.yaml
 ```
@@ -940,7 +938,6 @@ Configures the logical storage backend connection for Trident. It tells the cont
 ontap-nas-economy driver, connect via the management LIF (10.32.97.3), target the SVM
 main, and carve out space inside your parent volume ocp_nfs_pool_poc_pb.
 
-3.
 ```text
 #oc apply -f trident-storage-class.yaml
 ```
@@ -983,7 +980,7 @@ URL: OCP Docu - Configuring identity providers
 
 - htpasswd Binary on the Bastion Host
 ```text
-      #sudo dnf install httpd-tools
+#sudo dnf install httpd-tools
 ```
 
 ### Create a htpasswd file
@@ -997,8 +994,7 @@ URL: OCP Docu - Configuring identity providers
 ### Create Secret / Credentials in OCP
 
 ```text
-#oc create secret generic htpasswd-secret --from-file
-htpasswd=/var/ocp-airgap-poc/day2/htpasswd -n openshift-config
+#oc create secret generic htpasswd-secret --from-file htpasswd=/var/ocp-airgap-poc/day2/htpasswd -n openshift-config
 ```
 
 Extract the secret again locally - when you lost it:
@@ -1087,10 +1083,8 @@ Check & Monitor the Process:
 ### Step4: repace new cert for co authentication operator
 
 ```text
-#oc get secret pb-poc-root-ca-secret -n openshift-ingress -o jsonpath='{.data.tls\.crt}' |
-base64 --decode > active-root-ca.crt
-#oc create configmap custom-ca --from-file=ca-bundle.crt=active-root-ca.crt -n
-openshift-config
+#oc get secret pb-poc-root-ca-secret -n openshift-ingress -o jsonpath='{.data.tls\.crt}' | base64 --decode > active-root-ca.crt
+#oc create configmap custom-ca --from-file=ca-bundle.crt=active-root-ca.crt -n openshift-config
 #oc patch proxy/cluster --type=merge -p '{"spec":{"trustedCA":{"name":"custom-ca"}}}'
 ```
 
@@ -1098,8 +1092,7 @@ openshift-config
 
 Download the cert locally in the day2 directory!
 ```text
-#oc get secret pb-poc-root-ca-secret -n openshift-ingress -o jsonpath='{.data.tls\.crt}' |
-base64 --decode > active-root-ca.crt
+#oc get secret pb-poc-root-ca-secret -n openshift-ingress -o jsonpath='{.data.tls\.crt}' | base64 --decode > active-root-ca.crt
 ```
 
 # Additional Worker Nodes (Optional!)
@@ -1150,33 +1143,33 @@ The following Resource we have to change:
 --------------------------------------------------------------
 spec:
  provisioningNetwork: Managed
- provisioningInterface: enp9s0        # Interface on masters connected to provisioning-net
- provisioningIP: 172.22.0.3          # IP address assigned to enp9s0 on the master nodes
+ provisioningInterface: enp9s0              # Interface on masters connected to provisioning-net
+ provisioningIP: 172.22.0.3                 # IP address assigned to enp9s0 on the master nodes
  provisioningNetworkCIDR: 172.22.0.0/24     # CIDR of the provisioning network
  provisioningDHCPRange: 172.22.0.10,172.22.0.100 # DHCP range for PXE discovery and booting
  provisioningMacAddresses:
- - "52:54:00:02:2d:fd"            # Node 1 provisioning MAC
- - "52:54:00:fb:3e:4b"            # Node 2 provisioning MAC
- - "52:54:00:62:ba:2c"            # Node 3 provisioning MAC
+ - "52:54:00:02:2d:fd"                      # Node 1 provisioning MAC
+ - "52:54:00:fb:3e:4b"                      # Node 2 provisioning MAC
+ - "52:54:00:62:ba:2c"                      # Node 3 provisioning MAC
  preProvisioningOSDownloadURLs: {}
  watchAllNamespaces: true
 --------------------------------------------------------------
 ```
 
 What does it:
-
+```text
     1. provisioningNetwork: Managed: Tells the BareMetal Operator to actively run its own
        DHCP/TFTP servers to network-boot (PXE) your new workers.
     2. provisioningInterface enp9s0: every interface!: Binds the DHCP and TFTP services
        specifically to the isolated provisioning network interface on your master nodes.
-
-   3. provisioningNetworkCIDR: 172.22.0.0/24: Defines the subnet range of our isolated
+    3. provisioningNetworkCIDR: 172.22.0.0/24: Defines the subnet range of our isolated
       network.
-   4. provisioningIPRange: 172.22.0.10,172.22.0.100: Tells the internal Ironic service
+    4. provisioningIPRange: 172.22.0.10,172.22.0.100: Tells the internal Ironic service
       which dynamic IP addresses it can hand out to the new hosts while they are PXE
       booting and installing RHCOS.
+```
 
-Verify Operator and DHCP/TFTP Health
+### Verify Operator and DHCP/TFTP Health
 ```text
 #oc get pods -n openshift-machine-api | grep -E "metal3|baremetal|ironic"
 ```
@@ -1190,12 +1183,12 @@ Verify Operator and DHCP/TFTP Health
 ### Create an empty VM Shell for the worker nodes later
 
 Create two virtual machine (e.g., named ocp4-node4/5) on storm4.
-- State:
+- State:  
        Keep the VM completely powered off (in shut off state).
-- Virtual Disk:
+- Virtual Disk:  
        Attach a blank virtual disk (e.g., /var/lib/libvirt/images/ocp4-node4.qcow2) with a
        capacity matching your existing worker nodes.
-- MAC Address:
+- MAC Address:  
        Record the MAC address of the primary network interface that is bridged to your
        192.168.60.0/24 subnet (ocp-net)
 
