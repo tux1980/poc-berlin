@@ -168,7 +168,7 @@ virtio --mac 52:54:00:b2:03:ce --config
 virtio --mac 52:54:00:c9:c6:76 --config
 ```
 
-# Optional: Example - In the case - we have to detach these interfaces again...
+### Optional: Example - In the case - we have to detach these interfaces again...
 Figure out the MAC addresses:
 ```text
 #virsh domiflist ocp4-node1
@@ -186,7 +186,7 @@ Or do just:
 done; echo "------------"
 ```
 
-# Optional: Remove the Interfaces (example):
+### Optional: Remove the Interfaces (example):
 ```text
 #virsh detach-interface --domain ocp4-node1 --type network --mac 52:54:00:xx:xx:xx
 --config --live
@@ -196,7 +196,7 @@ done; echo "------------"
 --config --live
 ```
 
-## Network Node Config (virsh)
+### Network Node Config (virsh)
 
 ```text
 # virsh domiflist --domain ocp4-node1
