@@ -537,34 +537,44 @@ minor Version!!
 
 First time to replicate!
 ```text
-#oc-mirror -c /var/ocp-airgap-poc/imageset-config.yaml --workspace
-file:///var/ocp-airgap-poc/workspace --authfile /var/ocp-airgap-poc/auth.json --dest-tls-verify=false
-docker://storm4.ocp.polizei.test:5000/openshift/release --v2
+#oc-mirror \
+  -c /var/ocp-airgap-poc/imageset-config.yaml \
+  --workspace file:///var/ocp-airgap-poc/workspace \
+  --authfile /var/ocp-airgap-poc/auth.json \
+  --dest-tls-verify=false \
+  docker://storm4.ocp.polizei.test:5000/openshift/release \
+  --v2
 ```
 
 Second time - after updating the imageset-config.yaml file!
 
 ```text
-#oc-mirror -c /var/ocp-airgap-poc/imageset-config.yaml --workspace
-file:///var/ocp-airgap-poc/workspace --authfile /var/ocp-airgap-poc/auth.json --dest-tls-verify=false
---retry-times 10 --parallel-images 2 --parallel-layers 2
-docker://storm4.ocp.polizei.test:5000/openshift/release --v2
+#oc-mirror \
+  -c /var/ocp-airgap-poc/imageset-config.yaml \
+  --workspace file:///var/ocp-airgap-poc/workspace \
+  --authfile /var/ocp-airgap-poc/auth.json \
+  --dest-tls-verify=false \
+  --retry-times 10 \
+  --parallel-images 2 \
+  --parallel-layers 2 \
+  docker://storm4.ocp.polizei.test:5000/openshift/release \
+  --v2
 ```
 
 ### Test Commands Registry Tests
 
-Up and running?
+#### Up and running?
 ```text
 #curl -vk https://storm4.ocp.polizei.test:5000
 ```
 
-Tests!
+#### Further Tests!
 ```text
 #curl -k https://storm4.ocp.polizei.test:5000/v2/_catalog | jq .
 #curl -k https://storm4.ocp.polizei.test:5000/v2/openshift/release/openshift/release-images/tags/list | jq .
 ```
 
-Pull Test
+#### Pull Test
 ```text
 #podman pull --tls-verify=false
 storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images:4.22.10-x86_64
