@@ -1163,10 +1163,10 @@ What does it:
     2. provisioningInterface enp9s0: every interface!: Binds the DHCP and TFTP services
        specifically to the isolated provisioning network interface on your master nodes.
     3. provisioningNetworkCIDR: 172.22.0.0/24: Defines the subnet range of our isolated
-      network.
+       network.
     4. provisioningIPRange: 172.22.0.10,172.22.0.100: Tells the internal Ironic service
-      which dynamic IP addresses it can hand out to the new hosts while they are PXE
-      booting and installing RHCOS.
+       which dynamic IP addresses it can hand out to the new hosts while they are PXE
+       booting and installing RHCOS.
 ```
 
 ### Verify Operator and DHCP/TFTP Health
@@ -1236,10 +1236,8 @@ the RHCOS images from your local registry, and proceed with the installation.
 In the case the Provisioning Provision is failing, check the boot order (you need the provision
 Network from KVM on Place 1
 ```text
-#oc annotate bmh ocp4-node4 reboot-trigger=$(date +%s) --overwrite -n
-openshift-machine-api
-#oc annotate bmh ocp4-node5 reboot-trigger=$(date +%s) --overwrite -n
-openshift-machine-api
+#oc annotate bmh ocp4-node4 reboot-trigger=$(date +%s) --overwrite -n openshift-machine-api
+#oc annotate bmh ocp4-node5 reboot-trigger=$(date +%s) --overwrite -n openshift-machine-api
 ```
 
 ```text
@@ -1268,8 +1266,7 @@ oc get machines -n openshift-machine-api
 ```text
 # And if we see “pending” CSR’s with
 oc get csr >> we have to approve them!
-oc get csr -o go-template='{{range .items}}{{if not
-.status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve
+oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve
 ```
 
 Logs during deployment of additional Nodes to provision!
@@ -1285,16 +1282,12 @@ Resetting whole MAC Addresses ect in MetalB
 
 Remove Node BMH and machine with force!
 ```text
-#oc patch bmh ocp4-node4 -n openshift-machine-api -p '{"metadata":{"finalizers":[]}}'
---type=merge
+#oc patch bmh ocp4-node4 -n openshift-machine-api -p '{"metadata":{"finalizers":[]}}' --type=merge
 ```
 
 ```text
-#oc patch bmh ocp4-node5 -n openshift-machine-api -p '{"metadata":{"finalizers":[]}}'
---type=merge
-#oc patch bmh ocp4-node5 -n openshift-machine-api --type json -p '[
-   {"op": "remove", "path": "/spec/consumerRef"}
-]'
+#oc patch bmh ocp4-node5 -n openshift-machine-api -p '{"metadata":{"finalizers":[]}}' --type=merge
+#oc patch bmh ocp4-node5 -n openshift-machine-api --type json -p '[ {"op": "remove", "path": "/spec/consumerRef"}]'
 #oc patch machine pb-poc-pdvzj-worker-xxxxx -n openshift-machine-api --type merge -p
 '{"metadata":{"finalizers":[]}}'
 ```
