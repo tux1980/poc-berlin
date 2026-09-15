@@ -576,8 +576,7 @@ Second time - after updating the imageset-config.yaml file!
 
 #### Pull Test
 ```text
-#podman pull --tls-verify=false
-storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images:4.22.10-x86_64
+#podman pull --tls-verify=false storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images:4.22.10-x86_64
 ```
 
 ### Check Manifests in the Image Workspace
@@ -603,10 +602,16 @@ Copy Registry the external USB Disk!
 
 Mirror external Bastion Host! Maybe the NAME is gonna change!
 ```text
-##oc-mirror -c /var/ocp-airgap-poc/imageset-config.yaml --workspace
-file:///var/ocp-airgap-poc/workspace --authfile /var/ocp-airgap-poc/auth.json --dest-tls-verify=false
---retry-times 10 --parallel-images 2 --parallel-layers 2
-docker://storm4.ocp.polizei.test:5000/openshift/release --v2
+##oc-mirror \
+  -c /var/ocp-airgap-poc/imageset-config.yaml \
+  --workspace file:///var/ocp-airgap-poc/workspace \
+  --authfile /var/ocp-airgap-poc/auth.json \
+  --dest-tls-verify=false \
+  --retry-times 10 \
+  --parallel-images 2 \
+  --parallel-layers 2 \
+  docker://storm4.ocp.polizei.test:5000/openshift/release \
+  --v2
 ```
 
 Check the imagedigestmirrorsets - right names?
@@ -616,31 +621,26 @@ Check the imagedigestmirrorsets - right names?
 
 ImageDigestMirrorSet to install the New BMH / MachineSets
 ```text
-#oc get imagedigestmirrorset -o json | jq -r '.items[].spec.imageDigestMirrors[].mirrors[]'
-storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images
+#oc get imagedigestmirrorset -o json | jq -r '.items[].spec.imageDigestMirrors[].mirrors[]' storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images
 ```
-
-storm4.ocp.polizei.test:5000/openshift/release/openshift/release
 
 This will output the list of digests found in the file
 ```text
-#oc image extract --file /release-manifests/0000_50_installer_coreos-bootimages.yaml $(oc
-get clusterversion version -o jsonpath='{.status.desired.image}') --confirm
-#python3 -c "import re; print(re.findall(r'\"digest-ref\":\s*\"([^\"]+)\"',
-open('0000_50_installer_coreos-bootimages.yaml').read()))"
+#oc image extract \
+  --file /release-manifests/0000_50_installer_coreos-bootimages.yaml \
+  "$(oc get clusterversion version -o jsonpath='{.status.desired.image}')" \
+  --confirm
+#python3 -c "import re; print(re.findall(r'\"digest-ref\":\s*\"([^\"]+)\"', open('0000_50_installer_coreos-bootimages.yaml').read()))"
 ```
 
 Test - is image we need there?
 ```text
-#oc adm release info
-storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images:4.22.12-x86_64
---insecure=true
+#oc adm release info storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images:4.22.12-x86_64 --insecure=true
 ```
 
 Copy whole Directory to USB Harddisk
 ```text
-#rsync -avzP --inplace root@storm4.local:/var/ocp-airgap-poc/
-/home/wmarx/po-berlin/harddisk/var/ocp-airgap-poc/
+#rsync -avzP --inplace root@storm4.local:/var/ocp-airgap-poc/ /home/wmarx/po-berlin/harddisk/var/ocp-airgap-poc/
 ```
 
 # VirtualBMC
