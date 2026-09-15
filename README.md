@@ -488,31 +488,28 @@ Authfile (pull-secret,RH registry, Podman Registry):
 
 ### Login Registry in auth.json
 
-```text
-# Mein Pull Secret in Auth File einfügen:
-```
-
+#### Mein Pull Secret in Auth File einfügen:
 ```text
 printf '%s\n' '{PULL_SECRET}' > /var/ocp-airgap-poc/auth.json
 ```
 
+#### Red Hat Registry Login
 ```text
-# Red Hat Registry Login
 podman login registry.redhat.io --authfile /var/ocp-airgap-poc/auth.json
 ```
 
+#### Quay.io Release Login (wird für das Release-Image benötigt)
 ```text
-# Quay.io Release Login (wird für das Release-Image benötigt)
 podman login quay.io --authfile /var/ocp-airgap-poc/auth.json
 ```
 
+#### Login PoC Offline Registry: - give auth file to local Registry:
 ```text
-# Login polizei Registry: - give auth file to local Registry:
 podman login storm4.ocp.polizei.test:5000 --tls-verify=false --authfile
 /var/ocp-airgap-poc/auth.json
 ```
 
-### oc-mirror Binary installieren
+## oc-mirror Binary installieren
 
 ```text
 #curl -O https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/oc-mirror.tar.gz && tar
