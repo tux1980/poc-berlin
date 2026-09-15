@@ -707,10 +707,10 @@ Test: Query status of ocp4-node1
 
 # Create env & files for the Metal3 Installer
 
-URL: Installing an on-premise cluster with the Agent-based Installer
-URL: Deploying OpenShift Container Platform clusters with virtualized control planes
-URL: Red Hat Docu / Bonds with agent-config.yaml
-URL: API Docu - Provisioning [metal3.io/v1alpha1]
+- [Installing an on-premise cluster with the Agent-based Installer](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/installing_an_on-premise_cluster_with_the_agent-based_installer/preparing-to-install-with-agent-based-installer#agent-based-installer-recommended-resources_preparing-to-install-with-agent-based-installer)
+- [Deploying OpenShift Container Platform clusters with virtualized control planes](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html-single/virtualized_control_planes/index#vcp-overview)
+- [Red Hat Docu / Bonds with agent-config.yaml](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/installing_an_on-premise_cluster_with_the_agent-based_installer/preparing-to-install-with-agent-based-installer)
+- [API Docu - Provisioning [metal3.io/v1alpha1]](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/provisioning_apis/provisioning-metal3-io-v1alpha1) 
 
 Run Metal3 with VBMC and KVM
 Simulate baremetal servers - Create a virtual baremetal environment to “test” baremetal
