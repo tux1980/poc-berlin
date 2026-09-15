@@ -338,14 +338,15 @@ or port 22)"
 # Overview Install Process of OpenShift
 
 ## Architectural Summary
-
+```text
 - Nodes:                       3 Compact Nodes (Master + Worker role combined)
 - Ingress Virtual IPs (VIPs):  192.168.60.20
 - API VIP:                     192.168.60.10
 - Node IPs:
-           - ocp4-node1.pb-poc.ocp.polizei.test: 192.168.60.11 (Rendezvous Host!!)
-           - ocp4-node2.pb-poc.ocp.polizei.test: 192.168.60.12
+           - ocp4-node1.pb-poc.ocp.polizei.test: 192.168.60.11 (Rendezvous Host!!)  
+           - ocp4-node2.pb-poc.ocp.polizei.test: 192.168.60.12  
            - ocp4-node3.pb-poc.ocp.polizei.test: 192.168.60.13
+```
 
 ## Design Picture / Architecture
 
@@ -404,9 +405,12 @@ the targeted cluster hosts. These target nodes are categorized into three roles:
 ### TLS-Certs for local Registry
 
 ```text
-#openssl req -newkey rsa:4096 -nodes -sha256 \ -keyout /var/ocp-airgap-poc/certs/domain.key \
--x509 -days 365 \ -out /var/ocp-airgap-poc/certs/domain.crt \ -subj "/CN=storm4.ocp.polizei.test" \
--addext "subjectAltName=DNS:storm4.ocp.polizei.test,IP:192.168.60.1"
+#openssl req -newkey rsa:4096 -nodes -sha256 \
+  -keyout /var/ocp-airgap-poc/certs/domain.key \
+  -x509 -days 365 \
+  -out /var/ocp-airgap-poc/certs/domain.crt \
+  -subj "/CN=storm4.ocp.polizei.test" \
+  -addext "subjectAltName=DNS:storm4.ocp.polizei.test,IP:192.168.60.1"
 ```
 
 ## Podman Registry
@@ -420,45 +424,59 @@ Image we need:
 
 Test it:
 ```text
-podman run --rm --entrypoint echo -p 5000:5000 -v /var/ocp-airgap-poc/data:/var/lib/registry:z
--v /var/ocp-airgap-poc/certs:/certs:z -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt
--e REGISTRY_HTTP_TLS_KEY=/certs/domain.key docker.io/library/registry:2 "Syntax and
-flags are valid!"
+#podman run --rm \
+  --entrypoint echo \
+  -p 5000:5000 \
+  -v /var/ocp-airgap-poc/data:/var/lib/registry:z \
+  -v /var/ocp-airgap-poc/certs:/certs:z \
+  -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt \
+  -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
+  docker.io/library/registry:2 \
+  "Syntax and flags are valid!"
 ```
 
 Run it!
 ```text
-#podman run -d --name local-registry --restart=always -p 5000:5000 -v
-/var/ocp-airgap-poc/data:/var/lib/registry:z -v /var/ocp-airgap-poc/certs:/certs:z -e
-REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt -e
-REGISTRY_HTTP_TLS_KEY=/certs/domain.key docker.io/library/registry:2
+#podman run -d \
+  --name local-registry \
+  --restart=always \
+  -p 5000:5000 \
+  -v /var/ocp-airgap-poc/data:/var/lib/registry:z \
+  -v /var/ocp-airgap-poc/certs:/certs:z \
+  -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt \
+  -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
+  docker.io/library/registry:2
 ```
 
-### Take the docker.io/library/registry:2 offline
+### Take the docker.io/library/registry:2 with you!
 
 Download the Registry Image & save it
 ```text
-#sudo podman pull docker.io/library/registry:2
-#sudo podman tag docker.io/library/registry:2 local-poc-registry:2
-#sudo podman save -o /var/ocp-airgap-poc/harddisk-test/registry-image.tar local-poc-registry:2
+#podman pull docker.io/library/registry:2
+#podman tag docker.io/library/registry:2 local-poc-registry:2
+#podman save -o /var/ocp-airgap-poc/harddisk-test/registry-image.tar local-poc-registry:2
 ```
 
-Load the Image in the air-gapped env
+Load the Image in the air-gapped env!
 ```text
-#sudo podman load -i /var/ocp-airgap-poc/harddisk-test/registry-image.tar
+#podman load -i /var/ocp-airgap-poc/harddisk-test/registry-image.tar
 ```
-
 You might inspect the registry now, is now “local” - ignore the docker.io address….
 ```text
-#sudo podman inspect local-poc-registry:2
+#podman inspect local-poc-registry:2
 ```
 
 Start Container Image/Registry airgapped!
 ```text
-#podman run -d --name local-registry --restart=always -p 5000:5000 -v
-/var/ocp-airgap-poc/data:/var/lib/registry:z -v /var/ocp-airgap-poc/certs:/certs:z -e
-REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt -e
-REGISTRY_HTTP_TLS_KEY=/certs/domain.key local-poc-registry:2
+#podman run -d \
+  --name local-registry \
+  --restart=always \
+  -p 5000:5000 \
+  -v /var/ocp-airgap-poc/data:/var/lib/registry:z \
+  -v /var/ocp-airgap-poc/certs:/certs:z \
+  -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt \
+  -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
+  local-poc-registry:2
 ```
 
 ## Mirror offline & oc-mirror for images
