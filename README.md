@@ -1241,13 +1241,13 @@ Network from KVM on Place 1
 ```
 
 ```text
-# Setzt den Power-State für beide Nodes auf "on" / VM’s are on!
+# Sets the power state for both nodes to "on" / VMs are powered on.
 #oc patch bmh ocp4-node4 -n openshift-machine-api --type=merge -p '{"spec":{"online":true}}'
 #oc patch bmh ocp4-node5 -n openshift-machine-api --type=merge -p '{"spec":{"online":true}}'
 ```
 
 ```text
-# Setzt den Power-State für beide Nodes auf "aus" / VM’s are off!
+# Sets the power state for both nodes to "off" / VMs are powered off.
 #oc patch bmh ocp4-node4 -n openshift-machine-api --type merge -p '{"spec":{"online":false}}'
 #oc patch bmh ocp4-node5 -n openshift-machine-api --type merge -p '{"spec":{"online":false}}'
 ```
