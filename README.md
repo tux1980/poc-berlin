@@ -103,69 +103,49 @@ Hybrid Nodes (Compact Cluster Nodes, Control Plane & Worker)
 The MAC addresses we got from the VM Configuration!
 ```text
 OCP Net - Leg-1:
-#virsh attach-interface --domain ocp4-node1 --type network --source ocp-net --model
-virtio --mac 52:54:00:aa:bb:01 --config --live
-#virsh attach-interface --domain ocp4-node2 --type network --source ocp-net --model
-virtio --mac 52:54:00:aa:bb:02 --config --live
-#virsh attach-interface --domain ocp4-node3 --type network --source ocp-net --model
-virtio --mac 52:54:00:aa:bb:03 --config --live
+#virsh attach-interface --domain ocp4-node1 --type network --source ocp-net --model virtio --mac 52:54:00:aa:bb:01 --config --live
+#virsh attach-interface --domain ocp4-node2 --type network --source ocp-net --model virtio --mac 52:54:00:aa:bb:02 --config --live
+#virsh attach-interface --domain ocp4-node3 --type network --source ocp-net --model virtio --mac 52:54:00:aa:bb:03 --config --live
 ```
 ```text
 OCP Net - Leg-2:
-#virsh attach-interface --domain ocp4-node1 --type network --source ocp-net --model
-virtio --mac 52:54:00:aa:bb:21 --config --live
-#virsh attach-interface --domain ocp4-node2 --type network --source ocp-net --model
-virtio --mac 52:54:00:aa:bb:22 --config --live
-#virsh attach-interface --domain ocp4-node3 --type network --source ocp-net --model
-virtio --mac 52:54:00:aa:bb:23 --config --live
+#virsh attach-interface --domain ocp4-node1 --type network --source ocp-net --model virtio --mac 52:54:00:aa:bb:21 --config --live
+#virsh attach-interface --domain ocp4-node2 --type network --source ocp-net --model virtio --mac 52:54:00:aa:bb:22 --config --live
+#virsh attach-interface --domain ocp4-node3 --type network --source ocp-net --model virtio --mac 52:54:00:aa:bb:23 --config --live
 ```
 ```text
 VTN-Net:
-#virsh attach-interface --domain ocp4-node1 --type network --source vtn-net --model
-virtio --mac 52:54:00:5c:b6:a3 --config --live
-#virsh attach-interface --domain ocp4-node2 --type network --source vtn-net --model
-virtio --mac 52:54:00:ab:fe:cb --config --live
-#virsh attach-interface --domain ocp4-node3 --type network --source vtn-net --model
-virtio --mac 52:54:00:64:e5:9d --config --live
+#virsh attach-interface --domain ocp4-node1 --type network --source vtn-net --model virtio --mac 52:54:00:5c:b6:a3 --config --live
+#virsh attach-interface --domain ocp4-node2 --type network --source vtn-net --model virtio --mac 52:54:00:ab:fe:cb --config --live
+#virsh attach-interface --domain ocp4-node3 --type network --source vtn-net --model virtio --mac 52:54:00:64:e5:9d --config --live
 ```
 ```text
 Provisioning Network:
-#virsh attach-interface --domain ocp4-node1 --type network --source provisioning-net --model
-virtio --mac 52:54:00:02:2d:fd --config --live
-#virsh attach-interface --domain ocp4-node2 --type network --source provisioning-net --model
-virtio --mac 52:54:00:fb:3e:4b --config --live
-#virsh attach-interface --domain ocp4-node3 --type network --source provisioning-net --model
-virtio --mac 52:54:00:62:ba:2c --config --live
+#virsh attach-interface --domain ocp4-node1 --type network --source provisioning-net --model virtio --mac 52:54:00:02:2d:fd --config --live
+#virsh attach-interface --domain ocp4-node2 --type network --source provisioning-net --model virtio --mac 52:54:00:fb:3e:4b --config --live
+#virsh attach-interface --domain ocp4-node3 --type network --source provisioning-net --model virtio --mac 52:54:00:62:ba:2c --config --live
 ```
 
 Optional: Two additional Worker Nodes
 ```text
 OCP Net - Leg-1:
-#virsh attach-interface --domain ocp4-node4 --type network --source ocp-net --model
-virtio --mac 52:54:00:01:c6:89 --config --live
-#virsh attach-interface --domain ocp4-node5 --type network --source ocp-net --model
-virtio --mac 52:54:00:dd:ed:70 --config --live
+#virsh attach-interface --domain ocp4-node4 --type network --source ocp-net --model virtio --mac 52:54:00:01:c6:89 --config --live
+#virsh attach-interface --domain ocp4-node5 --type network --source ocp-net --model virtio --mac 52:54:00:dd:ed:70 --config --live
 ```
 ```text
 OCP Net - Leg-2:
-#virsh attach-interface --domain ocp4-node4 --type network --source ocp-net --model
-virtio --mac 52:54:00:aa:bb:24 --config --live
-#virsh attach-interface --domain ocp4-node5 --type network --source ocp-net --model
-virtio --mac 52:54:00:aa:bb:25 --config --live
+#virsh attach-interface --domain ocp4-node4 --type network --source ocp-net --model virtio --mac 52:54:00:aa:bb:24 --config --live
+#virsh attach-interface --domain ocp4-node5 --type network --source ocp-net --model virtio --mac 52:54:00:aa:bb:25 --config --live
 ```
 ```text
 VTN-Net:
-#virsh attach-interface --domain ocp4-node4 --type network --source vtn-net --model
-virtio --mac 52:54:00:db:03:17 --config --live
-#virsh attach-interface --domain ocp4-node5 --type network --source vtn-net --model
-virtio --mac 52:54:00:d4:b4:1c --config --live
+#virsh attach-interface --domain ocp4-node4 --type network --source vtn-net --model virtio --mac 52:54:00:db:03:17 --config --live
+#virsh attach-interface --domain ocp4-node5 --type network --source vtn-net --model virtio --mac 52:54:00:d4:b4:1c --config --live
 ```
 ```text
 # Provisioning Network:
-#virsh attach-interface --domain ocp4-node4 --type network --source provisioning-net --model
-virtio --mac 52:54:00:b2:03:ce --config
-#virsh attach-interface --domain ocp4-node5 --type network --source provisioning-net --model
-virtio --mac 52:54:00:c9:c6:76 --config
+#virsh attach-interface --domain ocp4-node4 --type network --source provisioning-net --model virtio --mac 52:54:00:b2:03:ce --config
+#virsh attach-interface --domain ocp4-node5 --type network --source provisioning-net --model virtio --mac 52:54:00:c9:c6:76 --config
 ```
 
 ### Optional: Example - In the case - we have to detach these interfaces again...
@@ -188,12 +168,9 @@ done; echo "------------"
 
 ### Optional: Remove the Interfaces (example):
 ```text
-#virsh detach-interface --domain ocp4-node1 --type network --mac 52:54:00:xx:xx:xx
---config --live
-#virsh detach-interface --domain ocp4-node2 --type network --mac 52:54:00:xx:xx:xx
---config --live
-#virsh detach-interface --domain ocp4-node3 --type network --mac 52:54:00:xx:xx:xx
---config --live
+#virsh detach-interface --domain ocp4-node1 --type network --mac 52:54:00:xx:xx:xx --config --live
+#virsh detach-interface --domain ocp4-node2 --type network --mac 52:54:00:xx:xx:xx --config --live
+#virsh detach-interface --domain ocp4-node3 --type network --mac 52:54:00:xx:xx:xx --config --live
 ```
 
 ### Network Node Config (virsh)
@@ -267,7 +244,7 @@ Status Check all Networks in KVM
 #virsh net-list --all
 ```
 
-Expected Outcome:
+## Expected Outcome:
 ocp-net               active yes        yes
 provisioning-net      active yes        yes
 vtn-net               active yes        yes
@@ -285,7 +262,7 @@ for our OpenShift nodes and API endpoints (.10 through .15 and .20) must travel 
 specific VLAN 40 path.
 
 Finally - because libvirt's embedded DHCP and DNS server (dnsmasq) only listens on base
-bridge interfaces by default, we update the virtual network XML file (ocp-net.xml and
+bridge interfaces by default we update the virtual network XML file (ocp-net.xml and
 vm-net.xml) to explicitly bind dnsmasq to our new VLAN sub-interfaces (virbr1.40 for the
 machine network and virbr2.100 for the VM Network). This ensures that when virtual
 machines boot up and request IP addresses over tagged VLAN traffic, dnsmasq captures
@@ -295,15 +272,12 @@ those requests and hands out the proper DHCP leases.
 
 ```text
 # Create the VLAN 40 profile with link-local IP
-nmcli connection add type vlan con-name virbr1.40 ifname virbr1.40 dev virbr1 id 40
-ipv4.method manual ipv4.addresses 192.168.60.1/32 connection.zone trusted
+nmcli connection add type vlan con-name virbr1.40 ifname virbr1.40 dev virbr1 id 40 ipv4.method manual ipv4.addresses 192.168.60.1/32 connection.zone trusted
 ```
 
 ```text
 # Add the persistent host routes (including .14 and .15)
-nmcli connection modify virbr1.40 +ipv4.routes "192.168.60.11/32, 192.168.60.12/32,
-192.168.60.13/32, 192.168.60.14/32, 192.168.60.15/32, 192.168.60.10/32,
-192.168.60.20/32"
+nmcli connection modify virbr1.40 +ipv4.routes "192.168.60.11/32, 192.168.60.12/32, 192.168.60.13/32, 192.168.60.14/32, 192.168.60.15/32, 192.168.60.10/32, 192.168.60.20/32"
 ```
 
 ```text
