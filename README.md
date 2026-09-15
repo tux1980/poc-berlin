@@ -78,11 +78,11 @@ Directory: Location for everything which we need for the PoC!
 #virsh net-start vtn-net
 #virsh net-autostart vtn-net
 ```
-## Now, we should have 3 libvirt nets
+### Now, we should have 3 libvirt nets
 
-Net1: ocp-net                    (install / machine network for LACP Install!)
-Net2: vtn-net                    (install / for virtual machines)
-Net3: provisioning-net           (BMH / Metal3, OpenShift)
+Net1: ocp-net                    (install / machine network for LACP Install!)  
+Net2: vtn-net                    (install / for virtual machines)  
+Net3: provisioning-net           (BMH / Metal3, OpenShift)  
 
 Optional: Delete a network! (Detach the Interfaces afterwards manually…
 ```text
