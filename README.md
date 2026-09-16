@@ -1158,19 +1158,17 @@ For this purpose, we use an existing RHEL 9 template as the base and create our 
 The goal is to keep the original RHEL 9 template unchanged and use a dedicated copy which can be adapted for this PoC.  
 
 ### 1. Create Namespace VM and Custom RHEL 9 Template via the UI
-
 Start with an existing RHEL 9 template in OpenShift Virtualization and create a copy of it. Use existing system Template "
 rhel9-server-small" and copy it with the name "rhel9-server-poc" in Namespace VM!  
 The customized template will be adapted with:  
 ```text
 - Create Namespace "VM"
 - Copy Template "rhel9-server-small" 
-- Create the required virtual network interfaces (vm/nad-intern & vm/vlan40-net)
 - VM-specific settings required for this PoC
 - The original RHEL 9 template remains untouched!!
 ```
 
-### 2. Adapt the Cloud-Init Configuration
+#### 2. Adapt the Cloud-Init Configuration
 
 Modify the Cloud-Init / user-data configuration of the copied RHEL 9 template.
 
@@ -1187,22 +1185,40 @@ This allows us to preconfigure the operating system during the first boot, for e
 
 The exact Cloud-Init configuration can be adapted independently for both virtual machines!
 
-### 3. Add the Virtual Networks
+#### 3. Add the Virtual Networks to the Template
+Attach the two virtual networks which were created in the previous steps of this documentation.  
+The virtual machines should use the previously configured OpenShift Virtualization network definitions.  
+For this PoC, the VM template is therefore extended with the required network interfaces before the virtual machines are created.  
+This allows the VMs to communicate through the external and internal VM networks configured earlier.  
+```text
+Create the required virtual network interfaces (vm/nad-intern & vm/vlan40-net)
+```
 
-Attach the two virtual networks which were created in the previous steps of this documentation.
-
-The virtual machines should use the previously configured OpenShift Virtualization network definitions.
-
-For this PoC, the VM template is therefore extended with the required network interfaces before the virtual machines are created.
-
-This allows the VMs to communicate through the external and internal VM networks configured earlier.
-
-### 4. Create the Virtual Machines
+### 4. Create the Virtual Machines from the Template
 
 Create two virtual machines from the customized RHEL 9 template in namespace via the UI!
 
 ```text
-VM
+- Create two VM's (srvrhel1 & srvrhel2) / Create from Template
+- Take the "User Template we created Above (rhel9-server-poc)
+- Install in Namespace VM
+- Start after Installation!
+```
+### 4. How to access these VM's now?
+We have several possibilities to access a VM - straight via ssh, via the virtctl tool or the WEBUI,....  
+Way1: virtctl
+Download via the OC UI (Command Line Tools)
+#wget --no-check-certificate https://hyperconverged-cluster-cli-download-openshift-cnv.apps.pb-poc.ocp.polizei.test/amd64/linux/virtctl.tar.gz
+```text
+Jump to the RHEL9 console:
+Approach1:
+#virtctl console srvrhel01 -n vm
+#To end the session: Ctrl + 5
+Approach2:
+#ssh wmarx@192.168.70.109 (The IP from the overlay libvirt host net, figure out in the UI)
+
+```
+
 
 # Additional Worker Nodes (Optional!)
 
