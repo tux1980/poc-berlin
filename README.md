@@ -6,8 +6,9 @@
 > The original wording, explanations, environment values and commands are "partially" intentionally retained.
 > The PoC working directory used throughout this README is **`/var/ocp-airgap-poc`**. This is a private Repository.
 
-
 ---
+
+## Table of Contents
 
 ## Table of Contents
 
@@ -15,11 +16,14 @@
 2. [Network stuff in KVM](#network-stuff-in-kvm)
 3. [Overview Install Process of OpenShift](#overview-install-process-of-openshift)
 4. [Local Registry for Airgapped Installation](#local-registry-for-airgapped-installation)
-5. [VirtualBMC](#virtualbmc)
-6. [Create env & files for the Metal3 Installer](#create-env--files-for-the-metal3-installer)
-7. [Installing OpenShift](#installing-openshift)
-8. [After the Installation - Day2](#after-the-installation---day2)
-10. [Create two RHEL VM's in Namespace via the OCP Virt UI!](#Install 2 VM'S)
+5. [oc-mirror Binary installieren](#oc-mirror-binary-installieren)
+6. [VirtualBMC](#virtualbmc)
+7. [Create env & files for the Metal3 Installer](#create-env--files-for-the-metal3-installer)
+8. [Installing OpenShift](#installing-openshift)
+9. [After Installation - Day Two operations](#after-installation---day-two-operations)
+10. [Login Process (Web UI & CLI)](#login-process-web-ui--cli)
+11. [Create two RHEL VM's in Namespace via the OCP Virt UI!](#create-two-rhel-vms-in-namespace-via-the-ocp-virt-ui)
+12. [Additional Worker Nodes (Optional!)](#additional-worker-nodes-optional)
 
 ---
 
