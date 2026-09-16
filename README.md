@@ -880,8 +880,7 @@ oc config use-context admin-poc
 
 Copy Cert locally on Fedora /home/wmarx/po-berlin
 ```text
-#oc get secret router-ca -n openshift-ingress-operator -o jsonpath='{.data.tls\.crt}' | base64 -d
-> router-root-ca.crt
+#oc get secret router-ca -n openshift-ingress-operator -o jsonpath='{.data.tls\.crt}' | base64 -d > router-root-ca.crt
 ```
 
 1. Zertifikat in den System-Truststore kopieren
