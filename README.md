@@ -1084,8 +1084,7 @@ Grant Permissions (RBAC)
 
 ## Ingress Cert - Replacing with a trusted cert
 
-URL: OCP Docu - Replacing Ingress Certs
-Namespace: cert-manager-operator / openshift-ingress
+[URL: OCP Docu - Replacing Ingress Certs](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/security_and_compliance/configuring-certificates)
 
 #### Requirement
 
