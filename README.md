@@ -812,7 +812,7 @@ Ignition and Bootservice check
 ```
 
 # After Installation, day2 operattions
-## Check the imagedigestmirrorsets - right names?
+### Check the imagedigestmirrorsets - right names?
 ```text
 #oc get imagedigestmirrorsets.config.openshift.io -o yaml
 ```
@@ -844,8 +844,31 @@ Ignition and Bootservice check
 ```
 
 ## Login Process (Web UI & CLI)
+#### Login via "oc" or Web UI
+```text
+Command Line:
+#oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.pb-poc.ocp.polizei.test:6443"
+WebUI:
+https://console-openshift-console.apps.pb-poc.ocp.polizei.test
+```
+#### Create a Context
+```text
+An OpenShift context is a set of access parameters stored inside your ~/.kube/config file. It binds three elements together:
+* a Cluster (API endpoint)
+* a User (authentication credentials)
+* a Namespace/Project (scope)
 
-### Cert Trust für *apps Ingress Certificate for Browser
+# Get Context
+oc config get-contexts
+
+# Create Context
+oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.pb-poc.ocp.polizei.test:6443 --context=admin-poc
+
+# Switch Context:
+oc config use-context admin-poc
+```
+
+## Cert Trust für *apps Ingress Certificate for Browser
 
 Copy Cert locally on Fedora /home/wmarx/po-berlin
 ```text
@@ -864,7 +887,7 @@ Copy Cert locally on Fedora /home/wmarx/po-berlin
 3. Chrome Trust / Privacy and Security > Security > Manage Certs / Import CRT
 router-root-ca.crt
 
-### Kubeadmin & Password
+## Kubeadmin & Password
 
 User:      kubeadmin
 Password:   *See authentication file in the auth Directory*
@@ -876,9 +899,9 @@ Export kubeconfig! (On Storm4)
 
 ## Install OpenShift Virtualization Operator via UI
 
-## Install Shared Storage
+### Install Shared Storage
 
-### NFS Storage
+#### NFS Storage
 
   - Create NDS on Storm4, quick and dirty
 ```text
@@ -903,13 +926,13 @@ Export kubeconfig! (On Storm4)
 #Set Default for Cluster in the UI!
 ```
 
-### NetApp Storage
+#### NetApp Storage
 
 URL: NetApp Storage in CoE!
 User:      admin
 Pass:      ********
 
-### NetApp, create a Volume and assign
+#### NetApp, create a Volume and assign
 ```text
 Name Volume:                  ocp_nfs_pool_poc_pb
 Storage VM:                   main
@@ -924,7 +947,7 @@ vs-password:                  *********
 Folder:
 /var/ocp-airgap-poc/day2
 
-### Apply the 3 Trident YAML Manifests
+#### Apply the 3 Trident YAML Manifests
 
 ```text
 #oc apply -f trident-secret.yaml
@@ -956,7 +979,7 @@ handles the background mounting and qtree creation.
 
 ## Networks in Kubevirt
 
-VM Network 1 - NNCP & NAD
+#### VM Network 1 - NNCP & NAD
 ```text
 External Net via VLANID40 + DHCP via DNSMASQ in libvirt on storm4 (192.168.70.0/24) -
 DHCP is external!
@@ -969,7 +992,7 @@ NNCP:             NNCP - /var/ocp-airgap-poc/day2/nncp-vlan40.yaml
 NAD:              NAD  - /var/ocp-airgap-poc/day2/nad-vlan40.yaml
 ```
 
-### VM Network 2 - Internal for VM’s, NAD
+#### VM Network 2 - Internal for VM’s, NAD
 
 Repeat for all 3 Nodes: Yes
 -------------------------------
@@ -980,16 +1003,16 @@ nad-internal-vm
 ```
 ## External Identity Provider htpasswd
 
-URL: OCP Docu - Configuring identity providers
+[OCP Docu - Configuring identity providers](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/authentication_and_authorization/configuring-identity-providers)
 
-### Requirements
+#### Requirements htpasswd
 
 - htpasswd Binary on the Bastion Host
 ```text
 #sudo dnf install httpd-tools
 ```
 
-### Create a htpasswd file
+#### Create a htpasswd file
 
 /var/ocp-airgap-poc/day2
 ```text
@@ -997,7 +1020,7 @@ URL: OCP Docu - Configuring identity providers
 #htpasswd B -b /tmp/htpasswd sabrina redhat12
 ```
 
-### Create Secret / Credentials in OCP
+#### Create Secret / Credentials in OCP
 
 ```text
 #oc create secret generic htpasswd-secret --from-file htpasswd=/var/ocp-airgap-poc/day2/htpasswd -n openshift-config
@@ -1014,7 +1037,7 @@ Then update the secret locally (after adding user with “htpassd -b -B….:
 #oc set data secret/htpasswd-secret --from-file htpasswd=/tmp/htpasswd -n openshift-config
 ```
 
-### Configure OAuth Provider
+#### Configure OAuth Provider
 
 Step1:
 Get the oauth Config
@@ -1044,11 +1067,11 @@ Grant Permissions (RBAC)
 URL: OCP Docu - Replacing Ingress Certs
 Namespace: cert-manager-operator / openshift-ingress
 
-### Requirement
+#### Requirement
 
 - Install Operator “cert-manager”!
 
-### Step1: Create and issue certs
+#### Step1: Create and issue certs
 
 Create a ClusterIssuer pointing to your internal enterprise Certificate Authority (CA).
 File: #oc apply -f /var/ocp-airgap-poc/day2/cluster-issuer.yaml
@@ -1067,12 +1090,12 @@ Check the issuer (it has to be true!):
 #oc get issuer pb-poc-trust-issuer -n openshift-ingress
 ```
 
-### Step2: Create the Wildcard Certificate Request
+#### Step2: Create the Wildcard Certificate Request
 
 File:        #oc apply -f /var/ocp-airgap-poc/day2/ingress-wildcard-certificate.yaml
 Check:        #oc get certificate apps-wildcard-cert -n openshift-ingress
 
-### Step3: Update Ingress Controller
+#### Step3: Update Ingress Controller
 
 ----------------------------------------------------------------------------
 ```text
@@ -1086,7 +1109,7 @@ Check & Monitor the Process:
 #oc rollout status deployment/router-default -n openshift-ingress
 ```
 
-### Step4: repace new cert for co authentication operator
+#### Step4: repace new cert for co authentication operator
 
 ```text
 #oc get secret pb-poc-root-ca-secret -n openshift-ingress -o jsonpath='{.data.tls\.crt}' | base64 --decode > active-root-ca.crt
@@ -1094,7 +1117,7 @@ Check & Monitor the Process:
 #oc patch proxy/cluster --type=merge -p '{"spec":{"trustedCA":{"name":"custom-ca"}}}'
 ```
 
-### Step5: Trust this Cert in Chrome
+#### Step5: Trust this Cert in Chrome
 
 Download the cert locally in the day2 directory!
 ```text
@@ -1107,7 +1130,7 @@ To enable OpenShift to automatically communicate with KVM, spin up new VMs, and 
 them as worker nodes, you must configure a virtual out-of-band management layer using a
 Redfish emulator.
 
-## The Architecture: How OpenShift talks to KVM
+### The Architecture: How OpenShift talks to KVM
 
 To automate worker provisioning, the platform leverages the native OpenShift Machine API
 and the BareMetal Operator (Metal3). The workflow is as follows:
@@ -1121,7 +1144,7 @@ and the BareMetal Operator (Metal3). The workflow is as follows:
        When you scale the MachineSet from 0 to 1 (or more), the Machine API controller
        generates a Machine request, claims an available BareMetalHost.
 
-## Master nodes from unmanaged to managed
+### Master nodes from unmanaged to managed
 
 The reason the initial bare metal hosts (Control Plane) are showing as Unmanaged with No
 power management in the console is due to a specific safety mechanism applied by the
@@ -1132,7 +1155,7 @@ installation process (such as triggering unexpected power cycles, hardware inspe
 disk-cleaning steps while the nodes are actively writing to disk), it explicitly detaches the
 hosts from BMO control
 
-## Apply the BMC Secrets for the BMC Cards
+#### Apply the BMC Secrets for the BMC Cards
 
 Day2 directory:
 /var/ocp-airgap-poc/day2
@@ -1140,7 +1163,7 @@ Day2 directory:
 #oc apply -f bmc-secrets.yaml
 ```
 
-### Patch the existing BMHs with BMC configuration
+#### Patch the existing BMHs with BMC configuration
 
 The following Resource we have to change:
 ```text
