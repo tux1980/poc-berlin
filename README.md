@@ -617,35 +617,6 @@ Mirror external Bastion Host! Maybe the NAME is gonna change!
   --v2
 ```
 
-Check the imagedigestmirrorsets - right names?
-```text
-#oc get imagedigestmirrorsets.config.openshift.io -o yaml
-```
-
-ImageDigestMirrorSet to install the New BMH / MachineSets
-```text
-#oc get imagedigestmirrorset -o json | jq -r '.items[].spec.imageDigestMirrors[].mirrors[]' storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images
-```
-
-This will output the list of digests found in the file
-```text
-#oc image extract \
-  --file /release-manifests/0000_50_installer_coreos-bootimages.yaml \
-  "$(oc get clusterversion version -o jsonpath='{.status.desired.image}')" \
-  --confirm
-#python3 -c "import re; print(re.findall(r'\"digest-ref\":\s*\"([^\"]+)\"', open('0000_50_installer_coreos-bootimages.yaml').read()))"
-```
-
-Test - is image we need there?
-```text
-#oc adm release info storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images:4.22.12-x86_64 --insecure=true
-```
-
-Copy whole Directory to USB Harddisk
-```text
-#rsync -avzP --inplace root@storm4.local:/var/ocp-airgap-poc/ /home/wmarx/po-berlin/harddisk/var/ocp-airgap-poc/
-```
-
 # VirtualBMC
 
 ## Configure VirtualBMC on storm4
@@ -832,6 +803,29 @@ Ignition and Bootservice check
 ```
 
 # After Installation, day2 operattions
+## Check the imagedigestmirrorsets - right names?
+```text
+#oc get imagedigestmirrorsets.config.openshift.io -o yaml
+```
+
+### ImageDigestMirrorSet to install the New BMH / MachineSets
+```text
+#oc get imagedigestmirrorset -o json | jq -r '.items[].spec.imageDigestMirrors[].mirrors[]' storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images
+```
+
+### This will output the list of digests found in the file
+```text
+#oc image extract \
+  --file /release-manifests/0000_50_installer_coreos-bootimages.yaml \
+  "$(oc get clusterversion version -o jsonpath='{.status.desired.image}')" \
+  --confirm
+#python3 -c "import re; print(re.findall(r'\"digest-ref\":\s*\"([^\"]+)\"', open('0000_50_installer_coreos-bootimages.yaml').read()))"
+```
+
+### Test - is image we need there?
+```text
+#oc adm release info storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images:4.22.12-x86_64 --insecure=true
+```
 
 ## DNS-check against the DNS Resolver
 
@@ -1293,4 +1287,10 @@ Remove Node BMH and machine with force!
 #oc patch bmh ocp4-node5 -n openshift-machine-api --type json -p '[ {"op": "remove", "path": "/spec/consumerRef"}]'
 #oc patch machine pb-poc-pdvzj-worker-xxxxx -n openshift-machine-api --type merge -p
 '{"metadata":{"finalizers":[]}}'
+```
+
+
+Copy whole Directory to USB Harddisk
+```text
+#rsync -avzP --inplace root@storm4.local:/var/ocp-airgap-poc/ /home/wmarx/po-berlin/harddisk/var/ocp-airgap-poc/
 ```
