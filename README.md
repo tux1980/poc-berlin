@@ -19,7 +19,8 @@
 6. [Create env & files for the Metal3 Installer](#create-env--files-for-the-metal3-installer)
 7. [Installing OpenShift](#installing-openshift)
 8. [After the Installation - Day2](#after-the-installation---day2)
-9. [Additional Worker Nodes (Optional!)](#additional-worker-nodes-optional)
+9. [After the Installation - Day2](#after-the-installation---day2)
+10. [Create two RHEL VM's in Namespace via the OCP Virt UI!](#Create two RHEL VM's in Namespace via the OCP Virt UI!)
 
 ---
 
