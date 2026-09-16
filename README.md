@@ -591,7 +591,7 @@ Optional Copy the Delta-Data to USB Harddisk
 #podman pull --tls-verify=false storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images:4.22.10-x86_64
 ```
 
-### Check Manifests in the Image Workspace
+#### Check Manifests in the Image Workspace
 
 ```text
 oc-mirror generated for ImageContentSourcePolicy (ICSP) eg. ImageDigestMirrorSet (IDMS)
@@ -599,7 +599,7 @@ Files:
 #ls -la /var/ocp-airgap-poc/workspace/working-dir/
 ```
 
-### Memory Check in /var
+#### Memory Check in /var
 
 ```text
 #du -sh /var/ocp-airgap-poc/data /var/ocp-airgap-poc/workspace
@@ -625,7 +625,6 @@ Mirror external Bastion Host! Maybe the NAME is gonna change!
   docker://storm4.ocp.polizei.test:5000/openshift/release \
   --v2
 ```
-
 # VirtualBMC
 
 ## Configure VirtualBMC on storm4
@@ -714,7 +713,7 @@ Ironic:
 The underlying service (original from OpenStack) handles hardware inspection, PXE booting,
 and image deployment.
 
-### 1. First, set your variables (.bashrc)
+#### 1. First, set your variables (.bashrc)
 
 ```text
 # Read variables from /var/ocp-airgap-poc (for the tow install Files!)
@@ -723,21 +722,22 @@ REGISTRY_CA=$(cat /var/ocp-airgap-poc/certs/domain.crt)
 PULL_SECRET=$(cat /var/ocp-airgap-poc/auth.json | tr -d '\n')
 ```
 
-### 2. Create install-config.yaml (/var/ocp-airgap-poc)
+#### 2. Create install-config.yaml (/var/ocp-airgap-poc)
 
 This mirrors all default domains (quay.io and registry.redhat.io) exclusively to your local
 registry (storm4.ocp.polizei.test:5000)
 
 /var/ocp-airgap-poc/installer/install-config.yaml
+
 ---------------------------------------------------------------
 
-### 3. Create agent-config.yaml File
+#### 3. Create agent-config.yaml File
 
 /var/ocp-airgap-poc/installer/agent-config.yaml
 
-### 4. Install ISO Image for Deployment
+#### 4. Install ISO Image for Deployment
 
-#### Cleanup with cleanup-installer.sh
+Cleanup with cleanup-installer.sh
 
 ```text
 #/var/ocp-airgap-poc/cleanup-installer.sh
