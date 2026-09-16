@@ -517,7 +517,7 @@ podman login storm4.ocp.polizei.test:5000 --tls-verify=false --authfile
 /var/ocp-airgap-poc/auth.json
 ```
 
-## oc-mirror Binary installieren
+# oc-mirror Binary installieren
 
 ```text
 #curl -O https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/oc-mirror.tar.gz && tar -xzf oc-mirror.tar.gz -C /usr/local/bin/ && chmod +x /usr/local/bin/oc-mirror
@@ -726,15 +726,19 @@ PULL_SECRET=$(cat /var/ocp-airgap-poc/auth.json | tr -d '\n')
 
 This mirrors all default domains (quay.io and registry.redhat.io) exclusively to your local
 registry (storm4.ocp.polizei.test:5000)
-
+```text
+Remark:
+Actually the install-config is accommodated in the /var/ocp-airgap-poc/ directory - we just copy them to the "installer" Directory since those files just temporay in this directory (the installer directory)
 /var/ocp-airgap-poc/installer/install-config.yaml
-
+```
 ---------------------------------------------------------------
 
 #### 3. Create agent-config.yaml File
-
+```text
+Remark:
+Actually the agent-config is accommodated in the /var/ocp-airgap-poc/ directory - we just copy them to the "installer" Directory since those files just temporay in this directory (the installer directory)
 /var/ocp-airgap-poc/installer/agent-config.yaml
-
+```
 #### 4. Install ISO Image for Deployment
 
 Cleanup with cleanup-installer.sh
