@@ -905,8 +905,11 @@ Export kubeconfig! (On Storm4)
 ```
 
 ## Install OpenShift Virtualization Operator via UI
+#### Install Kubevirt Operator via WebUI
+#### Install nmstate/multus Operator via WebUI
+#### Install MTV Operator via WebUI
 
-### Install Shared Storage
+## Install Shared Storage
 
 #### NFS Storage
 
