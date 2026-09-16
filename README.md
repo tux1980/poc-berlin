@@ -911,7 +911,7 @@ Export kubeconfig! (On Storm4)
 
 ## Install Shared Storage
 
-#### NFS Storage
+### NFS Storage
 
   - Create NDS on Storm4, quick and dirty
 ```text
@@ -936,7 +936,10 @@ Export kubeconfig! (On Storm4)
 #Set Default for Cluster in the UI!
 ```
 
-#### NetApp Storage
+### NetApp Storage
+```text
+First, Install the NetApp Trident Operator / CR TridentOrchestrators via the WebUI
+```
 
 URL: NetApp Storage in CoE!
 User:      admin
