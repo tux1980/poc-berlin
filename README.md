@@ -1088,7 +1088,7 @@ Grant Permissions (RBAC)
 
 #### Requirement
 
-- Install Operator “cert-manager”!
+- Install Operator “cert-manager”
 
 #### Step1: Create and issue certs
 
