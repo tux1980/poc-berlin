@@ -1146,7 +1146,6 @@ Test:
 Download the cert locally in the day2 directory!
 ```text
 Again, as in the previous step - Cert Trust für *apps Ingress Certificate for Browser, but this time for our own cert.
-#oc get secret pb-poc-root-ca-secret -n openshift-ingress -o jsonpath='{.data.tls\.crt}' | base64 --decode > active-root-ca.crt
 #sudo update-ca-trust
 #sudo update-ca-trust extract
 Chrome Trust / Privacy and Security > Security > Manage Certs / Import CRT router-root-ca.crt
