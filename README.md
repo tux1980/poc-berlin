@@ -752,7 +752,7 @@ Cleanup with cleanup-installer.sh
 - Create/Check the 150 GB vda Harddisks on all three nodes
 - Remove Entries from “known_hosts”
 
-#### Install Script install-iso-file.sh - create ISO File!
+Install Script install-iso-file.sh - create ISO File!
 
 ```text
 #/var/ocp-airgap-poc/install-iso-file.sh
@@ -767,7 +767,7 @@ Cleanup with cleanup-installer.sh
        /var/ocp-airgap-poc/installer
 - Create ISO File!
 
-### 5. Install via virt-manager
+#### 5. Install via virt-manager
 
 We have manually created 3 KVM hosts on our KVM Hypervisor in REL9.
 
