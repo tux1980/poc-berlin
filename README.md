@@ -451,6 +451,11 @@ Run it!
   docker.io/library/registry:2
 ```
 
+Copy whole Directory to USB Harddisk
+```text
+#rsync -avzP --inplace root@storm4.local:/var/ocp-airgap-poc/ /home/wmarx/po-berlin/harddisk/var/ocp-airgap-poc/
+```
+
 ### Take the docker.io/library/registry:2 with you!
 
 Download the Registry Image & save it
@@ -562,6 +567,10 @@ Second time - after updating the imageset-config.yaml file!
   --parallel-layers 2 \
   docker://storm4.ocp.polizei.test:5000/openshift/release \
   --v2
+```
+Optional Copy the Delta-Data to USB Harddisk
+```text
+#rsync -avzP --inplace root@storm4.local:/var/ocp-airgap-poc/ /home/wmarx/po-berlin/harddisk/var/ocp-airgap-poc/
 ```
 
 ### Test Commands Registry Tests
@@ -1287,10 +1296,4 @@ Remove Node BMH and machine with force!
 #oc patch bmh ocp4-node5 -n openshift-machine-api --type json -p '[ {"op": "remove", "path": "/spec/consumerRef"}]'
 #oc patch machine pb-poc-pdvzj-worker-xxxxx -n openshift-machine-api --type merge -p
 '{"metadata":{"finalizers":[]}}'
-```
-
-
-Copy whole Directory to USB Harddisk
-```text
-#rsync -avzP --inplace root@storm4.local:/var/ocp-airgap-poc/ /home/wmarx/po-berlin/harddisk/var/ocp-airgap-poc/
 ```
