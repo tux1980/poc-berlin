@@ -810,13 +810,13 @@ Or straight on the nodes:
 ```text
 #journalctl -f -u agent-installer
 #journalctl -f -u agent-bootstrapper -u assisted-service
-#sudo podman logs service 2>&1 | grep -i "host" | tail -n 20
+#podman logs service 2>&1 | grep -i "host" | tail -n 20
 ```
 
 Ignition and Bootservice check
 ```text
-#sudo journalctl -b -n 50 --no-pager
-#sudo systemctl list-units --failed
+#journalctl -b -n 50 --no-pager
+#systemctl list-units --failed
 ```
 
 # After Installation - Day Two operations
