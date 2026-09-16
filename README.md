@@ -1128,19 +1128,28 @@ Check & Monitor the Process:
 #oc rollout status deployment/router-default -n openshift-ingress
 ```
 
-#### Step4: repace new cert for co authentication operator
+#### Step4: replace new cert fo CO authentication operator
 
 ```text
+Extract Active Root Certificate:
 #oc get secret pb-poc-root-ca-secret -n openshift-ingress -o jsonpath='{.data.tls\.crt}' | base64 --decode > active-root-ca.crt
+Create Cluster-Wide ConfigMap:
 #oc create configmap custom-ca --from-file=ca-bundle.crt=active-root-ca.crt -n openshift-config
+Apply Custom CA to Cluster Proxy:
 #oc patch proxy/cluster --type=merge -p '{"spec":{"trustedCA":{"name":"custom-ca"}}}'
+Test:
+#oc get proxy cluster -o jsonpath='{.spec.trustedCA}'
 ```
 
 #### Step5: Trust this Cert in Chrome
 
 Download the cert locally in the day2 directory!
 ```text
+Again, as in the previous step - Cert Trust für *apps Ingress Certificate for Browser, but this time for our own cert.
 #oc get secret pb-poc-root-ca-secret -n openshift-ingress -o jsonpath='{.data.tls\.crt}' | base64 --decode > active-root-ca.crt
+#sudo update-ca-trust
+#sudo update-ca-trust extract
+Chrome Trust / Privacy and Security > Security > Manage Certs / Import CRT router-root-ca.crt
 ```
 
 # Additional Worker Nodes (Optional!)
