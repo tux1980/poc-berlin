@@ -844,22 +844,22 @@ Ignition and Bootservice check
 #oc adm release info storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images:4.22.12-x86_64 --insecure=true
 ```
 
-## DNS-check against the DNS Resolver
+### DNS-check against the DNS Resolver
 
 ```text
 #dig @192.168.60.1 api.pb-poc.ocp.polizei.test +short
 #dig @192.168.60.1 console-openshift-console.apps.pb-poc.ocp.polizei.test +short
 ```
 
-## Login Process (Web UI & CLI)
-#### Login via "oc" or Web UI
+# Login Process (Web UI & CLI)
+### Login via "oc" or Web UI
 ```text
 Command Line:
 #oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.pb-poc.ocp.polizei.test:6443"
 WebUI:
 https://console-openshift-console.apps.pb-poc.ocp.polizei.test
 ```
-#### Create a Context
+### Create a Context
 ```text
 An OpenShift context is a set of access parameters stored inside your ~/.kube/config file. It binds three elements together:
 * a Cluster (API endpoint)
