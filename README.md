@@ -890,7 +890,6 @@ Copy Cert locally on Fedora /home/wmarx/po-berlin
 #sudo update-ca-trust
 #sudo update-ca-trust extract
 ```
-
 3. Chrome Trust / Privacy and Security > Security > Manage Certs / Import CRT
 router-root-ca.crt
 
@@ -1148,6 +1147,7 @@ Download the cert locally in the day2 directory!
 Again, as in the previous step - Cert Trust für *apps Ingress Certificate for Browser, but this time for our own cert.
 #sudo update-ca-trust
 #sudo update-ca-trust extract
+-------------------
 Chrome Trust / Privacy and Security > Security > Manage Certs / Import CRT router-root-ca.crt
 ```
 # Create two RHEL VM's in Namespace via the OCP Virt UI!
@@ -1179,7 +1179,7 @@ This allows us to preconfigure the operating system during the first boot, for e
 - SSH access
   * We gonna take out Test Lab Key in Storm4:  
     #oc create secret generic vm-ssh-key -n vm --from-file=key=/root/.ssh/id_ed25519.pub  
-    #Now we can chose this SSH Key via the Web UI in the Template / or VM Manifest.  
+    Now we can chose this SSH Key via the Web UI in the Template / or VM Manifest.  
 - initial system settings
 - additional RHEL configuration if required
 
@@ -1210,10 +1210,11 @@ Way1: virtctl
 Download via the OC UI (Command Line Tools)
 #wget --no-check-certificate https://hyperconverged-cluster-cli-download-openshift-cnv.apps.pb-poc.ocp.polizei.test/amd64/linux/virtctl.tar.gz
 ```text
-Jump to the RHEL9 console:
+Jump to the RHEL9 console!
 Approach1:
 #virtctl console srvrhel01 -n vm
 #To end the session: Ctrl + 5
+
 Approach2:
 #ssh wmarx@192.168.70.109 (The IP from the overlay libvirt host net, figure out in the UI)
 
