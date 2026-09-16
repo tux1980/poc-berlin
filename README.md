@@ -1027,7 +1027,7 @@ nad-internal-vm
 /var/ocp-airgap-poc/day2
 ```text
 #htpasswd -c -B -b /tmp/htpasswd wmarx *********
-#htpasswd B -b /tmp/htpasswd sabrina redhat12
+#htpasswd -B -b /tmp/htpasswd sabrina redhat12
 ```
 
 #### Create Secret / Credentials in OCP
@@ -1057,6 +1057,16 @@ Get the oauth Config
 
 Step2:
 Change the specs in the oauth Config to add a provider
+```text
+spec:
+  identityProviders:
+  - htpasswd:
+      fileData:
+        name: htpasswd-secret
+    mappingMethod: claim
+    name: poc-pb-users
+    type: HTPasswd
+```
 
 Step3:
 Replace the oauth File with the new I-Provider
