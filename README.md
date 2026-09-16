@@ -1150,25 +1150,30 @@ Again, as in the previous step - Cert Trust für *apps Ingress Certificate for B
 #sudo update-ca-trust extract
 Chrome Trust / Privacy and Security > Security > Manage Certs / Import CRT router-root-ca.crt
 ```
-# Create two RHEL VM's in Namespace "VM" via the OCP Virt UI (Optional!)
+# Create two RHEL VM's in Namespace via the OCP Virt UI!
 The following step creates two additional RHEL 9 virtual machines which can be used as test workloads inside OpenShift Virtualization.  
 
 For this purpose, we use an existing RHEL 9 template as the base and create our own customized user template / blueprint from it.  
 
 The goal is to keep the original RHEL 9 template unchanged and use a dedicated copy which can be adapted for this PoC.  
 
-### 1. Create a Custom RHEL 9 Template via the UI
+### 1. Create Namespace VM and Custom RHEL 9 Template via the UI
 
-Start with an existing RHEL 9 template in OpenShift Virtualization and create a copy of it.  
-Use this copy as the customized blueprint for the new virtual machines.  
+Start with an existing RHEL 9 template in OpenShift Virtualization and create a copy of it. Use existing system Template "
+rhel9-server-small" and copy it with the name "rhel9-server-poc" in Namespace VM!  
 The customized template will be adapted with:  
-
-- our own Cloud-Init / user-data configuration  
-- the required virtual network interfaces  
-- the network definitions created in the previous steps  
-- VM-specific settings required for this PoC  
-
-The original RHEL 9 template remains untouched.  
+```text
+- Create Namespace "VM"
+- Copy Template "rhel9-server-small" 
+- Create our own Cloud-Init / user-data configuration
+  User Cloud-Init:
+  wmarx
+  Password Cloud-Init:
+  redhat
+- Create the required virtual network interfaces (vm/nad-intern & vm/vlan40-net)
+- VM-specific settings required for this PoC
+- The original RHEL 9 template remains untouched!!
+```
 
 ### 2. Adapt the Cloud-Init Configuration
 
