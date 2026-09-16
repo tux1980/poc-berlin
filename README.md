@@ -1092,8 +1092,10 @@ Grant Permissions (RBAC)
 
 #### Step1: Create and issue certs
 
+```text
 Create a ClusterIssuer pointing to your internal enterprise Certificate Authority (CA).
-File: #oc apply -f /var/ocp-airgap-poc/day2/cluster-issuer.yaml
+#oc apply -f /var/ocp-airgap-poc/day2/cluster-issuer.yaml
+```
 
 What does that issue file do for us?
   1. Self-Signed Bootstrapper: We create a temporary, internal-only ClusterIssuer
@@ -1110,19 +1112,17 @@ Check the issuer (it has to be true!):
 ```
 
 #### Step2: Create the Wildcard Certificate Request
-
-File:        #oc apply -f /var/ocp-airgap-poc/day2/ingress-wildcard-certificate.yaml
-Check:        #oc get certificate apps-wildcard-cert -n openshift-ingress
-
+```text
+Execute:     #oc apply -f /var/ocp-airgap-poc/day2/ingress-wildcard-certificate.yaml
+Check:       #oc get certificate apps-wildcard-cert -n openshift-ingress
+```
 #### Step3: Update Ingress Controller
 
 ----------------------------------------------------------------------------
 ```text
-#oc patch ingresscontroller default -n openshift-ingress-operator --type=merge -p
-'{"spec":{"defaultCertificate":{"name":"apps-wildcard-tls"}}}'
+#oc patch ingresscontroller default -n openshift-ingress-operator --type=merge -p '{"spec":{"defaultCertificate":{"name":"apps-wildcard-tls"}}}'
 ----------------------------------------------------------------------------
 ```
-
 Check & Monitor the Process:
 ```text
 #oc rollout status deployment/router-default -n openshift-ingress
