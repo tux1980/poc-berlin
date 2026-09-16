@@ -940,10 +940,11 @@ Export kubeconfig! (On Storm4)
 ```text
 First, Install the NetApp Trident Operator / CR TridentOrchestrators via the WebUI
 ```
-
-URL: NetApp Storage in CoE!
+```text
+NetApp Storage in CoE!
 User:      admin
 Pass:      ********
+```
 
 #### NetApp, create a Volume and assign
 ```text
