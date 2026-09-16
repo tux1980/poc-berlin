@@ -997,8 +997,7 @@ handles the background mounting and qtree creation.
 ```text
 External Net via VLANID40 + DHCP via DNSMASQ in libvirt on storm4 (192.168.70.0/24) -
 DHCP is external!
-Netname in KVM: virsh net-edit --network vtn-net
-Repeat for all 3 Nodes: Yes
+Check Netname in KVM: virsh net-info --network vtn-net
 ```
 ```text
 -------------------------------
@@ -1007,11 +1006,8 @@ NAD:              NAD  - /var/ocp-airgap-poc/day2/nad-vlan40.yaml
 ```
 
 #### VM Network 2 - Internal for VM’s, NAD
-
-Repeat for all 3 Nodes: Yes
--------------------------------
-Just one NAD for an internal Network (East-West) so that VM’S can talk to each other:
 ```text
+Just one NAD for an internal Network (East-West) so that VM’S can talk to each other:
 NAD Name:
 nad-internal-vm
 ```
