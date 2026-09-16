@@ -1150,6 +1150,56 @@ Again, as in the previous step - Cert Trust für *apps Ingress Certificate for B
 #sudo update-ca-trust extract
 Chrome Trust / Privacy and Security > Security > Manage Certs / Import CRT router-root-ca.crt
 ```
+# Create two RHEL VM's in Namespace "VM" via the OCP Virt UI (Optional!)
+The following step creates two additional RHEL 9 virtual machines which can be used as test workloads inside OpenShift Virtualization.  
+
+For this purpose, we use an existing RHEL 9 template as the base and create our own customized user template / blueprint from it.  
+
+The goal is to keep the original RHEL 9 template unchanged and use a dedicated copy which can be adapted for this PoC.  
+
+### 1. Create a Custom RHEL 9 Template via the UI
+
+Start with an existing RHEL 9 template in OpenShift Virtualization and create a copy of it.  
+Use this copy as the customized blueprint for the new virtual machines.  
+The customized template will be adapted with:  
+
+- our own Cloud-Init / user-data configuration  
+- the required virtual network interfaces  
+- the network definitions created in the previous steps  
+- VM-specific settings required for this PoC  
+
+The original RHEL 9 template remains untouched.  
+
+### 2. Adapt the Cloud-Init Configuration
+
+Modify the Cloud-Init / user-data configuration of the copied RHEL 9 template.
+
+This allows us to preconfigure the operating system during the first boot, for example:
+
+- hostname
+- user configuration
+- SSH access
+- initial system settings
+- additional RHEL configuration if required
+
+The exact Cloud-Init configuration can be adapted independently for both virtual machines.
+
+### 3. Add the Virtual Networks
+
+Attach the two virtual networks which were created in the previous steps of this documentation.
+
+The virtual machines should use the previously configured OpenShift Virtualization network definitions.
+
+For this PoC, the VM template is therefore extended with the required network interfaces before the virtual machines are created.
+
+This allows the VMs to communicate through the external and internal VM networks configured earlier.
+
+### 4. Create the Virtual Machines
+
+Create two virtual machines from the customized RHEL 9 template in namespace via the UI!
+
+```text
+VM
 
 # Additional Worker Nodes (Optional!)
 
