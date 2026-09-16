@@ -784,13 +784,11 @@ created!
 
 Bootstrap Log
 ```text
-#./openshift-install agent wait-for bootstrap-complete --dir /var/ocp-airgap-poc/installer --log-level
-debug
+#./openshift-install agent wait-for bootstrap-complete --dir /var/ocp-airgap-poc/installer --log-level debug
 ```
 
 ```text
-#./openshift-install agent wait-for bootstrap-complete --dir=/var/ocp-airgap-poc/installer
---log-level=info
+#./openshift-install agent wait-for bootstrap-complete --dir=/var/ocp-airgap-poc/installer --log-level=info
 ```
 
 OpenShift Log
