@@ -795,9 +795,16 @@ OpenShift Log
 ```text
 #tail -f /var/ocp-airgap-poc/installer/.openshift_install.log
 ```
-
-VIP & API VIP Test Script
+## VIP & API VIP Test Script
+This script monitors the availability of the OCP API, the Ignition Port & the Ingress VIP
+```text
 /var/ocp-airgap-poc/installer/vip_api_ip_test.sh
+=== OPENSHIFT VIP & BOOTSTRAP MONITORING ===
+API VIP (192.168.60.10):       ONLINE
+Ignition Server (Port 22623):  ONLINE
+Ingress VIP (192.168.60.20):   ONLINE
+--------------------------------------------
+```
 
 Or straight on the nodes:
 ```text
