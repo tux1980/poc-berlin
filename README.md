@@ -503,17 +503,17 @@ printf '%s\n' '{PULL_SECRET}' > /var/ocp-airgap-poc/auth.json
 
 #### Red Hat Registry Login
 ```text
-podman login registry.redhat.io --authfile /var/ocp-airgap-poc/auth.json
+#podman login registry.redhat.io --authfile /var/ocp-airgap-poc/auth.json
 ```
 
 #### Quay.io Release Login (wird für das Release-Image benötigt)
 ```text
-podman login quay.io --authfile /var/ocp-airgap-poc/auth.json
+#podman login quay.io --authfile /var/ocp-airgap-poc/auth.json
 ```
 
-#### Login PoC Offline Registry: Give auth file to local Registry:
+#### Login PoC Offline Registry: Give auth file to local Registry
 ```text
-podman login storm4.ocp.polizei.test:5000 --tls-verify=false --authfile /var/ocp-airgap-poc/auth.json
+#podman login storm4.ocp.polizei.test:5000 --tls-verify=false --authfile /var/ocp-airgap-poc/auth.json
 ```
 
 # oc-mirror Binary installieren
