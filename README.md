@@ -224,10 +224,11 @@ done; echo "------------"
 
 Fast Check for all nodes in regards of ALL, incl. the two install leg interfaces (the later bond
 interface in OpenShift:
-```text
-#for node in ocp4-node1 ocp4-node2 ocp4-node3 ocp4-node4 ocp4-node5; do echo "===
-Schnittstellen für $node ==="; virsh domiflist $node | grep -E
-"ocp-net|provisioning-net|vtn-net"; echo ""; done
+#for node in ocp4-node1 ocp4-node2 ocp4-node3 ocp4-node4 ocp4-node5; do
+  echo "=== Schnittstellen für $node ==="
+  virsh domiflist "$node" | grep -E "ocp-net|provisioning-net|vtn-net"
+  echo ""
+done
 ```
 
 Fast Check for all MAC Addresses on the VM’s
