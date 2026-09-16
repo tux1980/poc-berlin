@@ -1165,11 +1165,6 @@ The customized template will be adapted with:
 ```text
 - Create Namespace "VM"
 - Copy Template "rhel9-server-small" 
-- Create our own Cloud-Init / user-data configuration
-  User Cloud-Init:
-  wmarx
-  Password Cloud-Init:
-  redhat
 - Create the required virtual network interfaces (vm/nad-intern & vm/vlan40-net)
 - VM-specific settings required for this PoC
 - The original RHEL 9 template remains untouched!!
@@ -1182,12 +1177,15 @@ Modify the Cloud-Init / user-data configuration of the copied RHEL 9 template.
 This allows us to preconfigure the operating system during the first boot, for example:
 
 - hostname
-- user configuration
+- user configuration (wmarx & redhat)
 - SSH access
+  * We gonna take out Test Lab Key in Storm4:  
+    #oc create secret generic vm-ssh-key -n vm --from-file=key=/root/.ssh/id_ed25519.pub
+    #Now we can chose this SSH Key via the Web UI in the Template / or VM Manifest.  
 - initial system settings
 - additional RHEL configuration if required
 
-The exact Cloud-Init configuration can be adapted independently for both virtual machines.
+The exact Cloud-Init configuration can be adapted independently for both virtual machines!
 
 ### 3. Add the Virtual Networks
 
