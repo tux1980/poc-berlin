@@ -772,7 +772,7 @@ We have manually created 3 KVM hosts on our KVM Hypervisor in REL9.
 
 # Installing OpenShift
 
-## Start the 3 prepped KVM Hosts on RHEL9
+### Start the 3 prepped KVM Hosts on RHEL9
 
 After doing step 4 above (Install Script install-iso-file.sh - create ISO File!)  
 “#/var/ocp-airgap-poc/install-iso-file.sh”
@@ -780,7 +780,7 @@ After doing step 4 above (Install Script install-iso-file.sh - create ISO File!)
 Now just start the 3 servers to start the installation from the agent.x86_64.iso Boot Image we
 created!
 
-## Log & Status during Installation phase
+### Log & Status during Installation phase
 
 Bootstrap Log
 ```text
@@ -795,7 +795,7 @@ OpenShift Log
 ```text
 #tail -f /var/ocp-airgap-poc/installer/.openshift_install.log
 ```
-## VIP & API VIP Test Script
+### VIP & API VIP Test Script
 This script monitors the availability of the OCP API, the Ignition Port & the Ingress VIP
 ```text
 /var/ocp-airgap-poc/installer/vip_api_ip_test.sh
@@ -819,7 +819,7 @@ Ignition and Bootservice check
 #sudo systemctl list-units --failed
 ```
 
-# After Installation, day2 operattions
+# After Installation - Day Two operations
 ### Check the imagedigestmirrorsets - right names?
 ```text
 #oc get imagedigestmirrorsets.config.openshift.io -o yaml
