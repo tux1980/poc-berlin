@@ -1180,7 +1180,7 @@ This allows us to preconfigure the operating system during the first boot, for e
 - user configuration (wmarx & redhat)
 - SSH access
   * We gonna take out Test Lab Key in Storm4:  
-    #oc create secret generic vm-ssh-key -n vm --from-file=key=/root/.ssh/id_ed25519.pub
+    #oc create secret generic vm-ssh-key -n vm --from-file=key=/root/.ssh/id_ed25519.pub  
     #Now we can chose this SSH Key via the Web UI in the Template / or VM Manifest.  
 - initial system settings
 - additional RHEL configuration if required
