@@ -1318,7 +1318,11 @@ The following Windows images are prepared in the namespace:
 #openshift-virtualization-os-images  
 ```
 The file used for this is:  
+Increase RAM for Importer Pods:  
+hetzner-stuff/day2_virt_install/holler_gitlab hco-ram-increase.yaml  
+Create Windows Data Volumes:  
 hetzner-stuff/day2_virt_install/holler_gitlab/datavolumes_windows.yaml  
+
 
 It provides images for:  
 ```text
