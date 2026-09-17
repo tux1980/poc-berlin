@@ -1259,8 +1259,84 @@ The downloaded KubeVirt templates are adjusted to use the OpenShift Virtualizati
 #openshift-virtualization-os-images
 ```
 
-# Create Windows 11 Machines!
+# Create Windows Machines!
 
+### Architecture / Basic Relationship
+Windows virtual machines in OpenShift Virtualization are deployed using the same storage model as the Linux templates described above.  
+
+Instead of attaching an installation ISO or a manually prepared disk every time, we maintain a **Golden Image** for our Windows Versions and reference it through CDI objects.  
+
+The basic relationship is:  
+
+```text
+Container Disk / Image
+        |
+        v
+   DataVolume
+        |
+        v
+       PVC
+        |
+        v
+   DataSource
+        |
+        v
+   VM Template
+        |
+        v
+ Virtual Machine
+```
+### 1. DataVolume, PVC and DataSource
+
+The DataVolume is responsible for importing or cloning an operating system image through CDI.  
+After the import, the actual disk data is stored inside a PersistentVolumeClaim (PVC).  
+The DataSource provides a stable logical reference to this PVC and can therefore be referenced by VM templates.  
+
+In simple terms:  
+```text
+DataVolume (DV):
+Downloads or clones the operating system image and creates the required PVC.
+
+PVC:
+Contains the actual operating system disk / Golden Image.
+
+DataSource (DS):
+Provides a stable reference to the PVC.
+
+VM Template:
+Defines the VM configuration and references the corresponding DataSource.
+
+Virtual Machine:
+The final VM instance receives its own disk cloned from the Golden Image.
+```
+This allows us to deploy multiple identical Windows machines without manually reinstalling Windows for every VM.  
+
+### 2. Windows Golden Images
+
+The following Windows images are prepared in the namespace:  
+```text
+#openshift-virtualization-os-images  
+```
+The file used for this is:  
+hetzner-stuff/day2_virt_install/holler_gitlab/datavolumes_windows.yaml  
+
+It provides images for:  
+```text
+Windows Server 2025    -> win2k25
+Windows Server 2022    -> win2k22
+Windows Server 2019    -> win2k19
+Windows 10             -> win10
+Windows 11             -> win11
+```
+Each operating system gets its own: 
+```text
+'DataVolume'
+'DataSource' >> and requests a 64 GiB disk.
+```  
+The source images are retrieved from:
+```text
+quay.io/openshift-cnv/containerdisks
+```
 
 # Additional Worker Nodes (Optional!)
 
