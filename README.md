@@ -1248,7 +1248,12 @@ Execute the Playbook:
 ```text
 #ansible-playbook config_ocp-v-V3.yml
 ```
-
+Test DV's & Templates:
+```text
+#oc get templates -n openshift | grep -Ei 'opensuse|freebsd|debian|ubuntu'
+and:
+#oc get dv -n openshift-virtualization-os-images | grep -Ei 'opensuse|freebsd|debian|ubuntu'
+```
 The downloaded KubeVirt templates are adjusted to use the OpenShift Virtualization image namespace: 
 ```text
 #openshift-virtualization-os-images
