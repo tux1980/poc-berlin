@@ -10,8 +10,6 @@
 
 ## Table of Contents
 
-## Table of Contents
-
 1. [Overview](#overview)
 2. [Network stuff in KVM](#network-stuff-in-kvm)
 3. [Overview Install Process of OpenShift](#overview-install-process-of-openshift)
@@ -1320,7 +1318,9 @@ The following Windows images are prepared in the namespace:
 The file used for this is:  
 Increase RAM for Importer Pods:  
 hetzner-stuff/day2_virt_install/holler_gitlab hco-ram-increase.yaml  
-Create Windows Data Volumes:  
+Check RAM Increase:  
+oc get hyperconvergeds.v1beta1.hco.kubevirt.io kubevirt-hyperconverged -n openshift-cnv -o yaml | grep -A10 resourceRequirements  
+Create Windows Data Volumes:   
 hetzner-stuff/day2_virt_install/holler_gitlab/datavolumes_windows.yaml  
 
 
