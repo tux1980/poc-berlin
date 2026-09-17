@@ -10,6 +10,8 @@
 
 ## Table of Contents
 
+## Table of Contents
+
 1. [Overview](#overview)
 2. [Network stuff in KVM](#network-stuff-in-kvm)
 3. [Overview Install Process of OpenShift](#overview-install-process-of-openshift)
@@ -21,7 +23,9 @@
 9. [After Installation - Day Two operations](#after-installation---day-two-operations)
 10. [Login Process (Web UI & CLI)](#login-process-web-ui--cli)
 11. [Create two RHEL VM's in Namespace via the OCP Virt UI!](#create-two-rhel-vms-in-namespace-via-the-ocp-virt-ui)
-12. [Additional Worker Nodes (Optional!)](#additional-worker-nodes-optional)
+12. [Create "not-rhel" templates!](#create-not-rhel-templates)
+13. [Create Windows Machines!](#create-windows-machines)
+14. [Additional Worker Nodes (Optional!)](#additional-worker-nodes-optional)
 
 ---
 
