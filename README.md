@@ -1260,6 +1260,11 @@ The downloaded KubeVirt templates are adjusted to use the OpenShift Virtualizati
 ```text
 #openshift-virtualization-os-images
 ```
+And just in case we have to undo everything we did with the Playboook: "config_ocp-v-V3.yml"  
+Execute the Playbook in hetzner-stuff/day2_virt_install/templates:  
+```text
+#ansible-playbook cleanup-virt.yaml
+```
 
 # Create Windows Machines!
 
