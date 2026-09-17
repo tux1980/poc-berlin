@@ -1223,6 +1223,33 @@ Approach2:
 #ssh wmarx@192.168.70.109 (The IP from the overlay libvirt host net, figure out in the UI)
 
 ```
+# Create "not-rhel" templates!
+The playbook `config_ocp-v-V3.yml` extends the default OpenShift Virtualization template catalog with additional operating systems which are not provided as ready-to-use templates in our environment.  
+  
+The playbook runs locally on the bastion host and uses the already configured `oc` CLI connection to create and modify OpenShift Virtualization resources.  
+
+### Create additional VM Templates
+
+The playbook downloads the upstream KubeVirt `common-templates` definition and uses the existing Ubuntu and Fedora templates as a technical base for additional operating systems. The DataVolume objects import the operating system images from external registry or HTTP sources, while the DataSource objects provide stable references to these images for the VM templates.  
+
+For Ubuntu 22.04, the playbook also configures an automatic DataImportCron so that the base image can be refreshed periodically.  
+
+The result is a set of ready-to-use non-RHEL templates with corresponding operating-system images that can be used directly to deploy virtual machines in OpenShift Virtualization.  
+```text
+It creates templates for:  
+  
+- Ubuntu 22.04  
+- Debian 12  
+- Debian Testing  
+- FreeBSD 15.1  
+- OpenSUSE 15.6
+```
+
+The downloaded KubeVirt templates are adjusted to use the OpenShift Virtualization image namespace: 
+```text
+#openshift-virtualization-os-images
+```
+
 # Create Windows 11 Machines!
 
 
