@@ -10,8 +10,6 @@
 
 ## Table of Contents
 
-## Table of Contents
-
 1. [Overview](#overview)
 2. [Network stuff in KVM](#network-stuff-in-kvm)
 3. [Overview Install Process of OpenShift](#overview-install-process-of-openshift)
