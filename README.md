@@ -254,9 +254,11 @@ Status Check all Networks in KVM
 ```
 
 ## Expected Outcome:
+```text
 ocp-net               active yes        yes  
 provisioning-net      active yes        yes  
-vtn-net               active yes        yes  
+vtn-net               active yes        yes
+```  
 
 ## Create Network Bond with VLAN ovp-net & vtn-net
 
