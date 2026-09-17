@@ -1244,7 +1244,7 @@ It creates templates for:
 - FreeBSD 15.1  
 - OpenSUSE 15.6
 ```  
-Execute the Playbook:
+Execute the Playbook in hetzner-stuff/day2_virt_install/templates:
 ```text
 #ansible-playbook config_ocp-v-V3.yml
 ```
