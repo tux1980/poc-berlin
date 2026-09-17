@@ -459,7 +459,7 @@ Run it!
 
 Copy whole Directory to USB Harddisk
 ```text
-#rsync -avzP --inplace root@storm4.local:/var/ocp-airgap-poc/ /home/wmarx/po-berlin/harddisk/var/ocp-airgap-poc/
+#rsync -avzP --inplace --exclude='*pinned_*.yaml' root@storm4.local:/var/ocp-airgap-poc/ /home/wmarx/po-berlin/harddisk/var/ocp-airgap-poc/
 ```
 
 ### Take the docker.io/library/registry:2 with you!
@@ -575,7 +575,7 @@ Second time - after updating the imageset-config.yaml file!
 ```
 Optional Copy the Delta-Data to USB Harddisk
 ```text
-#rsync -avzP --inplace root@storm4.local:/var/ocp-airgap-poc/ /home/wmarx/po-berlin/harddisk/var/ocp-airgap-poc/
+#rsync -avzP --inplace --exclude='*pinned_*.yaml' root@storm4.local:/var/ocp-airgap-poc/ /home/wmarx/po-berlin/harddisk/var/ocp-airgap-poc/
 ```
 
 ### Test Commands Registry Tests
