@@ -1243,6 +1243,10 @@ It creates templates for:
 - Debian Testing  
 - FreeBSD 15.1  
 - OpenSUSE 15.6
+```  
+Execute the Playbook:
+```text
+#ansible-playbook config_ocp-v-V3.yml
 ```
 
 The downloaded KubeVirt templates are adjusted to use the OpenShift Virtualization image namespace: 
