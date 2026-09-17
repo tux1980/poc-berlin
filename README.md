@@ -1315,14 +1315,18 @@ The following Windows images are prepared in the namespace:
 ```text
 #openshift-virtualization-os-images  
 ```
+
 The file used for this is:  
+```text
 Increase RAM for Importer Pods:  
-hetzner-stuff/day2_virt_install/holler_gitlab hco-ram-increase.yaml  
+hetzner-stuff/day2_virt_install/holler_gitlab hco-ram-increase.yaml
+
 Check RAM Increase:  
-oc get hyperconvergeds.v1beta1.hco.kubevirt.io kubevirt-hyperconverged -n openshift-cnv -o yaml | grep -A10 resourceRequirements  
+#oc get hyperconvergeds.v1beta1.hco.kubevirt.io kubevirt-hyperconverged -n openshift-cnv -o yaml | grep -A10 resourceRequirements
+
 Create Windows Data Volumes:   
 hetzner-stuff/day2_virt_install/holler_gitlab/datavolumes_windows.yaml  
-
+```
 
 It provides images for:  
 ```text
