@@ -4,7 +4,7 @@
 >
 > This README is a Markdown representation of the original PoC document we created to the PoC in Berlin.
 > The original wording, explanations, environment values and commands are "partially" intentionally retained.
-> The PoC working directory used throughout this README is **`/var/ocp-airgap-poc`**. This is a private Repository.
+> The PoC working directory used throughout this README is **`/usb1/var/poc-berlin`**. This is a private Repository.
 
 ---
 
@@ -51,7 +51,7 @@ Directory: Image Location on Storm4 for libvirt Images!
 /var/lib/libvirt/images
 
 Directory: Location for everything which we need for the PoC!
-/var/ocp-airgap-poc
+/usb1/var/poc-berlin
 
 # Network stuff in KVM
 
@@ -60,7 +60,7 @@ Directory: Location for everything which we need for the PoC!
 ### OpenShift Machine Network
 
 ```text
-#virsh net-define /var/ocp-airgap-poc/ocp-net.xml
+#virsh net-define /usb1/var/poc-berlin/ocp-net.xml
 #virsh net-start ocp-net
 #virsh net-autostart ocp-net
 ```
@@ -68,7 +68,7 @@ Directory: Location for everything which we need for the PoC!
 ### VM-Network
 
 ```text
-#virsh net-define /var/ocp-airgap-poc/vm-net.xml
+#virsh net-define /usb1/var/poc-berlin/vm-net.xml
 #virsh net-start vtn-net
 #virsh net-autostart vtn-net
 ```
@@ -76,7 +76,7 @@ Directory: Location for everything which we need for the PoC!
 ### Provisioning-Network (Day2 Directory!)
 
 ```text
-#virsh net-define /var/ocp-airgap-poc/day2/provisioning-net.xml
+#virsh net-define /usb1/var/poc-berlin/day2/provisioning-net.xml
 #virsh net-start vtn-net
 #virsh net-autostart vtn-net
 ```
@@ -94,7 +94,7 @@ Optional: Delete a network! (Detach the Interfaces afterwards manually…
 
 Optional: And new again……
 ```text
-#virsh net-define /var/ocp-airgap-poc/ocp-net.xml
+#virsh net-define /usb1/var/poc-berlin/ocp-net.xml
 #virsh net-start ocp-net
 #virsh net-autostart ocp-net
 ```
@@ -405,17 +405,17 @@ the targeted cluster hosts. These target nodes are categorized into three roles:
 ### Working dir on Storm4
 
 ```text
-#mkdir -p /var/ocp-airgap-poc/{certs,data,metadata,workspace}
-#cd /var/ocp-airgap-poc
+#mkdir -p /usb1/var/poc-berlin/{certs,data,metadata,workspace}
+#cd /usb1/var/poc-berlin
 ```
 
 ### TLS-Certs for local Registry
 
 ```text
 #openssl req -newkey rsa:4096 -nodes -sha256 \
-  -keyout /var/ocp-airgap-poc/certs/domain.key \
+  -keyout /usb1/var/poc-berlin/certs/domain.key \
   -x509 -days 365 \
-  -out /var/ocp-airgap-poc/certs/domain.crt \
+  -out /usb1/var/poc-berlin/certs/domain.crt \
   -subj "/CN=storm4.ocp.polizei.test" \
   -addext "subjectAltName=DNS:storm4.ocp.polizei.test,IP:192.168.60.1"
 ```
@@ -434,8 +434,8 @@ Test it:
 #podman run --rm \
   --entrypoint echo \
   -p 5000:5000 \
-  -v /var/ocp-airgap-poc/data:/var/lib/registry:z \
-  -v /var/ocp-airgap-poc/certs:/certs:z \
+  -v /usb1/var/poc-berlin/data:/var/lib/registry:z \
+  -v /usb1/var/poc-berlin/certs:/certs:z \
   -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt \
   -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
   docker.io/library/registry:2 \
@@ -448,8 +448,8 @@ Run it!
   --name local-registry \
   --restart=always \
   -p 5000:5000 \
-  -v /var/ocp-airgap-poc/data:/var/lib/registry:z \
-  -v /var/ocp-airgap-poc/certs:/certs:z \
+  -v /usb1/var/poc-berlin/data:/var/lib/registry:z \
+  -v /usb1/var/poc-berlin/certs:/certs:z \
   -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt \
   -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
   docker.io/library/registry:2
@@ -457,7 +457,7 @@ Run it!
 
 Copy whole Directory to USB Harddisk
 ```text
-#rsync -avzP --inplace --exclude='*pinned_*.yaml' root@storm4.local:/var/ocp-airgap-poc/ /home/wmarx/po-berlin/harddisk/var/ocp-airgap-poc/
+#rsync -avzP --inplace --exclude='*pinned_*.yaml' root@storm4.local:/usb1/var/poc-berlin/ /home/wmarx/po-berlin/harddisk/usb1/var/poc-berlin/
 ```
 
 ### Take the docker.io/library/registry:2 with you!
@@ -466,12 +466,12 @@ Download the Registry Image & save it
 ```text
 #podman pull docker.io/library/registry:2
 #podman tag docker.io/library/registry:2 local-poc-registry:2
-#podman save -o /var/ocp-airgap-poc/harddisk-test/registry-image.tar local-poc-registry:2
+#podman save -o /usb1/var/poc-berlin/harddisk-test/registry-image.tar local-poc-registry:2
 ```
 
 Load the Image in the air-gapped env!
 ```text
-#podman load -i /var/ocp-airgap-poc/harddisk-test/registry-image.tar
+#podman load -i /usb1/var/poc-berlin/harddisk-test/registry-image.tar
 ```
 You might inspect the registry now, is now “local” - ignore the docker.io address….
 ```text
@@ -484,8 +484,8 @@ Start Container Image/Registry airgapped!
   --name local-registry \
   --restart=always \
   -p 5000:5000 \
-  -v /var/ocp-airgap-poc/data:/var/lib/registry:z \
-  -v /var/ocp-airgap-poc/certs:/certs:z \
+  -v /usb1/var/poc-berlin/data:/var/lib/registry:z \
+  -v /usb1/var/poc-berlin/certs:/certs:z \
   -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt \
   -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
   local-poc-registry:2
@@ -495,29 +495,29 @@ Start Container Image/Registry airgapped!
 
 Authfile (pull-secret,RH registry, Podman Registry):
 ```text
-#echo '{}' > /var/ocp-airgap-poc/auth.json // Create auth file with an empty json object!
+#echo '{}' > /usb1/var/poc-berlin/auth.json // Create auth file with an empty json object!
 ```
 
 ### Login Registry in auth.json
 
 #### Mein Pull Secret in Auth File einfügen:
 ```text
-printf '%s\n' '{PULL_SECRET}' > /var/ocp-airgap-poc/auth.json
+printf '%s\n' '{PULL_SECRET}' > /usb1/var/poc-berlin/auth.json
 ```
 
 #### Red Hat Registry Login
 ```text
-#podman login registry.redhat.io --authfile /var/ocp-airgap-poc/auth.json
+#podman login registry.redhat.io --authfile /usb1/var/poc-berlin/auth.json
 ```
 
 #### Quay.io Release Login (wird für das Release-Image benötigt)
 ```text
-#podman login quay.io --authfile /var/ocp-airgap-poc/auth.json
+#podman login quay.io --authfile /usb1/var/poc-berlin/auth.json
 ```
 
 #### Login PoC Offline Registry: Give auth file to local Registry
 ```text
-#podman login storm4.ocp.polizei.test:5000 --tls-verify=false --authfile /var/ocp-airgap-poc/auth.json
+#podman login storm4.ocp.polizei.test:5000 --tls-verify=false --authfile /usb1/var/poc-berlin/auth.json
 ```
 
 # oc-mirror Binary installieren
@@ -541,7 +541,7 @@ Server / Core OS Images:
 https://mirror.openshift.com/pub/openshift-v4/amd64/dependencies/rhcos/4.22/latest/
 
 File for image download:  
-/var/ocp-airgap-poc/imageset-config.yaml >> File, maybe update the “maxVersion” to the actual
+/usb1/var/poc-berlin/imageset-config.yaml >> File, maybe update the “maxVersion” to the actual
 minor Version!!
 
 ### Image Mirror with oc-mirror
@@ -549,9 +549,9 @@ minor Version!!
 First time to replicate!
 ```text
 #oc-mirror \
-  -c /var/ocp-airgap-poc/imageset-config.yaml \
-  --workspace file:///var/ocp-airgap-poc/workspace \
-  --authfile /var/ocp-airgap-poc/auth.json \
+  -c /usb1/var/poc-berlin/imageset-config.yaml \
+  --workspace file:///usb1/var/poc-berlin/workspace \
+  --authfile /usb1/var/poc-berlin/auth.json \
   --dest-tls-verify=false \
   docker://storm4.ocp.polizei.test:5000/openshift/release \
   --v2
@@ -561,9 +561,9 @@ Second time - after updating the imageset-config.yaml file!
 
 ```text
 #oc-mirror \
-  -c /var/ocp-airgap-poc/imageset-config.yaml \
-  --workspace file:///var/ocp-airgap-poc/workspace \
-  --authfile /var/ocp-airgap-poc/auth.json \
+  -c /usb1/var/poc-berlin/imageset-config.yaml \
+  --workspace file:///usb1/var/poc-berlin/workspace \
+  --authfile /usb1/var/poc-berlin/auth.json \
   --dest-tls-verify=false \
   --retry-times 10 \
   --parallel-images 2 \
@@ -573,7 +573,7 @@ Second time - after updating the imageset-config.yaml file!
 ```
 Optional Copy the Delta-Data to USB Harddisk
 ```text
-#rsync -avzP --inplace --exclude='*pinned_*.yaml' root@storm4.local:/var/ocp-airgap-poc/ /home/wmarx/po-berlin/harddisk/var/ocp-airgap-poc/
+#rsync -avzP --inplace --exclude='*pinned_*.yaml' root@storm4.local:/usb1/var/poc-berlin/ /home/wmarx/po-berlin/harddisk/usb1/var/poc-berlin/
 ```
 
 ### Test Commands Registry Tests
@@ -599,28 +599,28 @@ Optional Copy the Delta-Data to USB Harddisk
 ```text
 oc-mirror generated for ImageContentSourcePolicy (ICSP) eg. ImageDigestMirrorSet (IDMS)
 Files:
-#ls -la /var/ocp-airgap-poc/workspace/working-dir/
+#ls -la /usb1/var/poc-berlin/workspace/working-dir/
 ```
 
 #### Memory Check in /var
 
 ```text
-#du -sh /var/ocp-airgap-poc/data /var/ocp-airgap-poc/workspace
+#du -sh /usb1/var/poc-berlin/data /usb1/var/poc-berlin/workspace
 ```
 
 ## Pack your registry workspace and take it to the PoC!
 
 Copy Registry the external USB Disk!
 ```text
-#cp -r /var/ocp-airgap-poc/* /external-usb-disk/ocp-airgap-poc
+#cp -r /usb1/var/poc-berlin/* /external-usb-disk/ocp-airgap-poc
 ```
 
 Mirror external Bastion Host! Maybe the NAME is gonna change!
 ```text
 ##oc-mirror \
-  -c /var/ocp-airgap-poc/imageset-config.yaml \
-  --workspace file:///var/ocp-airgap-poc/workspace \
-  --authfile /var/ocp-airgap-poc/auth.json \
+  -c /usb1/var/poc-berlin/imageset-config.yaml \
+  --workspace file:///usb1/var/poc-berlin/workspace \
+  --authfile /usb1/var/poc-berlin/auth.json \
   --dest-tls-verify=false \
   --retry-times 10 \
   --parallel-images 2 \
@@ -721,35 +721,35 @@ Test: Query status of ocp4-node1
 #### 1. First, set your variables (.bashrc)
 
 ```text
-# Read variables from /var/ocp-airgap-poc (for the tow install Files!)
+# Read variables from /usb1/var/poc-berlin (for the tow install Files!)
 SSH_KEY=$(cat ~/.ssh/id_ed25519.pub 2>/dev/null || cat ~/.ssh/id_rsa.pub)
-REGISTRY_CA=$(cat /var/ocp-airgap-poc/certs/domain.crt)
-PULL_SECRET=$(cat /var/ocp-airgap-poc/auth.json | tr -d '\n')
+REGISTRY_CA=$(cat /usb1/var/poc-berlin/certs/domain.crt)
+PULL_SECRET=$(cat /usb1/var/poc-berlin/auth.json | tr -d '\n')
 ```
 
-#### 2. Create install-config.yaml (/var/ocp-airgap-poc)
+#### 2. Create install-config.yaml (/usb1/var/poc-berlin)
 
 This mirrors all default domains (quay.io and registry.redhat.io) exclusively to your local
 registry (storm4.ocp.polizei.test:5000)
 ```text
 Remark:
-Actually the install-config is accommodated in the /var/ocp-airgap-poc/ directory - we just copy them to the "installer" Directory since those files just temporay in this directory (the installer directory)
-/var/ocp-airgap-poc/installer/install-config.yaml
+Actually the install-config is accommodated in the /usb1/var/poc-berlin/ directory - we just copy them to the "installer" Directory since those files just temporay in this directory (the installer directory)
+/usb1/var/poc-berlin/installer/install-config.yaml
 ```
 ---------------------------------------------------------------
 
 #### 3. Create agent-config.yaml File
 ```text
 Remark:
-Actually the agent-config is accommodated in the /var/ocp-airgap-poc/ directory - we just copy them to the "installer" Directory since those files just temporay in this directory (the installer directory)
-/var/ocp-airgap-poc/installer/agent-config.yaml
+Actually the agent-config is accommodated in the /usb1/var/poc-berlin/ directory - we just copy them to the "installer" Directory since those files just temporay in this directory (the installer directory)
+/usb1/var/poc-berlin/installer/agent-config.yaml
 ```
 #### 4. Install ISO Image for Deployment
 
 Cleanup with cleanup-installer.sh
 
 ```text
-#/var/ocp-airgap-poc/cleanup-installer.sh
+#/usb1/var/poc-berlin/cleanup-installer.sh
 ```
 
 - Delete Installer Artifacts! (rendezvousIP, auth Directory & .openshift_install*
@@ -760,16 +760,16 @@ Cleanup with cleanup-installer.sh
 Install-iso-file.sh - create ISO File!
 
 ```text
-#/var/ocp-airgap-poc/install-iso-file.sh
+#/usb1/var/poc-berlin/install-iso-file.sh
 ```
 
 - Sets the variables for: SSH_KEY, PULL_SECRET, REGISTRY_CA)
 - Delete Installer Artifacts! (rendezvousIP, auth Directory & .openshift_install*
-- Fresh copy of install-config in Installer Directory: /var/ocp-airgap-poc >>
-       /var/ocp-airgap-poc/installer
+- Fresh copy of install-config in Installer Directory: /usb1/var/poc-berlin >>
+       /usb1/var/poc-berlin/installer
 
-- Fresh copy of agent-config in Installer Directory: /var/ocp-airgap-poc >>
-       /var/ocp-airgap-poc/installer
+- Fresh copy of agent-config in Installer Directory: /usb1/var/poc-berlin >>
+       /usb1/var/poc-berlin/installer
 - Create ISO File!
 
 ### Start the 3 prepped KVM Hosts on RHEL9
@@ -783,21 +783,21 @@ created!
 
 Bootstrap Log
 ```text
-#./openshift-install agent wait-for bootstrap-complete --dir /var/ocp-airgap-poc/installer --log-level debug
+#./openshift-install agent wait-for bootstrap-complete --dir /usb1/var/poc-berlin/installer --log-level debug
 ```
 
 ```text
-#./openshift-install agent wait-for bootstrap-complete --dir=/var/ocp-airgap-poc/installer --log-level=info
+#./openshift-install agent wait-for bootstrap-complete --dir=/usb1/var/poc-berlin/installer --log-level=info
 ```
 
 OpenShift Log
 ```text
-#tail -f /var/ocp-airgap-poc/installer/.openshift_install.log
+#tail -f /usb1/var/poc-berlin/installer/.openshift_install.log
 ```
 ### VIP & API VIP Test Script
 This script monitors the availability of the OCP API, the Ignition Port & the Ingress VIP
 ```text
-/var/ocp-airgap-poc/installer/vip_api_ip_test.sh
+/usb1/var/poc-berlin/installer/vip_api_ip_test.sh
 === OPENSHIFT VIP & BOOTSTRAP MONITORING ===
 API VIP (192.168.60.10):       ONLINE
 Ignition Server (Port 22623):  ONLINE
@@ -900,7 +900,7 @@ Password:   *See authentication file in the auth Directory*
 
 Export kubeconfig! (On Storm4)
 ```text
-#export KUBECONFIG=/var/ocp-airgap-poc/installer/auth/kubeconfig
+#export KUBECONFIG=/usb1/var/poc-berlin/installer/auth/kubeconfig
 ```
 
 ## Install OpenShift Virtualization Operator via UI
@@ -920,12 +920,12 @@ Export kubeconfig! (On Storm4)
 
   - Create Storage Class Roles ect….
 ```text
-#oc apply -f /var/ocp-airgap-poc/day2/nfs-provisioner.yaml
+#oc apply -f /usb1/var/poc-berlin/day2/nfs-provisioner.yaml
 #oc adm policy add-scc-to-user hostmount-anyuid -z nfs-client-provisioner -n nfs-provisioner
 ```
   - Deploy the Provisioner
 ```text
-#oc apply -f /var/ocp-airgap-poc/day2/nfs-deployment.yaml
+#oc apply -f /usb1/var/poc-berlin/day2/nfs-deployment.yaml
 ```
 
   - Patch Storageclass
@@ -958,7 +958,7 @@ vs-password:                  *********
 ```
 
 Folder:
-/var/ocp-airgap-poc/day2
+/usb1/var/poc-berlin/day2
 
 #### Apply the 3 Trident YAML Manifests
 
@@ -1000,8 +1000,8 @@ Check Netname in KVM: virsh net-info --network vtn-net
 ```
 ```text
 -------------------------------
-NNCP:             NNCP - /var/ocp-airgap-poc/day2/nncp-vlan40.yaml
-NAD:              NAD  - /var/ocp-airgap-poc/day2/nad-vlan40.yaml
+NNCP:             NNCP - /usb1/var/poc-berlin/day2/nncp-vlan40.yaml
+NAD:              NAD  - /usb1/var/poc-berlin/day2/nad-vlan40.yaml
 ```
 
 #### VM Network 2 - Internal for VM’s, NAD
@@ -1023,7 +1023,7 @@ nad-internal-vm
 
 #### Create a htpasswd file
 
-/var/ocp-airgap-poc/day2
+/usb1/var/poc-berlin/day2
 ```text
 #htpasswd -c -B -b /tmp/htpasswd wmarx *********
 #htpasswd -B -b /tmp/htpasswd sabrina *********
@@ -1032,12 +1032,12 @@ nad-internal-vm
 #### Create Secret / Credentials in OCP
 
 ```text
-#oc create secret generic htpasswd-secret --from-file htpasswd=/var/ocp-airgap-poc/day2/htpasswd -n openshift-config
+#oc create secret generic htpasswd-secret --from-file htpasswd=/usb1/var/poc-berlin/day2/htpasswd -n openshift-config
 ```
 
 Extract the secret/htpasswd again locally - when you lost it:
 ```text
-#oc extract secret/htpasswd-secret -n openshift-config --to /var/ocp-airgap-poc/day2 --confirm
+#oc extract secret/htpasswd-secret -n openshift-config --to /usb1/var/poc-berlin/day2 --confirm
 ```
 
 Then update the secret locally (after adding user with “htpassd -b -B….:
@@ -1093,7 +1093,7 @@ Grant Permissions (RBAC)
 
 ```text
 Create a ClusterIssuer pointing to your internal enterprise Certificate Authority (CA).
-#oc apply -f /var/ocp-airgap-poc/day2/cluster-issuer.yaml
+#oc apply -f /usb1/var/poc-berlin/day2/cluster-issuer.yaml
 ```
 
 What does that issue file do for us?
@@ -1112,7 +1112,7 @@ Check the issuer (it has to be true!):
 
 #### Step2: Create the Wildcard Certificate Request
 ```text
-Execute:     #oc apply -f /var/ocp-airgap-poc/day2/ingress-wildcard-certificate.yaml
+Execute:     #oc apply -f /usb1/var/poc-berlin/day2/ingress-wildcard-certificate.yaml
 Check:       #oc get certificate apps-wildcard-cert -n openshift-ingress
 ```
 #### Step3: Update Ingress Controller
@@ -1396,7 +1396,7 @@ hosts from BMO control
 #### Apply the BMC Secrets for the BMC Cards
 
 Day2 directory:
-/var/ocp-airgap-poc/day2
+/usb1/var/poc-berlin/day2
 ```text
 #oc apply -f bmc-secrets.yaml
 ```
@@ -1463,12 +1463,12 @@ Create two virtual machine (e.g., named ocp4-node4/5) on storm4.
 
 Create the Secret:
 ```text
-#oc apply -f /var/ocp-airgap-poc/day2/bmc-secrets.yaml
+#oc apply -f /usb1/var/poc-berlin/day2/bmc-secrets.yaml
 ```
 
 Create and Apply the Standalone BareMetalHost (BMH) Definitions
 ```text
-#oc apply -f /var/ocp-airgap-poc/day2/baremetalhosts.yaml
+#oc apply -f /usb1/var/poc-berlin/day2/baremetalhosts.yaml
 ```
 
 Check Registration Process / Verify Registration!
@@ -1491,7 +1491,7 @@ the RHCOS images from your local registry, and proceed with the installation.
 
 ### Apply MachineSets & Troubleshooting
 
-/var/ocp-airgap-poc/day2/worker-machineset.yaml
+/usb1/var/poc-berlin/day2/worker-machineset.yaml
 
 ```text
 #oc apply -f worker-machineset.yaml
