@@ -1028,7 +1028,7 @@ nad-internal-vm
 /var/ocp-airgap-poc/day2
 ```text
 #htpasswd -c -B -b /tmp/htpasswd wmarx *********
-#htpasswd -B -b /tmp/htpasswd sabrina redhat12
+#htpasswd -B -b /tmp/htpasswd sabrina *********
 ```
 
 #### Create Secret / Credentials in OCP
@@ -1037,7 +1037,7 @@ nad-internal-vm
 #oc create secret generic htpasswd-secret --from-file htpasswd=/var/ocp-airgap-poc/day2/htpasswd -n openshift-config
 ```
 
-Extract the secret again locally - when you lost it:
+Extract the secret/htpasswd again locally - when you lost it:
 ```text
 #oc extract secret/htpasswd-secret -n openshift-config --to /var/ocp-airgap-poc/day2 --confirm
 ```
@@ -1147,6 +1147,7 @@ Test:
 Download the cert locally in the day2 directory!
 ```text
 Again, as in the previous step - Cert Trust für *apps Ingress Certificate for Browser, but this time for our own cert.
+#oc get secret pb-poc-root-ca-secret -n openshift-ingress -o jsonpath='{.data.tls\.crt}' | base64 --decode > active-root-ca.crt
 #sudo update-ca-trust
 #sudo update-ca-trust extract
 -------------------
@@ -1179,8 +1180,10 @@ This allows us to preconfigure the operating system during the first boot, for e
 - hostname
 - user configuration (wmarx & redhat)
 - SSH access
-  * We gonna take out Test Lab Key in Storm4:  
-    #oc create secret generic vm-ssh-key -n vm --from-file=key=/root/.ssh/id_ed25519.pub  
+  * We gonna take out Test Lab Key in Storm4:
+    ```text
+    #oc create secret generic vm-ssh-key -n vm --from-file=key=/root/.ssh/id_ed25519.pub
+    ```
     Now we can chose this SSH Key via the Web UI in the Template / or VM Manifest.  
 - initial system settings
 - additional RHEL configuration if required
