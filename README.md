@@ -759,7 +759,7 @@ Cleanup with cleanup-installer.sh
 - Create/Check the 150 GB vda Harddisks on all three nodes
 - Remove Entries from “known_hosts”
 
-Install Script install-iso-file.sh - create ISO File!
+Install-iso-file.sh - create ISO File!
 
 ```text
 #/var/ocp-airgap-poc/install-iso-file.sh
@@ -776,11 +776,10 @@ Install Script install-iso-file.sh - create ISO File!
 
 ### Start the 3 prepped KVM Hosts on RHEL9
 
-After doing step 4 above (Install Script install-iso-file.sh - create ISO File!)  
-“#/var/ocp-airgap-poc/install-iso-file.sh”
+After doing step 4 above (Install Script - create ISO File!)  
 
 Now just start the 3 servers to start the installation from the agent.x86_64.iso Boot Image we
-created!
+created!  
 
 ### Log & Status during Installation phase
 
