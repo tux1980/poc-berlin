@@ -1224,7 +1224,7 @@ Approach2:
 #ssh wmarx@192.168.70.109 (The IP from the overlay libvirt host net, figure out in the UI)
 ```
 
-## RHEL10 - Create an Image additional to the Boot Source
+## RHEL10 - Create a Template additional to the Boot Source
 
 #### RHEL10 YAML Template Manifest
 /var/poc-polizei/day2/template_rhel10.yaml  
