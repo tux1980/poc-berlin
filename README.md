@@ -1209,7 +1209,7 @@ Create two virtual machines from the customized RHEL 9 template in namespace via
 - Install in Namespace VM
 - Start after Installation!
 ```
-### 4. How to access these VM's now?
+### 5. How to access these VM's now?
 We have several possibilities to access a VM - straight via ssh, via the virtctl tool or the WEBUI,....  
 Way1: virtctl
 Download via the OC UI (Command Line Tools)
@@ -1222,8 +1222,18 @@ Approach1:
 
 Approach2:
 #ssh wmarx@192.168.70.109 (The IP from the overlay libvirt host net, figure out in the UI)
-
 ```
+
+## RHEL10 - Create an Image additional to the Boot Source
+
+#### RHEL10 YAML Template Manifest
+/var/poc-polizei/day2/template_rhel10.yaml  
+
+Create the RHEL Template:  
+```text
+#oc apply -f /var/poc-polizei/day2/template_rhel10.yaml -n vm
+```
+
 # Create "not-rhel" templates!
 The playbook `config_ocp-v-V3.yml` extends the default OpenShift Virtualization template catalog with additional operating systems which are not provided as ready-to-use templates in our environment.  
   
