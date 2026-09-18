@@ -822,15 +822,17 @@ Ignition and Bootservice check
 # After Installation - Day Two operations
 ### Check the imagedigestmirrorsets - right names?
 ```text
+Get all Mirrors / Image Sets:
+oc get imagedigestmirrorset -o json | jq -r '.items[].spec.imageDigestMirrors[].mirrors[]'
+
+Get the config as yaml file:
 #oc get imagedigestmirrorsets.config.openshift.io -o yaml
 ```
 
-### ImageDigestMirrorSet to install the New BMH / MachineSets
-```text
-#oc get imagedigestmirrorset -o json | jq -r '.items[].spec.imageDigestMirrors[].mirrors[]' storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images
-```
+### This will output the list of digests found in the file (Optional!)
+This section extracts the internal CoreOS boot image manifest (0000_50_installer_coreos-bootimages.yaml) directly from the cluster's active release payload using "oc image extract".   
+A inline Python script then scans the manifest to extract and list all required image SHA digests. This step verifies that the exact RHCOS boot images needed by Metal3 and Ironic for node provisioning are present and correctly referenced in your air-gapped registry.
 
-### This will output the list of digests found in the file
 ```text
 #oc image extract \
   --file /release-manifests/0000_50_installer_coreos-bootimages.yaml \
