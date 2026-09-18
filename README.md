@@ -727,7 +727,7 @@ REGISTRY_CA=$(cat /usb1/var/poc-berlin/certs/domain.crt)
 PULL_SECRET=$(cat /usb1/var/poc-berlin/auth.json | tr -d '\n')
 ```
 
-#### 2. Create install-config.yaml (/usb1/var/poc-berlin)
+#### 2.1 Create install-config.yaml (/usb1/var/poc-berlin)
 
 This mirrors all default domains (quay.io and registry.redhat.io) exclusively to your local
 registry (storm4.ocp.polizei.test:5000)
@@ -735,6 +735,25 @@ registry (storm4.ocp.polizei.test:5000)
 Remark:
 Actually the install-config is accommodated in the /usb1/var/poc-berlin/ directory - we just copy them to the "installer" Directory since those files just temporay in this directory (the installer directory)
 /usb1/var/poc-berlin/installer/install-config.yaml
+```
+#### 2.2 RootDevice Hints!
+If the default entry does not works - you have to figure this on the CoreOS Console.  
+Just boot the CoreOS OCP Node with the agent.iso file and figure out the Hints:  
+```text
+#lsblk -o NAME,SIZE,MODEL,SERIAL,WWN,TYPE
+#udevadm info --query=property --name=/dev/DISK | grep -E "ID_WWN|ID_SERIAL|ID_BUS"
+
+You get something like:
+ID_BUS=ata
+ID_SERIAL=WDC_WD30NMZW-11GX6S1_WD-WX11D98RE7AJ
+ID_SERIAL_SHORT=WD-WX11D98RE7AJ
+ID_WWN=0x50014ee6b3e2451b
+ID_WWN_WITH_EXTENSION=0x50014ee6b3e2451b
+
+Then take the WWN Number in the install-config.yaml File:
+Example:
+rootDeviceHints:
+          wwn: "0x50014ee6b3e2451b"
 ```
 ---------------------------------------------------------------
 
