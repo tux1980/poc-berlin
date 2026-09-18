@@ -630,9 +630,29 @@ Mirror external Bastion Host! Maybe the NAME is gonna change!
   docker://storm4.ocp.polizei.test:5000/openshift/release \
   --v2
 ```
-# VirtualBMC
+# VirtualBMC with OpenShift BMO
 
-## Configure VirtualBMC on storm4
+Run Metal3 with VBMC and KVM  
+Simulate baremetal servers - Create a virtual baremetal environment to “test” baremetal  
+cloud services such as Cluster API Provider Metal3, Ironic and Bare Metal Operator  
+
+### Components of OpenShift Metal3
+
+Cluster-Baremetal-Operator (CBO):
+The operator manages and monitors Metal3 services on control plane nodes based on
+deployment configs.
+
+BareMetalHost (BMH):
+A Custom Resource representing a physical server, storing its online status, MAC addresses,
+and BMC credentials. The Server is “stored” in the OCP Database for later use if needed for
+additional utilization.
+
+Ironic:
+The underlying service (original from OpenStack) handles hardware inspection, PXE booting,
+and image deployment.
+
+
+### Configure VirtualBMC on storm4
 
 Create a Python virtual environment and install virtualbmc:
 ```text
@@ -683,7 +703,7 @@ vbmc start ocp4-node4
 vbmc start ocp4-node5
 ```
 
-## Verify the IPMI Interface
+### Verify the IPMI Interface
 
 Test: Query status of ocp4-node1
 ```text
@@ -692,32 +712,14 @@ Test: Query status of ocp4-node1
 #ipmitool -I lanplus -H 192.168.60.1 -U wmarx -P redhat -p 6234 power off
 ```
 
-# Create env & files for the Metal3 Installer
+# Installing OpenShift
+
+#### 0. URL's 
 
 - [Installing an on-premise cluster with the Agent-based Installer](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/installing_an_on-premise_cluster_with_the_agent-based_installer/preparing-to-install-with-agent-based-installer#agent-based-installer-recommended-resources_preparing-to-install-with-agent-based-installer)
 - [Deploying OpenShift Container Platform clusters with virtualized control planes](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html-single/virtualized_control_planes/index#vcp-overview)
 - [Red Hat Docu / Bonds with agent-config.yaml](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/installing_an_on-premise_cluster_with_the_agent-based_installer/preparing-to-install-with-agent-based-installer)
 - [API Docu - Provisioning [metal3.io/v1alpha1]](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/provisioning_apis/provisioning-metal3-io-v1alpha1) 
-
-Run Metal3 with VBMC and KVM
-Simulate baremetal servers - Create a virtual baremetal environment to “test” baremetal
-cloud services such as Cluster API Provider Metal3, Ironic and Bare Metal Operator
-
-## Components of OpenShift Metal3
-
-Cluster-Baremetal-Operator (CBO):
-The operator manages and monitors Metal3 services on control plane nodes based on
-deployment configs.
-
-BareMetalHost (BMH):
-A Custom Resource representing a physical server, storing its online status, MAC addresses,
-and BMC credentials. The Server is “stored” in the OCP Database for later use if needed for
-additional utilization.
-
-Ironic:
-The underlying service (original from OpenStack) handles hardware inspection, PXE booting,
-and image deployment.
-
 #### 1. First, set your variables (.bashrc)
 
 ```text
@@ -772,12 +774,6 @@ Install Script install-iso-file.sh - create ISO File!
        /var/ocp-airgap-poc/installer
 - Create ISO File!
 
-#### 5. Install via virt-manager
-
-We have manually created 3 KVM hosts on our KVM Hypervisor in REL9.
-
-# Installing OpenShift
-
 ### Start the 3 prepped KVM Hosts on RHEL9
 
 After doing step 4 above (Install Script install-iso-file.sh - create ISO File!)  
@@ -811,7 +807,6 @@ Ignition Server (Port 22623):  ONLINE
 Ingress VIP (192.168.60.20):   ONLINE
 --------------------------------------------
 ```
-
 Or straight on the nodes:
 ```text
 #journalctl -f -u agent-installer
