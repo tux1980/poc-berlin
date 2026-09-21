@@ -1619,6 +1619,14 @@ Network from KVM on Place 1
 #oc patch bmh ocp4-node5 -n openshift-machine-api --type merge -p '{"spec":{"online":false}}'
 ```
 
+```text
+# In Case the scale to zero command (#oc scale machineset pb-poc-kubevirt-worker --replicas=0) fails:
+#oc patch bmh ocp4-node4 -n openshift-machine-api --type json -p '[{"op": "remove", "path": "/spec/consumerRef"}]'
+#oc patch bmh ocp4-node5 -n openshift-machine-api --type json -p '[{"op": "remove", "path": "/spec/consumerRef"}]'
+#oc patch machine pb-poc-kubevirt-worker-p69q2 -n openshift-machine-api --type json -p '[{"op": "remove", "path": "/metadata/finalizers"}]'
+#oc patch machine pb-poc-kubevirt-worker-xtrbf -n openshift-machine-api --type json -p '[{"op": "remove", "path": "/metadata/finalizers"}]'
+```
+
 Monitor the process
 ```text
 # Watch the Metal3 operator write the OS to the disks
