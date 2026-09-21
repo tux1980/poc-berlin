@@ -714,13 +714,12 @@ Test: Query status of ocp4-node1
 
 #### 0. URL's 
 
-- [OpenShift Documentation - Installation & Update]](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/architecture/architecture-installation)
+- [OpenShift Documentation - Installation & Update](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/architecture/architecture-installation)
 - [Installing an on-premise cluster with the Agent-based Installer](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/installing_an_on-premise_cluster_with_the_agent-based_installer/preparing-to-install-with-agent-based-installer#agent-based-installer-recommended-resources_preparing-to-install-with-agent-based-installer)
 - [Deploying OpenShift Container Platform clusters with virtualized control planes](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html-single/virtualized_control_planes/index#vcp-overview)
 - [Red Hat Docu / Bonds with agent-config.yaml](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/installing_an_on-premise_cluster_with_the_agent-based_installer/preparing-to-install-with-agent-based-installer)
 - [API Docu - Provisioning [metal3.io/v1alpha1]](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/provisioning_apis/provisioning-metal3-io-v1alpha1)
-- [Under the hood of OpenShift update mechanism]](https://rubenrodrigues.fr/under-the-hood-of-ocp-upgrade-mechanism/)
-- [Red Hat OpenShift Container Platform Update Graph]](https://access.redhat.com/labs/ocpupgradegraph/update_path?channel=stable-4.21&arch=x86_64&is_show_hot_fix=true&current_ocp_version=4.21.27&target_ocp_version=4.22.12)
+- [Under the hood of OpenShift update mechanism](https://rubenrodrigues.fr/under-the-hood-of-ocp-upgrade-mechanism/)
 - 
 #### 1. First, set your variables (.bashrc)
 
