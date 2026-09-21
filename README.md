@@ -779,23 +779,21 @@ Create the empty File:
 #echo '{}' > /usb1/var/poc-berlin/auth.json // Create auth file with an empty json object!
 ```
 
-#### 1. Login Registry in auth.json
-
-#### 2. Mein Pull Secret in Auth File einfügen:
+#### 1. Mein Pull Secret in Auth File einfügen:
 ```text
-printf '%s\n' '{PULL_SECRET}' > /usb1/var/poc-berlin/auth.json
+printf '%s\n' '[PULL_SECRET from console.redhat.com]' > /usb1/var/poc-berlin/auth.json
 ```
-#### 3. Red Hat Registry Login
+#### 2. Red Hat Registry Login
 ```text
 #podman login registry.redhat.io --authfile /usb1/var/poc-berlin/auth.json
 ```
 
-#### 4. Quay.io Release Login (wird für das Release-Image benötigt)
+#### 3. Quay.io Release Login (wird für das Release-Image benötigt)
 ```text
 #podman login quay.io --authfile /usb1/var/poc-berlin/auth.json
 ```
 
-#### 5. Login PoC Offline Registry: Give auth file to local Registry
+#### 4. Login PoC Offline Registry: Give auth file to local Registry
 ```text
 #podman login storm4.ocp.berlin.test:5000 --tls-verify=false --authfile /usb1/var/poc-berlin/auth.json
 ```
