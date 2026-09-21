@@ -433,7 +433,7 @@ Node IPs:
  - ocp4-node3.poc.ocp.berlin.test: 192.168.60.13
 ```
 
-## Design Picture / Architecture
+## Design / Architecture
 
 ### 1. Input Dependencies (Configuration Fields)
 
@@ -569,6 +569,38 @@ Start Container Image/Registry airgapped!
   local-poc-registry:2
 ```
 
+### Test Commands Registry Tests
+
+#### Up and running?
+```text
+#curl -vk https://storm4.ocp.berlin.test:5000
+```
+
+#### Further Tests!
+```text
+#curl -k https://storm4.ocp.berlin.test:5000/v2/_catalog | jq .
+#curl -k https://storm4.ocp.berlin.test:5000/v2/openshift/release/openshift/release-images/tags/list | jq .
+```
+
+#### Pull Test
+```text
+#podman pull --tls-verify=false storm4.ocp.berlin.test:5000/openshift/release/openshift/release-images:4.22.10-x86_64
+```
+
+#### Check Manifests in the Image Workspace
+
+```text
+oc-mirror generated for ImageContentSourcePolicy (ICSP) eg. ImageDigestMirrorSet (IDMS)
+Files:
+#ls -la /usb1/var/poc-berlin/workspace/working-dir/
+```
+
+#### Memory Check in /var
+
+```text
+#du -sh /usb1/var/poc-berlin/data /usb1/var/poc-berlin/workspace
+```
+
 ## Mirror offline & oc-mirror for images
 
 Authfile (pull-secret,RH registry, Podman Registry):
@@ -652,38 +684,6 @@ Second time - after updating the imageset-config.yaml file!
 Optional Copy the Delta-Data to USB Harddisk
 ```text
 #rsync -avzP --inplace --exclude='*pinned_*.yaml' root@storm4.local:/usb1/var/poc-berlin/ /home/wmarx/po-berlin/harddisk/usb1/var/poc-berlin/
-```
-
-### Test Commands Registry Tests
-
-#### Up and running?
-```text
-#curl -vk https://storm4.ocp.berlin.test:5000
-```
-
-#### Further Tests!
-```text
-#curl -k https://storm4.ocp.berlin.test:5000/v2/_catalog | jq .
-#curl -k https://storm4.ocp.berlin.test:5000/v2/openshift/release/openshift/release-images/tags/list | jq .
-```
-
-#### Pull Test
-```text
-#podman pull --tls-verify=false storm4.ocp.berlin.test:5000/openshift/release/openshift/release-images:4.22.10-x86_64
-```
-
-#### Check Manifests in the Image Workspace
-
-```text
-oc-mirror generated for ImageContentSourcePolicy (ICSP) eg. ImageDigestMirrorSet (IDMS)
-Files:
-#ls -la /usb1/var/poc-berlin/workspace/working-dir/
-```
-
-#### Memory Check in /var
-
-```text
-#du -sh /usb1/var/poc-berlin/data /usb1/var/poc-berlin/workspace
 ```
 
 ## Pack your registry workspace and take it to the PoC!
