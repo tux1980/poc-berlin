@@ -1247,11 +1247,11 @@ Approach2:
 ## RHEL10 - Create a Template additional to the Boot Source
 
 #### RHEL10 YAML Template Manifest
-/var/poc-polizei/day2/template_rhel10.yaml  
+/var/poc-berlin/day2/template_rhel10.yaml  
 
 Create the RHEL Template:  
 ```text
-#oc apply -f /var/poc-polizei/day2/template_rhel10.yaml -n vm
+#oc apply -f /var/poc-berlin/day2/template_rhel10.yaml -n vm
 ```
 
 # Create "not-rhel" templates!
