@@ -797,6 +797,7 @@ printf '%s\n' '[PULL_SECRET from console.redhat.com]' > /usb1/var/poc-berlin/aut
 ```text
 #podman login storm4.ocp.berlin.test:5000 --tls-verify=false --authfile /usb1/var/poc-berlin/auth.json
 ```
+#### 5. Fixing the environment variables 
 
 ```text
 # Read variables from /usb1/var/poc-berlin (for the two install Files!)
