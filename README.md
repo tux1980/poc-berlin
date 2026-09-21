@@ -1517,9 +1517,10 @@ spec:
  provisioningIP: 172.22.0.3                 # IP address assigned to enp9s0 on the master nodes
  provisioningNetworkCIDR: 172.22.0.0/24     # CIDR of the provisioning network
  provisioningDHCPRange: 172.22.0.10,172.22.0.100 # DHCP range for PXE discovery and booting
- provisioningMacAddresses:
- - "52:54:00:b2:03:ce"                      # Node 4 provisioning MAC
- - "52:54:00:c9:c6:76"                      # Node 5 provisioning MAC              
+ provisioningMacAddresses: #PXE and DHCP from Ironic has to bind to the master "provisiong-network!
+ - "52:54:00:02:2d:fd"                      # Node 1 provisioning MAC
+ - "52:54:00:fb:3e:4b"                      # Node 2 provisioning MAC
+ - "52:54:00:62:ba:2c"                      # Node 3 provisioning MAC     
  preProvisioningOSDownloadURLs: {}
  watchAllNamespaces: true
 --------------------------------------------------------------
