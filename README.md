@@ -1608,40 +1608,41 @@ Network from KVM on Place 1
 ```
 
 ```text
-# Sets the power state for both nodes to "on" / VMs are powered on.
+Sets the power state for both nodes to "on" / VMs are powered on.
 #oc patch bmh ocp4-node4 -n openshift-machine-api --type=merge -p '{"spec":{"online":true}}'
 #oc patch bmh ocp4-node5 -n openshift-machine-api --type=merge -p '{"spec":{"online":true}}'
 ```
 
 ```text
-# Sets the power state for both nodes to "off" / VMs are powered off.
+Sets the power state for both nodes to "off" / VMs are powered off.
 #oc patch bmh ocp4-node4 -n openshift-machine-api --type merge -p '{"spec":{"online":false}}'
 #oc patch bmh ocp4-node5 -n openshift-machine-api --type merge -p '{"spec":{"online":false}}'
 ```
 
 ```text
-# In Case the scale to zero command (#oc scale machineset pb-poc-kubevirt-worker --replicas=0) fails:
+In Case the scale to zero command (#oc scale machineset pb-poc-kubevirt-worker --replicas=0) fails:
 #oc patch bmh ocp4-node4 -n openshift-machine-api --type json -p '[{"op": "remove", "path": "/spec/consumerRef"}]'
 #oc patch bmh ocp4-node5 -n openshift-machine-api --type json -p '[{"op": "remove", "path": "/spec/consumerRef"}]'
 #oc patch machine pb-poc-kubevirt-worker-p69q2 -n openshift-machine-api --type json -p '[{"op": "remove", "path": "/metadata/finalizers"}]'
 #oc patch machine pb-poc-kubevirt-worker-xtrbf -n openshift-machine-api --type json -p '[{"op": "remove", "path": "/metadata/finalizers"}]'
 ```
 
-Monitor the process
+Monitor the process & Log with Metal3 Provisioner
 ```text
-# Watch the Metal3 operator write the OS to the disks
-oc get bmh -n openshift-machine-api
+Watch the Metal3 operator write the OS to the disks
+#oc get bmh -n openshift-machine-api
+#oc logs -n openshift-machine-api -l k8s-app=metal3 --tail=50
 ```
 
 ```text
-# Track the OpenShift-level machine resource state
-oc get machines -n openshift-machine-api
+Track the OpenShift-level machine resource state
+#oc get machines -n openshift-machine-api
 ```
 
 ```text
-# And if we see “pending” CSR’s with
-oc get csr >> we have to approve them!
-oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve
+And if we see “pending” CSR’s with
+#oc get csr >> we have to approve them!
+#oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve
 ```
 
 Logs during deployment of additional Nodes to provision!
