@@ -806,9 +806,9 @@ REGISTRY_CA=$(cat /usb1/var/poc-berlin/certs/domain.crt)
 PULL_SECRET=$(cat /usb1/var/poc-berlin/auth.json | tr -d '\n')
 
 Or fix via entries in our local .bashrc:
-export SSH_KEY="$(cat ~/.ssh/id_ed25519.pub 2>/dev/null || cat ~/.ssh/id_rsa.pub)"
-export PULL_SECRET="$(cat /usb1/var/poc-berlin/auth.json | jq -c .)"
-export REGISTRY_CA="$(cat /usb1/var/poc-berlin/certs/domain.crt)"
+export SSH_KEY=$(cat ~/.ssh/id_ed25519.pub 2>/dev/null || cat ~/.ssh/id_rsa.pub)
+export REGISTRY_CA=$(cat /var/poc-polizei/certs/domain.crt)                     
+export PULL_SECRET=$(cat /var/poc-polizei/auth.json | tr -d '\n')
 ```
 
 #### 2.1 Create install-config.yaml (/usb1/var/poc-berlin)
