@@ -811,7 +811,9 @@ export REGISTRY_CA=$(cat /var/poc-polizei/certs/domain.crt)
 export PULL_SECRET=$(cat /var/poc-polizei/auth.json | tr -d '\n')
 ```
 
-#### 2.1 Create install-config.yaml (/usb1/var/poc-berlin)
+## Install Config & Agent Config
+
+#### 1. Create install-config.yaml (/usb1/var/poc-berlin)
 
 This mirrors all default domains (quay.io and registry.redhat.io) exclusively to your local
 registry (storm4.ocp.berlin.test:5000)
@@ -820,7 +822,7 @@ Remark:
 Actually the install-config is accommodated in the /usb1/var/poc-berlin/ directory - we just copy them to the "installer" Directory since those files just temporay in this directory (the installer directory)
 /usb1/var/poc-berlin/installer/install-config.yaml
 ```
-#### 2.2 RootDevice Hints!
+#### 1.2 RootDevice Hints!
 If the default entry does not works - you have to figure this on the CoreOS Console.  
 Just boot the CoreOS OCP Node with the agent.iso file and figure out the Hints:  
 ```text
@@ -841,13 +843,13 @@ rootDeviceHints:
 ```
 ---------------------------------------------------------------
 
-#### 3. Create agent-config.yaml File
+#### 2. Create agent-config.yaml (/usb1/var/poc-berlin)
 ```text
 Remark:
 Actually the agent-config is accommodated in the /usb1/var/poc-berlin/ directory - we just copy them to the "installer" Directory since those files just temporay in this directory (the installer directory)
 /usb1/var/poc-berlin/installer/agent-config.yaml
 ```
-#### 4. Install ISO Image for Deployment
+#### 3. Install ISO Image for Deployment
 
 Cleanup with cleanup-installer.sh
 
