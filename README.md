@@ -802,7 +802,7 @@ Test: Query status of ocp4-node1
 #### 1. First, set your variables (.bashrc)
 
 ```text
-# Read variables from /usb1/var/poc-berlin (for the tow install Files!)
+# Read variables from /usb1/var/poc-berlin (for the two install Files!)
 SSH_KEY=$(cat ~/.ssh/id_ed25519.pub 2>/dev/null || cat ~/.ssh/id_rsa.pub)
 REGISTRY_CA=$(cat /usb1/var/poc-berlin/certs/domain.crt)
 PULL_SECRET=$(cat /usb1/var/poc-berlin/auth.json | tr -d '\n')
