@@ -99,6 +99,84 @@ Optional: And new again……
 #virsh net-autostart ocp-net
 ```
 
+## Create the 3 VM's with KVM/QEMU for my OpenShift Compact Cluster
+ocp4-node1:  
+```text
+Storage Size Disk Device:
+150GB
+
+Memory / RAM:
+32GB
+
+CPU Assignmet:
+8vCPU
+
+SATA CDROM - Boot ISO OpenShift:
+/PATH/agent.x86_64.iso (The Install ISO we creating later...)
+
+Network Interfaces:
+ocp-net / Leg1:         52:54:00:aa:bb:01
+ocp-net / Leg2:         52:54:00:aa:bb:21
+VM-Network:             52:54:00:5c:b6:a3
+Prov. Network Ironic:   52:54:00:02:2d:fd
+
+Boot Sequence:
+1. VirtIO Disk
+2. CDROM
+3. NIC: First Leg "ocp-net" / 52:54:00:aa:bb:01
+```
+ocp4-node2:  
+```text
+Storage Size Disk Device:
+150GB
+
+Memory / RAM:
+32GB
+
+CPU Assignmet:
+8vCPU
+
+SATA CDROM - Boot ISO OpenShift:
+/PATH/agent.x86_64.iso (The Install ISO we creating later...)
+
+Network Interfaces:
+ocp-net / Leg1:         52:54:00:aa:bb:02
+ocp-net / Leg2:         52:54:00:aa:bb:22
+VM-Network:             52:54:00:ab:fe:cb
+Prov. Network Ironic:   52:54:00:fb:3e:4b
+
+Boot Sequence:
+1. VirtIO Disk
+2. CDROM
+3. NIC: First Leg "ocp-net" / 52:54:00:aa:bb:02
+```
+
+ocp4-node3:  
+```text
+Storage Size Disk Device:
+150GB
+
+Memory / RAM:
+32GB
+
+CPU Assignmet:
+8vCPU
+
+SATA CDROM - Boot ISO OpenShift:
+/PATH/agent.x86_64.iso (The Install ISO we creating later...)
+
+Network Interfaces:
+ocp-net / Leg1:         52:54:00:aa:bb:03
+ocp-net / Leg2:         52:54:00:aa:bb:23
+VM-Network:             52:54:00:64:e5:9d
+Prov. Network Ironic:   52:54:00:62:ba:2c
+
+Boot Sequence:
+1. VirtIO Disk
+2. CDROM
+3. NIC: First Leg "ocp-net" / 52:54:00:aa:bb:03
+```
+
 ## Attach Interfaces for all 3 libvirt networks!
 
 Hybrid Nodes (Compact Cluster Nodes, Control Plane & Worker)
