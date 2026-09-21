@@ -1497,19 +1497,32 @@ installation process (such as triggering unexpected power cycles, hardware inspe
 disk-cleaning steps while the nodes are actively writing to disk), it explicitly detaches the
 hosts from BMO control
 
+#### Create an empty VM Shell for the worker nodes later (Done above!)
+
+Create two virtual machine (e.g., named ocp4-node4/5) on storm4.
+- State:  
+       Keep the VM completely powered off (in shut off state).
+- Virtual Disk:  
+       Attach a blank virtual disk (e.g., /var/lib/libvirt/images/ocp4-node4.qcow2) with a
+       capacity matching your existing worker nodes.
+- MAC Address:  
+       Record the MAC address of the primary network interface that is bridged to your
+       192.168.60.0/24 subnet (ocp-net)
+
+
 #### Apply the BMC Secrets for the BMC Cards
 
 Day2 directory:
 /usb1/var/poc-berlin/day2
 ```text
-#oc apply -f bmc-secrets-node4_and_5.yaml
+#oc apply -f /usb1/var/poc-berlin/day2/bmc-secrets-node4_and_5.yaml
 ```
 #### Patch the existing BMHs with BMC configuration
 
 The following Resource we have to change:
 ```text
 #oc get provisionings.metal3.io provisioning-configuration -o yaml
-#oc apply -f provisioning-configuration.yaml
+#oc apply -f /usb1/var/poc-berlin/day2/provisioning-configuration.yaml
 --------------------------------------------------------------
 spec:
  provisioningNetwork: Managed
@@ -1547,31 +1560,15 @@ What does it:
 ### Patch the existing BMH Hosts and create node4 & 5
 
 ```text
-#oc apply -f baremetalhosts.yaml
+#oc apply -f /usb1/var/poc-berlin/day2/baremetalhosts_node4_and_5.yaml
 ```
-
-### Create an empty VM Shell for the worker nodes later
-
-Create two virtual machine (e.g., named ocp4-node4/5) on storm4.
-- State:  
-       Keep the VM completely powered off (in shut off state).
-- Virtual Disk:  
-       Attach a blank virtual disk (e.g., /var/lib/libvirt/images/ocp4-node4.qcow2) with a
-       capacity matching your existing worker nodes.
-- MAC Address:  
-       Record the MAC address of the primary network interface that is bridged to your
-       192.168.60.0/24 subnet (ocp-net)
-
-### The additional BMHosts in OpenShift
-
-Create the Secret:
+#oc get bmh -n openshift-machine-api  
 ```text
-#oc apply -f /usb1/var/poc-berlin/day2/bmc-secrets.yaml
-```
+Outcome should be:
+Name:                                State:                              ONLINE:
+ocp4-node4                           available                           true            
+ocp4-node5                           available                           true            
 
-Create and Apply the Standalone BareMetalHost (BMH) Definitions
-```text
-#oc apply -f /usb1/var/poc-berlin/day2/baremetalhosts.yaml
 ```
 
 Check Registration Process / Verify Registration!
