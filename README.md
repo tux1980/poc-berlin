@@ -424,13 +424,13 @@ or port 22)"
 
 ## Architectural Summary
 ```text
-- Nodes:                       3 Compact Nodes (Master + Worker role combined)
-- Ingress Virtual IPs (VIPs):  192.168.60.20
-- API VIP:                     192.168.60.10
-- Node IPs:
-           - ocp4-node1.poc.ocp.berlin.test: 192.168.60.11 (Rendezvous Host!!)  
-           - ocp4-node2.poc.ocp.berlin.test: 192.168.60.12  
-           - ocp4-node3.poc.ocp.berlin.test: 192.168.60.13
+Nodes:                       3 Compact Nodes (Master + Worker role combined)
+Ingress Virtual IPs (VIPs):  192.168.60.20
+API VIP:                     192.168.60.10
+Node IPs:
+ - ocp4-node1.poc.ocp.berlin.test: 192.168.60.11 (Rendezvous Host!!)  
+ - ocp4-node2.poc.ocp.berlin.test: 192.168.60.12  
+ - ocp4-node3.poc.ocp.berlin.test: 192.168.60.13
 ```
 
 ## Design Picture / Architecture
