@@ -350,9 +350,9 @@ or port 22)"
 - Ingress Virtual IPs (VIPs):  192.168.60.20
 - API VIP:                     192.168.60.10
 - Node IPs:
-           - ocp4-node1.pb-poc.ocp.polizei.test: 192.168.60.11 (Rendezvous Host!!)  
-           - ocp4-node2.pb-poc.ocp.polizei.test: 192.168.60.12  
-           - ocp4-node3.pb-poc.ocp.polizei.test: 192.168.60.13
+           - ocp4-node1.pb-poc.ocp.berlin.test: 192.168.60.11 (Rendezvous Host!!)  
+           - ocp4-node2.pb-poc.ocp.berlin.test: 192.168.60.12  
+           - ocp4-node3.pb-poc.ocp.berlin.test: 192.168.60.13
 ```
 
 ## Design Picture / Architecture
@@ -416,8 +416,8 @@ the targeted cluster hosts. These target nodes are categorized into three roles:
   -keyout /usb1/var/poc-berlin/certs/domain.key \
   -x509 -days 365 \
   -out /usb1/var/poc-berlin/certs/domain.crt \
-  -subj "/CN=storm4.ocp.polizei.test" \
-  -addext "subjectAltName=DNS:storm4.ocp.polizei.test,IP:192.168.60.1"
+  -subj "/CN=storm4.ocp.berlin.test" \
+  -addext "subjectAltName=DNS:storm4.ocp.berlin.test,IP:192.168.60.1"
 ```
 
 ## Podman Registry
@@ -517,7 +517,7 @@ printf '%s\n' '{PULL_SECRET}' > /usb1/var/poc-berlin/auth.json
 
 #### Login PoC Offline Registry: Give auth file to local Registry
 ```text
-#podman login storm4.ocp.polizei.test:5000 --tls-verify=false --authfile /usb1/var/poc-berlin/auth.json
+#podman login storm4.ocp.berlin.test:5000 --tls-verify=false --authfile /usb1/var/poc-berlin/auth.json
 ```
 
 # oc-mirror Binary installieren
@@ -553,7 +553,7 @@ First time to replicate!
   --workspace file:///usb1/var/poc-berlin/workspace \
   --authfile /usb1/var/poc-berlin/auth.json \
   --dest-tls-verify=false \
-  docker://storm4.ocp.polizei.test:5000/openshift/release \
+  docker://storm4.ocp.berlin.test:5000/openshift/release \
   --v2
 ```
 
@@ -568,7 +568,7 @@ Second time - after updating the imageset-config.yaml file!
   --retry-times 10 \
   --parallel-images 2 \
   --parallel-layers 2 \
-  docker://storm4.ocp.polizei.test:5000/openshift/release \
+  docker://storm4.ocp.berlin.test:5000/openshift/release \
   --v2
 ```
 Optional Copy the Delta-Data to USB Harddisk
@@ -580,18 +580,18 @@ Optional Copy the Delta-Data to USB Harddisk
 
 #### Up and running?
 ```text
-#curl -vk https://storm4.ocp.polizei.test:5000
+#curl -vk https://storm4.ocp.berlin.test:5000
 ```
 
 #### Further Tests!
 ```text
-#curl -k https://storm4.ocp.polizei.test:5000/v2/_catalog | jq .
-#curl -k https://storm4.ocp.polizei.test:5000/v2/openshift/release/openshift/release-images/tags/list | jq .
+#curl -k https://storm4.ocp.berlin.test:5000/v2/_catalog | jq .
+#curl -k https://storm4.ocp.berlin.test:5000/v2/openshift/release/openshift/release-images/tags/list | jq .
 ```
 
 #### Pull Test
 ```text
-#podman pull --tls-verify=false storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images:4.22.10-x86_64
+#podman pull --tls-verify=false storm4.ocp.berlin.test:5000/openshift/release/openshift/release-images:4.22.10-x86_64
 ```
 
 #### Check Manifests in the Image Workspace
@@ -625,7 +625,7 @@ Mirror external Bastion Host! Maybe the NAME is gonna change!
   --retry-times 10 \
   --parallel-images 2 \
   --parallel-layers 2 \
-  docker://storm4.ocp.polizei.test:5000/openshift/release \
+  docker://storm4.ocp.berlin.test:5000/openshift/release \
   --v2
 ```
 # VirtualBMC with OpenShift BMO
@@ -733,7 +733,7 @@ PULL_SECRET=$(cat /usb1/var/poc-berlin/auth.json | tr -d '\n')
 #### 2.1 Create install-config.yaml (/usb1/var/poc-berlin)
 
 This mirrors all default domains (quay.io and registry.redhat.io) exclusively to your local
-registry (storm4.ocp.polizei.test:5000)
+registry (storm4.ocp.berlin.test:5000)
 ```text
 Remark:
 Actually the install-config is accommodated in the /usb1/var/poc-berlin/ directory - we just copy them to the "installer" Directory since those files just temporay in this directory (the installer directory)
@@ -863,23 +863,23 @@ A inline Python script then scans the manifest to extract and list all required 
 
 ### Test - is image we need there?
 ```text
-#oc adm release info storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images:4.22.12-x86_64 --insecure=true
+#oc adm release info storm4.ocp.berlin.test:5000/openshift/release/openshift/release-images:4.22.12-x86_64 --insecure=true
 ```
 
 ### DNS-check against the DNS Resolver
 
 ```text
-#dig @192.168.60.1 api.pb-poc.ocp.polizei.test +short
-#dig @192.168.60.1 console-openshift-console.apps.pb-poc.ocp.polizei.test +short
+#dig @192.168.60.1 api.pb-poc.ocp.berlin.test +short
+#dig @192.168.60.1 console-openshift-console.apps.pb-poc.ocp.berlin.test +short
 ```
 
 # Login Process (Web UI & CLI)
 ### Login via "oc" or Web UI
 ```text
 Command Line:
-#oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.pb-poc.ocp.polizei.test:6443"
+#oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.pb-poc.ocp.berlin.test:6443"
 WebUI:
-https://console-openshift-console.apps.pb-poc.ocp.polizei.test
+https://console-openshift-console.apps.pb-poc.ocp.berlin.test
 ```
 ### Create a Context
 ```text
@@ -892,7 +892,7 @@ An OpenShift context is a set of access parameters stored inside your ~/.kube/co
 oc config get-contexts
 
 # Create Context
-oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.pb-poc.ocp.polizei.test:6443 --context=admin-poc
+oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.pb-poc.ocp.berlin.test:6443 --context=admin-poc
 
 # Switch Context:
 oc config use-context admin-poc
@@ -1233,7 +1233,7 @@ Create two virtual machines from the customized RHEL 9 template in namespace via
 We have several possibilities to access a VM - straight via ssh, via the virtctl tool or the WEBUI,....  
 Way1: virtctl
 Download via the OC UI (Command Line Tools)
-#wget --no-check-certificate https://hyperconverged-cluster-cli-download-openshift-cnv.apps.pb-poc.ocp.polizei.test/amd64/linux/virtctl.tar.gz
+#wget --no-check-certificate https://hyperconverged-cluster-cli-download-openshift-cnv.apps.pb-poc.ocp.berlin.test/amd64/linux/virtctl.tar.gz
 ```text
 Jump to the RHEL9 console!
 Approach1:
