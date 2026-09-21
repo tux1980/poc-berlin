@@ -419,6 +419,87 @@ Bit of Troubleshoooting….
 #tcpdump -nn -i any "host (192.168.60.1 or 192.168.60.11) and (port 53 or port 5000 or icmp
 or port 22)"
 ```
+# VirtualBMC with OpenShift BMO
+
+Run Metal3 with VBMC and KVM  
+Simulate baremetal servers - Create a virtual baremetal environment to “test” baremetal  
+cloud services such as Cluster API Provider Metal3, Ironic and Bare Metal Operator  
+
+### Components of OpenShift Metal3
+
+Cluster-Baremetal-Operator (CBO):
+The operator manages and monitors Metal3 services on control plane nodes based on
+deployment configs.
+
+BareMetalHost (BMH):
+A Custom Resource representing a physical server, storing its online status, MAC addresses,
+and BMC credentials. The Server is “stored” in the OCP Database for later use if needed for
+additional utilization.
+
+Ironic:
+The underlying service (original from OpenStack) handles hardware inspection, PXE booting,
+and image deployment.
+
+
+### Configure VirtualBMC on storm4
+
+Create a Python virtual environment and install virtualbmc:
+```text
+#sudo python3 -m venv /opt/vbmc --system-site-packages
+#source /opt/vbmc/bin/activate
+#pip install virtualbmc
+```
+
+Create the vbmc service:
+```text
+#vim /etc/systemd/system/vbmcd.service
+#systemctl daemon-reload
+#systemctl start vbmcd
+#systemctl status vbmcd
+```
+
+Start the virtual BMC daemon
+```text
+#vbmc
+#vbmc list
+```
+
+Register existing Nodes!
+```text
+#vbmc add ocp4-node1 --address 192.168.60.1 --port 6234 --libvirt-uri qemu:///system
+--username wmarx --password redhat
+#vbmc add ocp4-node2 --address 192.168.60.1 --port 6235 --libvirt-uri qemu:///system
+--username wmarx --password redhat
+#vbmc add ocp4-node3 --address 192.168.60.1 --port 6236 --libvirt-uri qemu:///system
+--username wmarx --password redhat
+```
+
+Worker Nodes, second MachineSet - doing that later! (Optional!)
+
+```text
+#vbmc add ocp4-node4 --address 192.168.60.1 --port 6237 --libvirt-uri qemu:///system
+--username wmarx --password redhat
+#vbmc add ocp4-node5 --address 192.168.60.1 --port 6238 --libvirt-uri qemu:///system
+--username wmarx --password redhat
+```
+
+Start the BMC service for this VM’s
+```text
+vbmc start ocp4-node1
+vbmc start ocp4-node2
+vbmc start ocp4-node3
+vbmc start ocp4-node4
+vbmc start ocp4-node5
+```
+
+### Verify the IPMI Interface
+
+Test: Query status of ocp4-node1
+```text
+#ipmitool -I lanplus -H 192.168.60.1 -U wmarx -P redhat -p 6234 power status
+#ipmitool -I lanplus -H 192.168.60.1 -U wmarx -P redhat -p 6234 power on
+#ipmitool -I lanplus -H 192.168.60.1 -U wmarx -P redhat -p 6234 power off
+```
 
 # Overview Install Process of OpenShift
 
@@ -677,88 +758,6 @@ Mirror external Bastion Host! Maybe the NAME is gonna change!
   docker://storm4.ocp.berlin.test:5000/openshift/release \
   --v2
 ```
-# VirtualBMC with OpenShift BMO
-
-Run Metal3 with VBMC and KVM  
-Simulate baremetal servers - Create a virtual baremetal environment to “test” baremetal  
-cloud services such as Cluster API Provider Metal3, Ironic and Bare Metal Operator  
-
-### Components of OpenShift Metal3
-
-Cluster-Baremetal-Operator (CBO):
-The operator manages and monitors Metal3 services on control plane nodes based on
-deployment configs.
-
-BareMetalHost (BMH):
-A Custom Resource representing a physical server, storing its online status, MAC addresses,
-and BMC credentials. The Server is “stored” in the OCP Database for later use if needed for
-additional utilization.
-
-Ironic:
-The underlying service (original from OpenStack) handles hardware inspection, PXE booting,
-and image deployment.
-
-
-### Configure VirtualBMC on storm4
-
-Create a Python virtual environment and install virtualbmc:
-```text
-#sudo python3 -m venv /opt/vbmc --system-site-packages
-#source /opt/vbmc/bin/activate
-#pip install virtualbmc
-```
-
-Create the vbmc service:
-```text
-#vim /etc/systemd/system/vbmcd.service
-#systemctl daemon-reload
-#systemctl start vbmcd
-#systemctl status vbmcd
-```
-
-Start the virtual BMC daemon
-```text
-#vbmc
-#vbmc list
-```
-
-Register existing Nodes!
-```text
-#vbmc add ocp4-node1 --address 192.168.60.1 --port 6234 --libvirt-uri qemu:///system
---username wmarx --password redhat
-#vbmc add ocp4-node2 --address 192.168.60.1 --port 6235 --libvirt-uri qemu:///system
---username wmarx --password redhat
-#vbmc add ocp4-node3 --address 192.168.60.1 --port 6236 --libvirt-uri qemu:///system
---username wmarx --password redhat
-```
-
-Worker Nodes, second MachineSet - doing that later! (Optional!)
-
-```text
-#vbmc add ocp4-node4 --address 192.168.60.1 --port 6237 --libvirt-uri qemu:///system
---username wmarx --password redhat
-#vbmc add ocp4-node5 --address 192.168.60.1 --port 6238 --libvirt-uri qemu:///system
---username wmarx --password redhat
-```
-
-Start the BMC service for this VM’s
-```text
-vbmc start ocp4-node1
-vbmc start ocp4-node2
-vbmc start ocp4-node3
-vbmc start ocp4-node4
-vbmc start ocp4-node5
-```
-
-### Verify the IPMI Interface
-
-Test: Query status of ocp4-node1
-```text
-#ipmitool -I lanplus -H 192.168.60.1 -U wmarx -P redhat -p 6234 power status
-#ipmitool -I lanplus -H 192.168.60.1 -U wmarx -P redhat -p 6234 power on
-#ipmitool -I lanplus -H 192.168.60.1 -U wmarx -P redhat -p 6234 power off
-```
-
 # Installing OpenShift
 
 #### 0. URL's 
