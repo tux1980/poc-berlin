@@ -350,9 +350,9 @@ or port 22)"
 - Ingress Virtual IPs (VIPs):  192.168.60.20
 - API VIP:                     192.168.60.10
 - Node IPs:
-           - ocp4-node1.pb-poc.ocp.berlin.test: 192.168.60.11 (Rendezvous Host!!)  
-           - ocp4-node2.pb-poc.ocp.berlin.test: 192.168.60.12  
-           - ocp4-node3.pb-poc.ocp.berlin.test: 192.168.60.13
+           - ocp4-node1.poc.ocp.berlin.test: 192.168.60.11 (Rendezvous Host!!)  
+           - ocp4-node2.poc.ocp.berlin.test: 192.168.60.12  
+           - ocp4-node3.poc.ocp.berlin.test: 192.168.60.13
 ```
 
 ## Design Picture / Architecture
@@ -869,17 +869,17 @@ A inline Python script then scans the manifest to extract and list all required 
 ### DNS-check against the DNS Resolver
 
 ```text
-#dig @192.168.60.1 api.pb-poc.ocp.berlin.test +short
-#dig @192.168.60.1 console-openshift-console.apps.pb-poc.ocp.berlin.test +short
+#dig @192.168.60.1 api.poc.ocp.berlin.test +short
+#dig @192.168.60.1 console-openshift-console.apps.poc.ocp.berlin.test +short
 ```
 
 # Login Process (Web UI & CLI)
 ### Login via "oc" or Web UI
 ```text
 Command Line:
-#oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.pb-poc.ocp.berlin.test:6443"
+#oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.poc.ocp.berlin.test:6443"
 WebUI:
-https://console-openshift-console.apps.pb-poc.ocp.berlin.test
+https://console-openshift-console.apps.poc.ocp.berlin.test
 ```
 ### Create a Context
 ```text
@@ -892,7 +892,7 @@ An OpenShift context is a set of access parameters stored inside your ~/.kube/co
 oc config get-contexts
 
 # Create Context
-oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.pb-poc.ocp.berlin.test:6443 --context=admin-poc
+oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.poc.ocp.berlin.test:6443 --context=admin-poc
 
 # Switch Context:
 oc config use-context admin-poc
@@ -1123,13 +1123,13 @@ What does that issue file do for us?
       (selfsigned-root-issuer).
   2. Automated Root CA Certificate: We ask cert-manager to use that bootstrapper to
       generate a highly secure, dedicated Root CA key pair and save it in a Secret called
-      pb-poc-root-ca-secret.
+      poc-root-ca-secret.
   3. The Production CA Issuer: We create our production-grade ClusterIssuer
-      (pb-poc-trust-issuer) pointing to that automated secret.
+      (poc-trust-issuer) pointing to that automated secret.
 
 Check the issuer (it has to be true!):
 ```text
-#oc get issuer pb-poc-trust-issuer -n openshift-ingress
+#oc get issuer poc-trust-issuer -n openshift-ingress
 ```
 
 #### Step2: Create the Wildcard Certificate Request
@@ -1153,7 +1153,7 @@ Check & Monitor the Process:
 
 ```text
 Extract Active Root Certificate:
-#oc get secret pb-poc-root-ca-secret -n openshift-ingress -o jsonpath='{.data.tls\.crt}' | base64 --decode > active-root-ca.crt
+#oc get secret poc-root-ca-secret -n openshift-ingress -o jsonpath='{.data.tls\.crt}' | base64 --decode > active-root-ca.crt
 Create Cluster-Wide ConfigMap:
 #oc create configmap custom-ca --from-file=ca-bundle.crt=active-root-ca.crt -n openshift-config
 Apply Custom CA to Cluster Proxy:
@@ -1167,7 +1167,7 @@ Test:
 Download the cert locally in the day2 directory!
 ```text
 Again, as in the previous step - Cert Trust für *apps Ingress Certificate for Browser, but this time for our own cert.
-#oc get secret pb-poc-root-ca-secret -n openshift-ingress -o jsonpath='{.data.tls\.crt}' | base64 --decode > active-root-ca.crt
+#oc get secret poc-root-ca-secret -n openshift-ingress -o jsonpath='{.data.tls\.crt}' | base64 --decode > active-root-ca.crt
 #sudo update-ca-trust
 #sudo update-ca-trust extract
 -------------------
@@ -1233,7 +1233,7 @@ Create two virtual machines from the customized RHEL 9 template in namespace via
 We have several possibilities to access a VM - straight via ssh, via the virtctl tool or the WEBUI,....  
 Way1: virtctl
 Download via the OC UI (Command Line Tools)
-#wget --no-check-certificate https://hyperconverged-cluster-cli-download-openshift-cnv.apps.pb-poc.ocp.berlin.test/amd64/linux/virtctl.tar.gz
+#wget --no-check-certificate https://hyperconverged-cluster-cli-download-openshift-cnv.apps.poc.ocp.berlin.test/amd64/linux/virtctl.tar.gz
 ```text
 Jump to the RHEL9 console!
 Approach1:
@@ -1519,7 +1519,7 @@ the RHCOS images from your local registry, and proceed with the installation.
 #oc apply -f worker-machineset.yaml
 #oc get machines -n openshift-machine-api
 #oc get nodes
-#oc scale machineset pb-poc-pdvzj-worker -n openshift-machine-api --replicas=2
+#oc scale machineset poc-pdvzj-worker -n openshift-machine-api --replicas=2
 ```
 
 In the case the Provisioning Provision is failing, check the boot order (you need the provision
@@ -1577,6 +1577,6 @@ Remove Node BMH and machine with force!
 ```text
 #oc patch bmh ocp4-node5 -n openshift-machine-api -p '{"metadata":{"finalizers":[]}}' --type=merge
 #oc patch bmh ocp4-node5 -n openshift-machine-api --type json -p '[ {"op": "remove", "path": "/spec/consumerRef"}]'
-#oc patch machine pb-poc-pdvzj-worker-xxxxx -n openshift-machine-api --type merge -p
+#oc patch machine poc-pdvzj-worker-xxxxx -n openshift-machine-api --type merge -p
 '{"metadata":{"finalizers":[]}}'
 ```
