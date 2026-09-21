@@ -601,36 +601,7 @@ Files:
 #du -sh /usb1/var/poc-berlin/data /usb1/var/poc-berlin/workspace
 ```
 
-## Mirror offline & oc-mirror for images
-
-Authfile (pull-secret,RH registry, Podman Registry):
-```text
-#echo '{}' > /usb1/var/poc-berlin/auth.json // Create auth file with an empty json object!
-```
-
-### Login Registry in auth.json
-
-#### Mein Pull Secret in Auth File einfügen:
-```text
-printf '%s\n' '{PULL_SECRET}' > /usb1/var/poc-berlin/auth.json
-```
-
-#### Red Hat Registry Login
-```text
-#podman login registry.redhat.io --authfile /usb1/var/poc-berlin/auth.json
-```
-
-#### Quay.io Release Login (wird für das Release-Image benötigt)
-```text
-#podman login quay.io --authfile /usb1/var/poc-berlin/auth.json
-```
-
-#### Login PoC Offline Registry: Give auth file to local Registry
-```text
-#podman login storm4.ocp.berlin.test:5000 --tls-verify=false --authfile /usb1/var/poc-berlin/auth.json
-```
-
-# oc-mirror Binary installieren
+# Use OC-Mirror!
 
 ```text
 #curl -O https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/oc-mirror.tar.gz && tar -xzf oc-mirror.tar.gz -C /usr/local/bin/ && chmod +x /usr/local/bin/oc-mirror
@@ -799,7 +770,35 @@ Test: Query status of ocp4-node1
 - [API Docu - Provisioning [metal3.io/v1alpha1]](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/provisioning_apis/provisioning-metal3-io-v1alpha1)
 - [Under the hood of OpenShift update mechanism](https://rubenrodrigues.fr/under-the-hood-of-ocp-upgrade-mechanism/)
 - [Latest technical articles & videos, Like Let's Encrypt u.a.](https://www.certdepot.net/))
-#### 1. First, set your variables (.bashrc)
+
+## First, create auth.json & set your variables (.bashrc)
+
+Create Authfile (We need pull-secret,RH registry, Podman Registry):  
+```text
+Create the empty File:
+#echo '{}' > /usb1/var/poc-berlin/auth.json // Create auth file with an empty json object!
+```
+
+#### 1. Login Registry in auth.json
+
+#### 2. Mein Pull Secret in Auth File einfügen:
+```text
+printf '%s\n' '{PULL_SECRET}' > /usb1/var/poc-berlin/auth.json
+```
+#### 3. Red Hat Registry Login
+```text
+#podman login registry.redhat.io --authfile /usb1/var/poc-berlin/auth.json
+```
+
+#### 4. Quay.io Release Login (wird für das Release-Image benötigt)
+```text
+#podman login quay.io --authfile /usb1/var/poc-berlin/auth.json
+```
+
+#### 5. Login PoC Offline Registry: Give auth file to local Registry
+```text
+#podman login storm4.ocp.berlin.test:5000 --tls-verify=false --authfile /usb1/var/poc-berlin/auth.json
+```
 
 ```text
 # Read variables from /usb1/var/poc-berlin (for the two install Files!)
