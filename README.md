@@ -720,7 +720,7 @@ Test: Query status of ocp4-node1
 - [Red Hat Docu / Bonds with agent-config.yaml](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/installing_an_on-premise_cluster_with_the_agent-based_installer/preparing-to-install-with-agent-based-installer)
 - [API Docu - Provisioning [metal3.io/v1alpha1]](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/provisioning_apis/provisioning-metal3-io-v1alpha1)
 - [Under the hood of OpenShift update mechanism](https://rubenrodrigues.fr/under-the-hood-of-ocp-upgrade-mechanism/)
-- 
+- [Latest technical articles & videos, Like Let's Encrypt u.a.](https://www.certdepot.net/))
 #### 1. First, set your variables (.bashrc)
 
 ```text
