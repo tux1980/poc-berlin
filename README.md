@@ -958,8 +958,11 @@ A inline Python script then scans the manifest to extract and list all required 
 ```
 
 # Login Process (Web UI & CLI)
-### Login via "oc" or Web UI
+### Login via "oc" or Web UI  
+
+
 ```text
+
 Command Line:
 #oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.poc.ocp.berlin.test:6443"
 WebUI:
