@@ -808,6 +808,8 @@ Or fix via entries in our local .bashrc:
 export SSH_KEY=$(cat ~/.ssh/id_ed25519.pub 2>/dev/null || cat ~/.ssh/id_rsa.pub)
 export REGISTRY_CA=$(cat /var/poc-polizei/certs/domain.crt)                     
 export PULL_SECRET=$(cat /var/poc-polizei/auth.json | tr -d '\n')
+export KUBECONFIG=/usb1/var/poc-berlin/installer/auth/kubeconfig
+
 ```
 
 ## Install Config & Agent Config
@@ -962,6 +964,10 @@ Command Line:
 #oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.poc.ocp.berlin.test:6443"
 WebUI:
 https://console-openshift-console.apps.poc.ocp.berlin.test
+
+Or:
+Export the kubeconfig after Installation:
+#export KUBECONFIG=/usb1/var/poc-berlin/installer/auth/kubeconfig
 ```
 ### Create a Context
 ```text
