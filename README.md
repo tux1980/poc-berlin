@@ -54,6 +54,14 @@ Directory: Location for everything which we need for the PoC!
 /usb1/var/poc-berlin
 
 # Network stuff in KVM
+Since, we're supposed to work really "offline" - disable the Internet Access on storm4 for the CoreOS Nodes:
+```text
+Disable Internet Access!
+#iptables -I FORWARD -o enp132s0f0 -s 192.168.60.0/24 -j DROP
+
+Activate again (if really necessary for some test stuff!)
+#iptables -D FORWARD -s 192.168.60.0/24 ! -d 192.168.60.0/24 -j DROP
+```
 
 ## Create the 3 libvirt nets
 
@@ -659,8 +667,12 @@ Start Container Image/Registry airgapped!
 
 #### Up and running?
 ```text
-#curl -vk https://storm4.ocp.berlin.test:5000
+#oc patch OperatorHub cluster --type json -p '[{"op": "add", "path": "/spec/disableAllDefaultSources", "value": true}]'
 ```
+
+#### Disable Default Catalog sources to make sure nothing runs via the deafaults!
+```text
+#curl -vk https://storm4.ocp.berlin.test:5000
 
 #### Further Tests!
 ```text
@@ -738,6 +750,22 @@ Second time - after updating the imageset-config.yaml file!
   docker://storm4.ocp.berlin.test:5000/openshift/release \
   --v2
 ```
+### Sync new Sources
+Sync the new Sources & catalogs AFTER doing oc-mirror - all manifest are getting created automatically in:  
+/var/poc-berlin/workspace/working-dir/cluster-resources/  
+```text
+Either do single files (Like the cs-files and idms file). cc=Community Catalog  //  cs=Certified Store
+#oc apply -f /var/poc-berlin/workspace/working-dir/cluster-resources/cs-redhat-operator-index-v4-22.yaml
+#oc apply -f /var/poc-berlin/workspace/workspace/working-dir/cluster-resources/idms-oc-mirror.yaml
+
+Or just do the whole directory:
+#oc apply -f /var/poc-berlin/workspace/working-dir/cluster-resources/
+```
+
+```text
+#rsync -avzP --inplace --exclude='*pinned_*.yaml' root@storm4.local:/usb1/var/poc-berlin/ /home/wmarx/po-berlin/harddisk/usb1/var/poc-berlin/
+```
+
 Optional Copy the Delta-Data to USB Harddisk
 ```text
 #rsync -avzP --inplace --exclude='*pinned_*.yaml' root@storm4.local:/usb1/var/poc-berlin/ /home/wmarx/po-berlin/harddisk/usb1/var/poc-berlin/
