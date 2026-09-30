@@ -57,10 +57,10 @@ Directory: Location for everything which we need for the PoC!
 Since, we're supposed to work really "offline" - disable the Internet Access on storm4 for the CoreOS Nodes:
 ```text
 Disable Internet Access!
-#iptables -I FORWARD -o enp132s0f0 -s 192.168.60.0/24 -j DROP
+#iptables -I FORWARD 1 -o enp132s0f0 -s 192.168.60.0/24 -d 10.32.97.3 -j ACCEPT
 
 Activate again (if really necessary for some test stuff!)
-#iptables -D FORWARD -s 192.168.60.0/24 ! -d 192.168.60.0/24 -j DROP
+#iptables -D FORWARD -o enp132s0f0 -s 192.168.60.0/24 -d 10.32.97.3 -j ACCEPT
 ```
 
 ## Create the 3 libvirt nets
@@ -1088,7 +1088,7 @@ First, Install the NetApp Trident Operator / CR TridentOrchestrators via the Web
 Since we working offline, we "might" have to do something about it and establish it more or less manually:  
 In this case:  
 
-Check Out the Trident Operator:  
+#### Check Out the Trident Operator 
 ```text
 #podman inspect storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:26.06.1
 #curl -s "https://quay.io/api/v1/repository/netapp/trident-operator/tag/" | jq -r '.tags[].name' | sort -V
@@ -1099,7 +1099,7 @@ If not there:
 #podman push --tls-verify=false storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:26.06.1
 ```
 
-Check Out the Trident Orchestrator CR:  
+#### Check Out the Trident Orchestrator CR  
 ```text
 #podman inspect storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:26.06.1
 #curl -s "https://quay.io/api/v1/repository/netapp/trident/tag/" | jq -r '.tags[].name' | sort -V
@@ -1109,7 +1109,21 @@ If not there:
 #podman tag quay.io/netapp/trident:26.06.1 storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:26.06.1
 #podman push --tls-verify=false storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:26.06.1
 ```
-
+#### Install Trident Operator
+Sidecars:  
+All in one file here:   
+```text
+/var/poc-berlin/day2/trident-get-csi-sidecars.sh (There you can observe all the images we need)
+* trident-autosupport:26.06
+* sig-storage/csi-node-driver-registrar:v2.17.0
+* sig-storage/csi-provisioner:v6.3.0
+* sig-storage/csi-attacher:v4.11.0
+* sig-storage/csi-resizer:v2.1.0
+* sig-storage/csi-snapshotter:v8.6.0
+```
+Operator and Trident-Orchestrator:  
+Be aware: We are creating averything here
+/var/poc-berlin/day2/trident-create-operator-and-orchestretor.yaml
 
 ```text
 NetApp Storage in CoE!
