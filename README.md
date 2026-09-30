@@ -56,11 +56,16 @@ Directory: Location for everything which we need for the PoC!
 # Network stuff in KVM
 Since, we're supposed to work really "offline" - disable the Internet Access on storm4 for the CoreOS Nodes:
 ```text
-Disable Internet Access!
+Disable Internet Access except for the NetApp (10.32.97.3)
 #iptables -I FORWARD 1 -o enp132s0f0 -s 192.168.60.0/24 -d 10.32.97.3 -j ACCEPT
+#iptables -A FORWARD -o enp132s0f0 -s 192.168.60.0/24 -j DROP
 
-Activate again (if really necessary for some test stuff!)
-#iptables -D FORWARD -o enp132s0f0 -s 192.168.60.0/24 -d 10.32.97.3 -j ACCEPT
+Access auf NetApp testen:
+#oc debug node/ocp4-node1.pb-poc.ocp.polizei.test -- chroot /host nc -zvw3 10.32.97.3 443
+
+Delete Rules - Activate again (if really necessary for some test stuff!)
+#iptables -D FORWARD -o enp132s0f0 -s 192.168.60.0/24 -d 10.32.97.3 -j ACCEPT 
+#iptables -D FORWARD -o enp132s0f0 -s 192.168.60.0/24 -j DROP
 ```
 
 ## Create the 3 libvirt nets
