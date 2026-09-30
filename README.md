@@ -1125,6 +1125,18 @@ Operator and Trident-Orchestrator:
 Be aware: We are creating averything here
 /var/poc-berlin/day2/trident-create-operator-and-orchestretor.yaml
 
+#### Additional Commands
+Storgeclass is broken and cannot be deleted?  
+```text
+#oc patch tridentstorageclass netapp-nfs-economy -n trident --type=json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+``` 
+
+Since we blockes everything via an IPTABLES Rule - after a reboot - apply this again to make sure the cluster is offline but  
+we still can access the NetApp Storage:
+```text
+iptables -I FORWARD 1 -o enp132s0f0 -s 192.168.60.0/24 -d 10.32.97.3 -j ACCEPT
+```
+
 ```text
 NetApp Storage in CoE!
 User:      admin
