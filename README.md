@@ -1122,10 +1122,23 @@ All in one file here:
 * sig-storage/csi-snapshotter:v8.6.0
 ```
 Operator and Trident-Orchestrator:  
-Be aware: We are creating averything here
+Be aware: We are creating everything here in one yaml file:
 /var/poc-berlin/day2/trident-create-operator-and-orchestretor.yaml
 
 #### Additional Commands
+Check Backend! 
+```text
+#oc get tbc -n trident
+```
+```text
+Check Storageclass:
+#oc get tridentstorageclass -n trident
+```
+Check Trident Resource Trident-Orchestrator:
+```text
+#oc get torc -n trident
+```
+
 Storgeclass is broken and cannot be deleted?  
 ```text
 #oc patch tridentstorageclass netapp-nfs-economy -n trident --type=json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
