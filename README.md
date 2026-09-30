@@ -1121,10 +1121,12 @@ All in one file here:
 * sig-storage/csi-resizer:v2.1.0
 * sig-storage/csi-snapshotter:v8.6.0
 ```
-Operator and Trident-Orchestrator:  
-Be aware: We are creating everything here in one yaml file:
+#### Install Operator and Trident-Orchestrator
+Be aware:  
+We are creating everything here in one yaml file:  
+```text
 /var/poc-berlin/day2/trident-create-operator-and-orchestretor.yaml
-
+```
 #### Additional Commands
 Check Backend! 
 ```text
