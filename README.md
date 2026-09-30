@@ -332,7 +332,12 @@ Status Check all Networks in KVM
 ocp-net               active yes        yes  
 provisioning-net      active yes        yes  
 vtn-net               active yes        yes
-```  
+```
+If we have trouble creating the "provisioning-net" net as internal switch the "virbr-prov" IF didn't get created:
+```text
+#nmcli connection add type bridge con-name virbr-prov ifname virbr-prov autoconnect yes
+#nmcli connection up virbr-prov
+```
 
 ## Create Network Bond with VLAN ovp-net & vtn-net
 
