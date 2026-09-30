@@ -1057,6 +1057,27 @@ Export kubeconfig! (On Storm4)
 ```text
 First, Install the NetApp Trident Operator / CR TridentOrchestrators via the WebUI
 ```
+Since we working offline, we "might" have to do something about it and establish it more or less manually:  
+In this case:  
+```text
+Check Out the Trident Operator:  
+#podman inspect storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:26.06.1
+#curl -s "https://quay.io/api/v1/repository/netapp/trident-operator/tag/" | jq -r '.tags[].name' | sort -V
+If not there:
+#podman pull quay.io/netapp/trident-operator:26.06.1
+#podman tag quay.io/netapp/trident-operator:26.06.1 storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:26.06.1
+#podman push --tls-verify=false storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:26.06.1
+
+Check Out the Trident Orchestrator CR:  
+#podman inspect storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:26.06.1
+#curl -s "https://quay.io/api/v1/repository/netapp/trident/tag/" | jq -r '.tags[].name' | sort -V
+If not there:
+#podman pull quay.io/netapp/trident:26.06.1  
+#podman tag quay.io/netapp/trident:26.06.1 storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:26.06.1
+#podman push --tls-verify=false storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:26.06.1
+```
+
+
 ```text
 NetApp Storage in CoE!
 User:      admin
