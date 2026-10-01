@@ -1154,7 +1154,28 @@ Storgeclass is broken and cannot be deleted?
 Since we blockes everything via an IPTABLES Rule - after a reboot - apply this again to make sure the cluster is offline but  
 we still can access the NetApp Storage:
 ```text
-iptables -I FORWARD 1 -o enp132s0f0 -s 192.168.60.0/24 -d 10.32.97.3 -j ACCEPT
+#iptables -I FORWARD 1 -o enp132s0f0 -s 192.168.60.0/24 -d 10.32.97.3 -j ACCEPT
+#iptables -A FORWARD -o enp132s0f0 -s 192.168.60.0/24 -j DROP
+```
+
+#### Update Trident Operator AND Trident Orchestrator manually
+Step1:  
+You just have to pull, tag & pull again, as it is described above, only change the tag on the end of every command, eg ":27.09.3"  
+  
+Step2:  
+Afterwards change the tag in the yaml Manifest "trident-create-operator-and-orchestretor.yaml" in the day2 directory.
+```text
+Section Operator Deployment:
+image: storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:27.09.3
+
+Section TridentOrchestrator:
+tridentImage: storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:27.09.3
+```
+
+Step3:  
+Apply the changed "yaml" file:  
+```text
+#oc apply -f trident-create-operator-and-orchestretor.yaml
 ```
 
 ```text
