@@ -47,9 +47,19 @@ additional worker nodes.
 Note: Of course - although this is a private repository, it contains no credentials, secrets, or
 sensitive customer data.
 
-Fedora Root Acces:
+RHEL 9.x Access on our Bastion Host:
 ```text
 #storm4 (Alias for ssh access to my Remote Bastion Host)
+
+On Bastion Host you need couple of OpenShift clients:
+** oc
+** oc-mirror  
+** virtctl
+** openshift-install
+
+And execute:
+#oc completion bash > /dev/null && oc completion bash | sudo tee /etc/profile.d/bash_completion_oc.sh > /dev/null
+
 ```
 
 Directory: Image Location on Storm4 for libvirt Images!
@@ -1066,9 +1076,20 @@ Export kubeconfig! (On Storm4)
 ```
 
 # Install OpenShift Virtualization Operator via UI
-#### Install Kubevirt Operator via WebUI
-#### Install nmstate/multus Operator via WebUI
-#### Install MTV Operator via WebUI
+### Install Kubevirt Operator via WebUI
+
+#### Patching the Hyperconverged for offline configuration   
+[URL: Disable automatic updates for all system-defined boot sources](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/virtualization/storage#virt-managing-auto-update-all-system-boot-sources_virt-automatic-bootsource-updates)  
+Disable download of VM images from RH:  
+** Fedora  
+** RHEL  
+** CentOS  
+```text
+#oc patch hyperconvergeds.v1beta1.hco.kubevirt.io kubevirt-hyperconverged -n openshift-cnv --type json -p '[{"op": "replace", "path": "/spec/enableCommonBootImageImport","value": false}]'
+```
+
+### Install nmstate/multus Operator via WebUI
+### Install MTV Operator via WebUI
 
 # Install Shared Storage
 
