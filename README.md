@@ -752,8 +752,8 @@ Second time - after updating the imageset-oc-mirror-config.yaml file!
   --authfile /usb1/var/poc-berlin/auth.json \
   --dest-tls-verify=false \
   --retry-times 10 \
-  --parallel-images 2 \
-  --parallel-layers 2 \
+  --parallel-images 1 \
+  --parallel-layers 1 \
   docker://storm4.ocp.berlin.test:5000/openshift/release \
   --v2
 ```
