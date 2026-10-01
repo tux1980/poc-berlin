@@ -727,7 +727,7 @@ Server / Core OS Images:
 https://mirror.openshift.com/pub/openshift-v4/amd64/dependencies/rhcos/4.22/latest/
 
 File for image download:  
-/usb1/var/poc-berlin/imageset-config.yaml >> File, maybe update the “maxVersion” to the actual
+/usb1/var/poc-berlin/imageset-oc-mirror-config.yaml >> File, maybe update the “maxVersion” to the actual
 minor Version!!
 
 ### Image Mirror with oc-mirror
@@ -735,7 +735,7 @@ minor Version!!
 First time to replicate!
 ```text
 #oc-mirror \
-  -c /usb1/var/poc-berlin/imageset-config.yaml \
+  -c /usb1/var/poc-berlin/imageset-oc-mirror-config.yaml \
   --workspace file:///usb1/var/poc-berlin/workspace \
   --authfile /usb1/var/poc-berlin/auth.json \
   --dest-tls-verify=false \
@@ -743,11 +743,11 @@ First time to replicate!
   --v2
 ```
 
-Second time - after updating the imageset-config.yaml file!
+Second time - after updating the imageset-oc-mirror-config.yaml file!
 
 ```text
 #oc-mirror \
-  -c /usb1/var/poc-berlin/imageset-config.yaml \
+  -c /usb1/var/poc-berlin/imageset-oc-mirror-config.yaml \
   --workspace file:///usb1/var/poc-berlin/workspace \
   --authfile /usb1/var/poc-berlin/auth.json \
   --dest-tls-verify=false \
@@ -788,7 +788,7 @@ Copy Registry the external USB Disk!
 Mirror external Bastion Host! Maybe the NAME is gonna change!
 ```text
 ##oc-mirror \
-  -c /usb1/var/poc-berlin/imageset-config.yaml \
+  -c /usb1/var/poc-berlin/imageset-oc-mirror-config.yaml \
   --workspace file:///usb1/var/poc-berlin/workspace \
   --authfile /usb1/var/poc-berlin/auth.json \
   --dest-tls-verify=false \
@@ -1069,9 +1069,9 @@ Export kubeconfig! (On Storm4)
 [URL: Dependencies Container images and corresponding Kubernetes versions](https://docs.netapp.com/us-en/trident/trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions)  
 [URL: Install Trident using OpenShift OperatorHub](https://docs.netapp.com/us-en/trident/trident-install/openshift-operator-deploy.html)  
   
-```text
-First, Install the NetApp Trident Operator / CR TridentOrchestrators via the WebUI
-```
+
+First, Install the NetApp Trident Operator / CR TridentOrchestrators via the WebUI  
+  
 Since we working offline, we "might" have to do something about it and establish it more or less manually:  
 In this case:  
 
@@ -1096,7 +1096,7 @@ If not there:
 #podman tag quay.io/netapp/trident:26.06.1 storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:26.06.1
 #podman push --tls-verify=false storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:26.06.1
 ```
-#### Install Trident Operator
+#### Install Trident Operator manuelly
 Sidecars:  
 All in one file here:   
 ```text
