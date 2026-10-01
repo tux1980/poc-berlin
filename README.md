@@ -1255,9 +1255,11 @@ There are Pods for that Registry in Namespace "openshift-image-registry"
 #oc get pods -n openshift-image-registry
 ```
 
-### Create PVC "storage-registry"-(RWX) in the Namespace "openshift-image-registry" via the UI (FORM)
+### Create PVC "storage-registry
 Namespace: openshift-image-registry  
+Storage Class: nfs-dynamic
 Size: 100 Gi  
+Mode: RWX
 
 ### Finally, change Registry Deployment 
 ```text
