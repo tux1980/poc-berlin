@@ -1064,10 +1064,11 @@ Export kubeconfig! (On Storm4)
 # Install Shared Storage
 
 ### NetApp Storage
-[URL: Trident 26.06 documentation](https://docs.netapp.com/us-en/trident/index.html)
-[URL: Releases in Github / Version History](https://github.com/NetApp/trident/releases)
-[URL: Dependencies Container images and corresponding Kubernetes versions](https://docs.netapp.com/us-en/trident/trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions)
-URL: 
+[URL: Trident 26.06 documentation](https://docs.netapp.com/us-en/trident/index.html)  
+[URL: Releases in Github / Version History](https://github.com/NetApp/trident/releases)  
+[URL: Dependencies Container images and corresponding Kubernetes versions](https://docs.netapp.com/us-en/trident/trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions)  
+[URL: Install Trident using OpenShift OperatorHub](https://docs.netapp.com/us-en/trident/trident-install/openshift-operator-deploy.html)  
+  
 ```text
 First, Install the NetApp Trident Operator / CR TridentOrchestrators via the WebUI
 ```
