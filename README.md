@@ -21,10 +21,13 @@
 9. [Login Process (Web UI & CLI)](#login-process-web-ui--cli)
 10. [Install OpenShift Virtualization Operator via UI](#install-openshift-virtualization-operator-via-ui)
 11. [Install Shared Storage](#install-shared-storage)
-12. [Create two RHEL VM's in Namespace via the OCP Virt UI!](#create-two-rhel-vms-in-namespace-via-the-ocp-virt-ui)
-13. [Create "not-rhel" templates!](#create-not-rhel-templates)
-14. [Create Windows Machines!](#create-windows-machines)
-15. [Additional Worker Nodes (Optional!)](#additional-worker-nodes-optional)
+12. [Change internal OCP Registry (Ephemeral to Persistence)](#change-internal-ocp-registry-ephemeral-to-persistence)
+13. [Networks in Kubevirt](#networks-in-kubevirt)
+14. [External Identity Provider htpasswd](#external-identity-provider-htpasswd)
+15. [Create two RHEL VM's in Namespace via the OCP Virt UI!](#create-two-rhel-vms-in-namespace-via-the-ocp-virt-ui)
+16. [Create "not-rhel" templates!](#create-not-rhel-templates)
+17. [Create Windows Machines!](#create-windows-machines)
+18. [Additional Worker Nodes (Optional!)](#additional-worker-nodes-optional)
 ---
 
 # Overview
