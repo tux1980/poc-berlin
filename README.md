@@ -1242,8 +1242,37 @@ handles the background mounting and qtree creation.
 #Set Default for Cluster in the UI!
 ```
 
+# Change internal OCP Registry (Ephemeral to Persistence)
+[URL: Changing Internal OpenShift Registry](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/registry/setting-up-and-configuring-the-registry#configuring-registry-storage-baremetal)  
+  
+### Check out the Image Operator
+```text
+You will see, state is: "Management State: Removed" - so, no PVC is attached, it is ephemeral. 
+#oc describe configs.imageregistry.operator.openshift.io
+```
+There are Pods for that Registry in Namespace "openshift-image-registry"  
+```text
+#oc get pods -n openshift-image-registry
+```
 
-## Networks in Kubevirt
+### Create PVC "storage-registry"-(RWX) in the Namespace "openshift-image-registry" via the UI (FORM)
+Namespace: openshift-image-registry  
+Size: 100 Gi  
+
+### Finally, change Registry Deployment 
+```text
+#oc project openshift-image-registry
+
+Go and change the "spec" section!
+#oc edit configs.imageregistry.operator.openshift.io cluster
+spec:
+  managementState: Managed
+  storageClassName: nfs-dynamic # Desired Storage Class!
+  storage:
+    pvc:
+      claim: "storage-registry"
+```
+# Networks in Kubevirt
 
 #### VM Network 1 - NNCP & NAD
 ```text
@@ -1263,7 +1292,7 @@ Just one NAD for an internal Network (East-West) so that VM’S can talk to each
 NAD Name:
 nad-internal-vm
 ```
-## External Identity Provider htpasswd
+# External Identity Provider htpasswd
 
 [OCP Docu - Configuring identity providers](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/authentication_and_authorization/configuring-identity-providers)
 
