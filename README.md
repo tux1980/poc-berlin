@@ -730,6 +730,12 @@ File for image download:
 /usb1/var/poc-berlin/imageset-oc-mirror-config.yaml >> File, maybe update the “maxVersion” to the actual
 minor Version!!
 
+### Figure out if an operator is really there
+Example:  
+```text
+#oc-mirror --v2 list operators --catalog=registry.redhat.io/redhat/redhat-operator-index:v4.22 | grep -E 'cluster-logging|advanced-cluster-management|multicluster-engine|node-healthcheck|fence-agents|self-node'
+```
+
 ### Image Mirror with oc-mirror
 
 First time to replicate!
