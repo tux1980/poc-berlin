@@ -2,19 +2,19 @@ apiVersion: machine.openshift.io/v1beta1
 kind: MachineSet
 metadata:
   labels:
-    machine.openshift.io/cluster-api-cluster: pb-poc-kubevirt
+    machine.openshift.io/cluster-api-cluster: pb-poc-5j655
   name: pb-poc-kubevirt-worker
   namespace: openshift-machine-api
 spec:
   replicas: 2
   selector:
     matchLabels:
-      machine.openshift.io/cluster-api-cluster: pb-poc-kubevirt
+      machine.openshift.io/cluster-api-cluster: pb-poc-5j655
       machine.openshift.io/cluster-api-machineset: pb-poc-kubevirt-worker
   template:
     metadata:
       labels:
-        machine.openshift.io/cluster-api-cluster: pb-poc-kubevirt
+        machine.openshift.io/cluster-api-cluster: pb-poc-5j655
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: worker
         machine.openshift.io/cluster-api-machineset: pb-poc-kubevirt-worker
@@ -24,8 +24,8 @@ spec:
         value:
           apiVersion: baremetal.cluster.k8s.io/v1alpha1
           image:
-            checksum: "2b0eabefc64da4df51e6d7b7ab84e98417558f19847b6f136e54cbd2359d9204"
-            url: "storm4.ocp.polizei.test:5000/openshift/release/openshift/release@sha256:2b0eabefc64da4df51e6d7b7ab84e98417558f19847b6f136e54cbd2359d9204"
+            checksum: "c987c0017b86a5aed02d5fa854b4649039e7221e14fca2e824dc37b2937ce7b2"
+            url: "http://metal3-image-customization-service.openshift-machine-api.svc.cluster.local/9a88bb26-fb81-4491-bd17-1f6b75837b39"
           kind: BareMetalMachineProviderSpec
           metadata:
             creationTimestamp: null

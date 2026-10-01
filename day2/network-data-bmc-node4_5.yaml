@@ -1,0 +1,125 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ocp4-node4-network-data
+  namespace: openshift-machine-api
+type: Opaque
+stringData:
+  networkData: |
+    interfaces:
+      - name: bond0.40
+        type: vlan
+        state: up
+        vlan:
+          base-iface: bond0
+          id: 40
+        ipv4:
+          enabled: true
+          address:
+            - ip: 192.168.60.14
+              prefix-length: 24
+          dhcp: false
+      - name: bond0
+        type: bond
+        state: up
+        link-aggregation:
+          mode: active-backup
+          options:
+            miimon: "100"
+          port:
+            - enp1s0
+            - enp10s0
+      - name: enp8s0.100
+        type: vlan
+        state: up
+        vlan:
+          base-iface: enp8s0
+          id: 100
+        ipv4:
+          enabled: true
+          address:
+            - ip: 192.168.70.14
+              prefix-length: 24
+          dhcp: false
+      - name: enp8s0
+        type: ethernet
+        state: up
+        ipv4:
+          enabled: false
+      - name: enp9s0
+        type: ethernet
+        state: up
+        ipv4:
+          enabled: false
+    dns-resolver:
+      config:
+        server:
+          - 192.168.60.1
+    routes:
+      config:
+        - destination: 0.0.0.0/0
+          next-hop-address: 192.168.60.1
+          next-hop-interface: bond0.40
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ocp4-node5-network-data
+  namespace: openshift-machine-api
+type: Opaque
+stringData:
+  networkData: |
+    interfaces:
+      - name: bond0.40
+        type: vlan
+        state: up
+        vlan:
+          base-iface: bond0
+          id: 40
+        ipv4:
+          enabled: true
+          address:
+            - ip: 192.168.60.15
+              prefix-length: 24
+          dhcp: false
+      - name: bond0
+        type: bond
+        state: up
+        link-aggregation:
+          mode: active-backup
+          options:
+            miimon: "100"
+          port:
+            - enp1s0
+            - enp10s0
+      - name: enp8s0.100
+        type: vlan
+        state: up
+        vlan:
+          base-iface: enp8s0
+          id: 100
+        ipv4:
+          enabled: true
+          address:
+            - ip: 192.168.70.15
+              prefix-length: 24
+          dhcp: false
+      - name: enp8s0
+        type: ethernet
+        state: up
+        ipv4:
+          enabled: false
+      - name: enp9s0
+        type: ethernet
+        state: up
+        ipv4:
+          enabled: false
+    dns-resolver:
+      config:
+        server:
+          - 192.168.60.1
+    routes:
+      config:
+        - destination: 0.0.0.0/0
+          next-hop-address: 192.168.60.1
+          next-hop-interface: bond0.40

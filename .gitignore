@@ -1,12 +1,29 @@
-workspace/
-data/
-harddisk-test/
+# Workspace ignorieren - cluster-resources explizit zulassen
+workspace/*
+!workspace/working-dir/
+!workspace/working-dir/cluster-resources/
+
+# Archive, Images und Logs
+*.tar
+*.tgz
 *.tar.gz
 *.iso
+*.log
+*.qcow2
+
+# Sensitive Daten/Keys
 auth.json
+auth-test.json
 certs/domain.key
 *.key
+
+# Temp Stuff und co.
+data/
+harddisk-test/
+installer/
+os-images/
+day1/
+
+# Sensitive Manifeste
 day2/bmh-redfish.yaml
 day2/trident-secret.yaml
-installer/
-auth-test.json

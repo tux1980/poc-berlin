@@ -1,0 +1,70 @@
+# trident-create-operator-and-orchestretor.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: trident
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: trident-operator
+  namespace: trident
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: trident-operator
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["*"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: trident-operator
+subjects:
+  - kind: ServiceAccount
+    name: trident-operator
+    namespace: trident
+roleRef:
+  kind: ClusterRole
+  name: trident-operator
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trident-operator
+  namespace: trident
+  labels:
+    app: trident-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trident-operator
+  template:
+    metadata:
+      labels:
+        app: trident-operator
+    spec:
+      serviceAccountName: trident-operator
+      containers:
+        - name: trident-operator
+          image: storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:26.06.1
+          command:
+            - /trident-operator
+          args:
+            - "-log-level=info"
+          imagePullPolicy: IfNotPresent
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  namespace: trident
+  silenceAutosupport: true
+  tridentImage: storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:26.06.1
+  imageRegistry: storm4.ocp.polizei.test:5000/openshift/release
