@@ -1,0 +1,267 @@
+apiVersion: mirror.openshift.io/v2alpha1
+kind: ImageSetConfiguration
+
+mirror:
+  platform:
+    graph: false
+    kubeVirtContainer: true
+    architectures:
+    - "amd64"
+    channels:
+    - name: stable-4.21
+      minVersion: 4.21.6
+      maxVersion: 4.21.6
+      type: ocp
+
+  operators:
+
+    - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.21
+      packages:
+       - name: advanced-cluster-management
+         channels:
+         - name: release-2.15
+         - name: release-2.16
+       - name: cephcsi-operator
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: cincinnati-operator
+         channels:
+         - name: v1
+       - name: cluster-kube-descheduler-operator
+         channels:
+         - name: stable
+       - name: cluster-logging
+         channels:
+         - name: stable-6.3
+         - name: stable-6.4
+       - name: cluster-observability-operator
+         channels:
+         - name: stable
+       - name: compliance-operator
+         channels:
+         - name: stable
+       - name: container-security-operator
+         channels:
+         - name: stable-3.16
+         - name: stable-3.17
+       - name: devworkspace-operator
+         channels:
+         - name: fast
+       - name: kernel-module-management
+         channels:
+         - name: stable
+       - name: kubernetes-nmstate-operator
+         channels:
+         - name: stable
+       - name: kubevirt-hyperconverged
+         channels:
+         - name: stable
+       - name: local-storage-operator
+         channels:
+         - name: stable
+       - name: loki-operator
+         channels:
+         - name: stable-6.3
+         - name: stable-6.4
+       - name: lvms-operator
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: mcg-operator
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: metallb-operator
+         channels:
+         - name: stable
+       - name: multicluster-engine
+         channels:
+         - name: stable-2.10
+         - name: stable-2.11
+       - name: mtv-operator
+         channels:
+         - name: release-v2.8
+         - name: release-v2.9
+         - name: release-v2.10
+         - name: release-v2.11
+       - name: nfd
+         channels:
+         - name: stable
+       - name: node-healthcheck-operator
+         channels:
+         - name: stable
+       - name: node-maintenance-operator
+         channels:
+         - name: stable
+       - name: numaresources-operator
+         channels:
+         - name: "4.21"
+       - name: ocs-client-operator
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: ocs-operator
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: odf-csi-addons-operator
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: odf-dependencies
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: odf-external-snapshotter-operator
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: odf-multicluster-orchestrator
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: odf-operator
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: odf-prometheus-operator
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: odr-cluster-operator
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: odr-hub-operator
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: openshift-gitops-operator
+         channels:
+         - name: gitops-1.17
+         - name: latest
+       - name: power-monitoring-operator
+         channels:
+         - name: tech-preview
+       - name: quay-operator
+         channels:
+         - name: stable-3.16
+         - name: stable-3.17
+       - name: redhat-oadp-operator
+         channels:
+         - name: stable
+       - name: recipe
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: rhacs-operator
+         channels:
+         - name: stable
+       - name: rhods-operator
+         channels:
+         - name: stable
+         - name: stable-2.8
+         - name: stable-2.10
+         - name: stable-2.13
+         - name: stable-2.16
+         - name: stable-2.19
+         - name: stable-2.22
+       - name: rook-ceph-operator
+         channels:
+         - name: stable-4.20
+         - name: stable-4.21
+       - name: self-node-remediation
+         channels:
+         - name: stable
+       - name: skupper-operator
+         channels:
+         - name: stable-1.8
+         - name: stable-2
+         - name: stable-2.0
+       - name: sriov-network-operator
+         channels:
+         - name: stable
+       - name: submariner
+         channels:
+         - name: stable-0.20
+         - name: stable-0.21
+         - name: stable-0.22
+       - name: volsync-product
+         channels:
+         - name: stable
+       - name: web-terminal
+         channels:
+         - name: fast
+
+    - catalog: registry.redhat.io/redhat/certified-operator-index:v4.21
+      packages:
+       - name: hspc-operator
+         channels:
+         - name: stable
+       - name: gpu-operator-certified
+         channels:
+         - name: v1.10
+         - name: v1.11
+         - name: v22.9
+         - name: v23.3
+         - name: v23.6
+         - name: v23.9
+         - name: v24.3
+         - name: v24.6
+         - name: v24.9
+         - name: v25.3
+         - name: v25.10
+         - name: v26.3
+         - name: stable
+       - name: trident-operator
+         channels:
+         - name: stable
+       - name: vault-secrets-operator
+         channels:
+         - name: stable
+
+    - catalog: registry.redhat.io/redhat/redhat-marketplace-index:v4.21
+      packages:
+       - name: k10-kasten-operator-rhmp
+         channels:
+         - name: stable
+
+    - catalog: registry.redhat.io/redhat/community-operator-index:v4.21
+      packages:
+       - name: grafana-operator
+         channels:
+         - name: v5
+       - name: patterns-operator
+         channels:
+         - name: fast
+
+  additionalImages:
+   - name: registry.redhat.io/rhel8/support-tools:latest
+   - name: registry.redhat.io/rhel8/rhel-guest-image:latest
+   - name: registry.redhat.io/rhel9/support-tools:latest
+   - name: registry.redhat.io/rhel9/rhel-guest-image:latest
+   - name: registry.redhat.io/rhel10/support-tools:latest
+   - name: registry.redhat.io/rhel10/rhel-guest-image:latest
+   - name: registry.redhat.io/rhel10/rhel-bootc:latest
+   - name: registry.redhat.io/ubi8/ubi:latest
+   - name: registry.redhat.io/ubi8/ubi-init:latest
+   - name: registry.redhat.io/ubi8/ubi-minimal:latest
+   - name: registry.redhat.io/ubi8/toolbox:latest
+   - name: registry.redhat.io/ubi9/ubi:latest
+   - name: registry.redhat.io/ubi9/ubi-init:latest
+   - name: registry.redhat.io/ubi9/ubi-minimal:latest
+   - name: registry.redhat.io/ubi9/toolbox:latest
+   - name: registry.redhat.io/ubi10/ubi:latest
+   - name: registry.redhat.io/ubi10/ubi-init:latest
+   - name: registry.redhat.io/ubi10/ubi-minimal:latest
+   - name: registry.redhat.io/ubi10/toolbox:latest
+   - name: registry.redhat.io/openshift4/ose-keepalived-ipfailover-rhel9:v4.21
+   - name: quay.io/containerdisks/fedora:latest
+   - name: quay.io/openshifttest/hello-openshift:1.2.0
+   - name: quay.io/nirsof/busybox:stable
+   - name: quay.io/egoirand/my-fio-ubi:latest
+   - name: nvcr.io/nvidia/k8s/cuda-sample:vectoradd-cuda12.5.0
+   - name: registry.k8s.io/sig-storage/nfs-subdir-external-provisioner:v4.0.2
+   - name: docker.io/node:14
+   - name: docker.io/library/busybox:latest
