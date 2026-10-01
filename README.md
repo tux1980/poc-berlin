@@ -1054,39 +1054,18 @@ Export kubeconfig! (On Storm4)
 #export KUBECONFIG=/usb1/var/poc-berlin/installer/auth/kubeconfig
 ```
 
-## Install OpenShift Virtualization Operator via UI
+# Install OpenShift Virtualization Operator via UI
 #### Install Kubevirt Operator via WebUI
 #### Install nmstate/multus Operator via WebUI
 #### Install MTV Operator via WebUI
 
-## Install Shared Storage
-
-### NFS Storage
-
-  - Create NDS on Storm4, quick and dirty
-```text
-#mkdir -p /var/nfs/ocp-pv1 && sudo chmod 777 /var/nfs/ocp-pv1
-#echo "/var/nfs/ocp-pv1 192.168.60.0/24(rw,sync,no_root_squash)" | sudo tee -a /etc/exports
-```
-
-  - Create Storage Class Roles ect….
-```text
-#oc apply -f /usb1/var/poc-berlin/day2/nfs-provisioner.yaml
-#oc adm policy add-scc-to-user hostmount-anyuid -z nfs-client-provisioner -n nfs-provisioner
-```
-  - Deploy the Provisioner
-```text
-#oc apply -f /usb1/var/poc-berlin/day2/nfs-deployment.yaml
-```
-
-  - Patch Storageclass
-
-```text
-#oc patch storageprofiles.cdi.kubevirt.io nfs-dynamic --type=merge -p '{"spec":{"claimPropertySets": [{"accessModes":["ReadWriteMany"], "volumeMode":"Filesystem"}]}}'
-#Set Default for Cluster in the UI!
-```
+# Install Shared Storage
 
 ### NetApp Storage
+[URL: Trident 26.06 documentation](https://docs.netapp.com/us-en/trident/index.html)
+[URL: Releases in Github / Version History](https://github.com/NetApp/trident/releases)
+[URL: Dependencies Container images and corresponding Kubernetes versions](https://docs.netapp.com/us-en/trident/trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions)
+URL: 
 ```text
 First, Install the NetApp Trident Operator / CR TridentOrchestrators via the WebUI
 ```
@@ -1177,6 +1156,7 @@ Apply the changed "yaml" file:
 ```text
 #oc apply -f trident-create-operator-and-orchestretor.yaml
 ```
+#### NetApp, create a Volume and assign
 
 ```text
 NetApp Storage in CoE!
@@ -1184,7 +1164,6 @@ User:      admin
 Pass:      ********
 ```
 
-#### NetApp, create a Volume and assign
 ```text
 Name Volume:                  ocp_nfs_pool_poc_pb
 Storage VM:                   main
@@ -1228,6 +1207,32 @@ Explanation:
 Exposes the storage to your cluster users by defining a Kubernetes StorageClass
 (netapp-nfs-economy). When users request a PVC using this class, Trident automatically
 handles the background mounting and qtree creation.
+
+### NFS Storage (Optional!)
+
+  - Create NDS on Storm4, quick and dirty
+```text
+#mkdir -p /var/nfs/ocp-pv1 && sudo chmod 777 /var/nfs/ocp-pv1
+#echo "/var/nfs/ocp-pv1 192.168.60.0/24(rw,sync,no_root_squash)" | sudo tee -a /etc/exports
+```
+
+  - Create Storage Class Roles ect….
+```text
+#oc apply -f /usb1/var/poc-berlin/day2/nfs-provisioner.yaml
+#oc adm policy add-scc-to-user hostmount-anyuid -z nfs-client-provisioner -n nfs-provisioner
+```
+  - Deploy the Provisioner
+```text
+#oc apply -f /usb1/var/poc-berlin/day2/nfs-deployment.yaml
+```
+
+  - Patch Storageclass
+
+```text
+#oc patch storageprofiles.cdi.kubevirt.io nfs-dynamic --type=merge -p '{"spec":{"claimPropertySets": [{"accessModes":["ReadWriteMany"], "volumeMode":"Filesystem"}]}}'
+#Set Default for Cluster in the UI!
+```
+
 
 ## Networks in Kubevirt
 
