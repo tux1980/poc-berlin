@@ -1030,6 +1030,10 @@ https://console-openshift-console.apps.poc.ocp.berlin.test
 Or:
 Export the kubeconfig after Installation:
 #export KUBECONFIG=/usb1/var/poc-berlin/installer/auth/kubeconfig
+
+In case you delete the "auth" directory with the KubeConfig:
+Create a new one - if you have still some cluster-admin credentials...
+#oc config new-admin-kubeconfig > auth/kubeconfig
 ```
 ### Create a Context
 ```text
