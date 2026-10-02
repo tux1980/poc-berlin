@@ -9,7 +9,6 @@
 ---
 
 ## Table of Contents
-<img width="1510" height="796" alt="image" src="https://github.com/user-attachments/assets/2a06a6ab-c0e6-4c8c-8e10-99f9b4d846ab" />
 
 1. [Overview](#overview)
 2. [Network stuff in KVM](#network-stuff-in-kvm)
