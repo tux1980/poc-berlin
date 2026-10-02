@@ -1008,7 +1008,14 @@ Fix "CannotRetrieveUpdates" Message in the Status Messages
 ```
 
 Fix "SamplesImagestreamImportFailing" Message in the Status Messages
+```text
 #oc patch configs.samples.operator.openshift.io/cluster --type=merge -p '{"spec":{"managementState":"Removed"}}'
+```
+
+Fix "Missing Dev File" Message in Operatot Hub
+```text
+#oc patch console.operator.openshift.io cluster --type=merge -p '{"spec":{"customization":{"developerCatalog":{"types":{"state":"Disabled","disabled":["Devfile"]}}}}}'
+```
 
 ### Check the imagedigestmirrorsets - right names?
 ```text
