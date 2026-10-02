@@ -1000,10 +1000,20 @@ Ignition and Bootservice check
 ```
 
 # After Installation - Day Two operations
+
+### Deactivate Default Internet Update Channels in Disconnected env's (One-Time Command)  
+Fix "CannotRetrieveUpdates" Message in the Status Messages  
+```text
+#oc patch clusterversion version --type=json -p='[{"op": "remove", "path": "/spec/channel"}]'
+```
+
+Fix "SamplesImagestreamImportFailing" Message in the Status Messages
+#oc patch configs.samples.operator.openshift.io/cluster --type=merge -p '{"spec":{"managementState":"Removed"}}'
+
 ### Check the imagedigestmirrorsets - right names?
 ```text
 Get all Mirrors / Image Sets:
-oc get imagedigestmirrorset -o json | jq -r '.items[].spec.imageDigestMirrors[].mirrors[]'
+#oc get imagedigestmirrorset -o json | jq -r '.items[].spec.imageDigestMirrors[].mirrors[]'
 
 Get the config as yaml file:
 #oc get imagedigestmirrorsets.config.openshift.io -o yaml
