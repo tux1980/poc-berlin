@@ -770,6 +770,7 @@ Files:
 #ls -la /var/poc-berlin/workspace/working-dir/cluster-resources
 ```
 Second time - after updating the imageset-oc-mirror-config.yaml file!  
+In the case errors happen - change parallel-images & parallel-layers to 1 or 2.  
 ```text
 #oc-mirror \
   -c /var/poc-berlin/imageset-oc-mirror-config.yaml \
@@ -777,8 +778,8 @@ Second time - after updating the imageset-oc-mirror-config.yaml file!
   --authfile /var/poc-berlin/auth.json \
   --dest-tls-verify=false \
   --retry-times 10 \
-  --parallel-images 1 \
-  --parallel-layers 1 \
+  --parallel-images 8 \
+  --parallel-layers 8 \
   docker://storm4.ocp.berlin.test:5000/openshift/release \
   --v2
 ```
@@ -786,7 +787,7 @@ Second time - after updating the imageset-oc-mirror-config.yaml file!
 ### Alternative - mirror a single Image with "oc image mirror"!   
 Find out the latest 3 tags of an image you want to pull in the offline registry:  
 ```text
-skopeo list-tags docker://registry.redhat.io/cert-manager/cert-manager-operator-rhel9 --authfile /var/poc-berlin/auth.json | jq -r '.Tags[]' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | tail -n 3
+#skopeo list-tags docker://registry.redhat.io/cert-manager/cert-manager-operator-rhel9 --authfile /var/poc-berlin/auth.json | jq -r '.Tags[-3:]'
 ```
 Than you can download a single Image with "oc image" - means with the original OpenShift Command Line Tool
 ```text
@@ -1127,15 +1128,17 @@ In this case:
 
 #### Check Out the Trident Operator 
 ```text
-#podman inspect storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:26.06.1
+First - check out the latest Tag available on the Quay IO Page:
 #curl -s "https://quay.io/api/v1/repository/netapp/trident-operator/tag/" | jq -r '.tags[].name' | sort -V
+
+Second - check out if already available on the NetApp Page
+#podman inspect storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:26.06.1
 
 If not there:
 #podman pull quay.io/netapp/trident-operator:26.06.1
 #podman tag quay.io/netapp/trident-operator:26.06.1 storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:26.06.1
 #podman push --tls-verify=false storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:26.06.1
 ```
-
 #### Check Out the Trident Orchestrator CR  
 ```text
 #podman inspect storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:26.06.1
