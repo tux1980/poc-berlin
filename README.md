@@ -1068,6 +1068,17 @@ A inline Python script then scans the manifest to extract and list all required 
 #dig @192.168.60.1 api.poc.ocp.berlin.test +short
 #dig @192.168.60.1 console-openshift-console.apps.poc.ocp.berlin.test +short
 ```
+### CSR Approval in OpenShift / How to check for pending CSRs
+After node reboots, cluster recovery, or network disconnections, these Certificate Signing Requests (CSRs) sometimes remain stuck in a Pending state.  
+Especiall with having self-signed certs like in our PoC Lab here!
+So, how to re-approve? 
+
+```text
+#oc get csr | grep -i Pending
+
+Or just show and approve:
+#for i in `oc get csr --no-headers | grep -i pending | awk '{ print $1 }'`; do oc adm certificate approve $i; done
+```
 
 # Login Process (Web UI & CLI)
 ### Login via "oc" or Web UI  
