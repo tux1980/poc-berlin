@@ -853,6 +853,25 @@ Mirror external Bastion Host! Maybe the NAME is gonna change!
   docker://storm4.ocp.berlin.test:5000/openshift/release \
   --v2
 ```
+## Optional: How to delete old images with oc-mirror!
+In oc-mirror v2, image deletion is a two-step workflow using a DeleteImageSetConfiguration file. Unlike v1, v2 does not prune images automatically, giving you explicit control to avoid accidental data loss.  
+```text
+Example Deletion File:
+apiVersion: mirror.openshift.io/v2alpha1
+kind: DeleteImageSetConfiguration
+delete:
+  platform:
+    channels:
+      - name: stable-4.22
+        minVersion: 4.22.10
+        maxVersion: 4.22.12
+  additionalImages:
+    - name: docker.io/library/busybox:latest
+
+Then, generate the Delete Manifest:
+oc-mirror delete -c delete-config.yaml --workspace file:///var/poc-berlin/workspace --v2 --generate docker://storm4.ocp.polizei.test:5000/openshift/release
+```text
+
 # Installing OpenShift
 
 #### 0. URL's 
