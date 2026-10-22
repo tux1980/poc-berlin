@@ -1775,6 +1775,10 @@ mirror:
       - name: stable-4.22
         minVersion: 4.22.18
         maxVersion: 4.22.19
+  operators:                                                                                                             
+    - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.22            
+      packages:                                                                 
+        - name: cincinnati-operator # >> Mirrors the Update Service Operator!
 
 Remark: Be aware - after changing anything in the ImageSetConfiguration File you have to run "oc-mirror" again!
 ```
@@ -1790,8 +1794,12 @@ Add your mirror registry CA to OpenShift's trusted CAs:
   --dry-run=client -o yaml | oc apply -f -
 
 Patch the cluster image config to use the ConfigMap:
-#oc patch image.config.openshift.io/cluster --type=merge -p '{"spec":{"additionalTrustedCA":{"name":"my-mirror-registry-ca"}}}''
+#oc patch image.config.openshift.io/cluster --type=merge -p '{"spec":{"additionalTrustedCA":{"name":"my-mirror-registry-ca"}}}'
 ```
+
+### Step3: Deploy Operator "OpenShift Update Service" via the web UI
+
+
 ### Step3: Deploy OpenShift Update Service (OSUS)
 ```text
 #oc apply -n openshift-update-service -f workspace/working-dir/cluster-resources/updateService.yaml
