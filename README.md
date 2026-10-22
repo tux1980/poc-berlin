@@ -1041,7 +1041,7 @@ Ignition and Bootservice check
 
 # After Installation - Day Two operations
 
-### Deactivate Default Internet Update Channels in Disconnected env's (One-Time Command)  
+### Deactivate Default Internet Update Channels in Disconnected env's (One-Time Command)
 Fix "CannotRetrieveUpdates" Message in the Status Messages  
 ```text
 #oc patch clusterversion version --type=json -p='[{"op": "remove", "path": "/spec/channel"}]'
@@ -1056,6 +1056,31 @@ Fix "Missing Dev File" Message in Operatot Hub
 ```text
 #oc patch console.operator.openshift.io cluster --type=merge -p '{"spec":{"customization":{"developerCatalog":{"types":{"state":"Disabled","disabled":["Devfile"]}}}}}'
 ```
+
+### Deactivate & Delete Insights! 
+
+Step1: Set Insigts CVS to "unmanaged"!
+```text
+#oc patch clusterversion/version --type=json -p '[{"op": "add", "path": "/spec/overrides", "value": [{"group": "apps/v1", "kind": "Deployment", "name": "insights-operator", "namespace": "openshift-insights", "unmanaged": true}]}]'
+```
+
+Step2: Scale Deployment to 0!
+```text
+#oc scale deployment/insights-operator -n openshift-insights --replicas=0
+```
+Step3: Remove remaining Pods & Check!
+```text
+Scale deployment to 0 and delete it
+#oc scale deployment/insights-operator -n openshift-insights --replicas=0
+#oc delete deployment/insights-operator -n openshift-insights --ignore-not-found
+
+Delete all CronJobs, Jobs, and DaemonSets
+#oc delete cronjobs --all -n openshift-insights
+#oc delete jobs --all -n openshift-insights
+#oc delete daemonsets --all -n openshift-insights
+```
+
+
 
 ### Check the imagedigestmirrorsets - right names?
 ```text
