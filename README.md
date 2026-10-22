@@ -1798,15 +1798,21 @@ Patch the cluster image config to use the ConfigMap:
 ```
 
 ### Step3: Deploy Operator "OpenShift Update Service" via the web UI
+```text
+1. Log into the OpenShift Web Console
 
+2. Go to Operators → OperatorHub
 
-### Step3: Deploy OpenShift Update Service (OSUS)
+3. Search for OpenShift Update Service & Install!
+```
+
+### Step4: Deploy OpenShift Update Service (OSUS)
 ```text
 #oc apply -n openshift-update-service -f workspace/working-dir/cluster-resources/updateService.yaml
 
 Note: Verify pods reach 2/2 READY using oc -n openshift-update-service get pods!
 ```
-### Step 4: Configure Cluster Ingress Router Trust
+### Step 5: Configure Cluster Ingress Router Trust
 Because the Cluster Version Operator (CVO) communicates with OSUS via an internal cluster route, trust the router CA cluster-wide:  
 ```text
 Extract router CA certificate:
@@ -1818,13 +1824,13 @@ Create private CA ConfigMap:
 Patch cluster proxy:
 #oc patch proxy/cluster --type=merge -p '{"spec":{"trustedCA":{"name":"my-private-ca-ingress-cert"}}}'
 ```
-### Step 5: Point Cluster Version Operator to Local Graph
+### Step 6: Point Cluster Version Operator to Local Graph
 ```text
 #POLICY_ENGINE_GRAPH_URI="$(oc -n openshift-update-service get updateservice update-service-oc-mirror -o jsonpath='{.status.policyEngineURI}/api/upgrades_info/v1/graph{"\n"}')"
 
 #oc patch clusterversion/version --type=merge -p "{\"spec\":{\"upstream\":\"${POLICY_ENGINE_GRAPH_URI}\"}}"
 ```
-### Step 6: Verify Upgrade Recommendations
+### Step 7: Verify Upgrade Recommendations
 ```text
 #oc adm upgrade recommend
 ```
