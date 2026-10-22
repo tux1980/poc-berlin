@@ -809,9 +809,29 @@ Or just do the whole directory:
 #rsync -avzP --inplace --exclude='*pinned_*.yaml' root@storm4.local:/var/poc-berlin/ /home/wmarx/po-berlin/harddisk/var/poc-berlin/
 ```
 
-Optional Copy the Delta-Data to USB Harddisk
+Optional: Copy the Delta-Data to USB Harddisk
 ```text
 #rsync -avzP --inplace --exclude='*pinned_*.yaml' root@storm4.local:/var/poc-berlin/ /home/wmarx/po-berlin/harddisk/var/poc-berlin/
+```
+### Optional: IDMS And ITMS Files (ImageDigestMirrorSet / ImageTagMirrorSet)
+When changing or renaming target registries, you must purge and regenerate the  
+ImageDigestMirrorSet (IDMS) and ImageTagMirrorSet (ITMS) manifests!    
+These files have been generated with "oc-mirror" after executing it the first time!  
+/var/poc-berlin/workspace/working-dir/cluster-resources/
+```text
+#oc get idms
+#oc get itms
+
+If any resources are there after renaming or switching registries:
+#oc delete idms --all
+#oc delete itms --all
+
+And then:
+#oc apply -f /var/poc-berlin/workspace/working-dir/cluster-resources/
+
+Verification:
+Run '#oc get idms' and '#oc get itms' to confirm all image mirrors now resolve to the new registry host.
+We still need "itms" since we using additionalImages with tags like "latest" in the imageset-oc-mirror-config.yaml file.
 ```
 
 ## Pack your registry workspace and take it to the PoC!
