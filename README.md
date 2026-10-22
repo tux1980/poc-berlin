@@ -814,8 +814,7 @@ Optional: Copy the Delta-Data to USB Harddisk
 #rsync -avzP --inplace --exclude='*pinned_*.yaml' root@storm4.local:/var/poc-berlin/ /home/wmarx/po-berlin/harddisk/var/poc-berlin/
 ```
 ### Optional: IDMS And ITMS Files (ImageDigestMirrorSet / ImageTagMirrorSet)
-When changing or renaming target registries, you must purge and regenerate the  
-ImageDigestMirrorSet (IDMS) and ImageTagMirrorSet (ITMS) manifests!    
+When changing or renaming target registries, you must purge and regenerate the ImageDigestMirrorSet (IDMS) and ImageTagMirrorSet (ITMS) manifests!    
 These files have been generated with "oc-mirror" after executing it the first time!  
 /var/poc-berlin/workspace/working-dir/cluster-resources/
 ```text
