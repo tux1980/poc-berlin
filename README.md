@@ -1763,21 +1763,22 @@ quay.io/openshift-cnv/containerdisks
 # Setting Up the OpenShift Update Service!
 In a disconnected/air-gapped environment, OpenShift cannot reach Red Hat's servers to see available updates. This process configures a local Update Service Operator that reads update paths directly from your mirror registry!  
 
-### Step 1. Update imageset configuration
+### Step 1: Update imageset configuration
 
 ```text
-apiVersion: mirror.openshift.io/v2alpha1                                        
-kind: ImageSetConfiguration                                                     
-mirror:                                                                         
-  platform:                                                                     
-    graph: true // Add this parameter in the ImageSetConfiguration File!                                                                 
-    channels:                                                                   
-      .....
+apiVersion: mirror.openshift.io/v2alpha1
+kind: ImageSetConfiguration
+mirror:
+  platform:
+    graph: true # Enables local update graph metadata mirroring
+    channels:
+      - name: stable-4.22
+        minVersion: 4.22.18
+        maxVersion: 4.22.19
 ```
 
-### Step 2.Deploy Update Service & Trust Registry CA
+### Step2: Configure Mirror Registry CA Trust
 ```text
-
 # 1. Add your mirror registry CA to OpenShift's trusted CAs
 oc create configmap my-mirror-registry-ca \
   --from-file=updateservice-registry=/var/poc-berlin/certs/domain.crt \
@@ -1789,28 +1790,38 @@ oc create configmap my-mirror-registry-ca \
 # 2. Patch the cluster image config to use the ConfigMap
 oc patch image.config.openshift.io/cluster --type=merge \
   -p '{"spec":{"additionalTrustedCA":{"name":"my-mirror-registry-ca"}}}''
-
-# 3. Apply the Update Service instance
+```
+### Step3: Deploy OpenShift Update Service (OSUS)
+```text
 oc apply -n openshift-update-service -f workspace/working-dir/cluster-resources/updateService.yaml
+Note: Verify pods reach 2/2 READY using oc -n openshift-update-service get pods!
+```
+### Step 4: Configure Cluster Ingress Router Trust
+Because the Cluster Version Operator (CVO) communicates with OSUS via an internal cluster route, trust the router CA cluster-wide:  
+```text
+# Extract router CA certificate
+oc get secret router-ca -n openshift-ingress-operator -o jsonpath='{.data.tls\.crt}' | base64 -d > /var/poc-berlin/certs/router-ca.pem
 
-# 4. Point the Cluster Version Operator (CVO) to the Local Graph
+# Create private CA ConfigMap
+oc create configmap my-private-ca-ingress-cert \
+  --from-file=ca-bundle.crt=/var/poc-berlin/certs/router-ca.pem \
+  -n openshift-config \
+  --dry-run=client -o yaml | oc apply -f -
+
+# Patch cluster proxy
+oc patch proxy/cluster --type=merge \
+  -p '{"spec":{"trustedCA":{"name":"my-private-ca-ingress-cert"}}}'
+```
+### Step 5: Point Cluster Version Operator to Local Graph
+```text
 POLICY_ENGINE_GRAPH_URI="$(oc -n openshift-update-service get updateservice update-service-oc-mirror -o jsonpath='{.status.policyEngineURI}/api/upgrades_info/v1/graph{"\n"}')"
 
 oc patch clusterversion/version --type=merge -p "{\"spec\":{\"upstream\":\"${POLICY_ENGINE_GRAPH_URI}\"}}"
-
-# 5. Trust the Cluster Router CA in Cluster Proxy
-Extract router CA certificate
-oc get secret router-ca -n openshift-ingress-operator -o jsonpath='{.data.tls\.crt}' | base64 -d > /var/poc-berlin/certs/router-ca.pem
-
-Create private CA ConfigMap
-oc create configmap my-private-ca-ingress-cert \
-  --from-file=ca-bundle.crt=/var/poc-berlin/certs/router-ca.pem -n openshift-config --dry-run=client -o yaml | oc apply -f -
-
-Patch cluster proxy
-oc patch proxy/cluster --type=merge -p '{"spec":{"trustedCA":{"name":"my-private-ca-ingress-cert"}}}'
-
 ```
-
+### Step 6: Verify Upgrade Recommendations
+```text
+#oc adm upgrade recommend
+```
 
 # Additional Worker Nodes (Optional!)
 
