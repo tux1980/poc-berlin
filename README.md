@@ -1779,7 +1779,7 @@ mirror:
 
 ### Step2: Configure Mirror Registry CA Trust
 ```text
-Add your mirror registry CA to OpenShift's trusted CAs
+Add your mirror registry CA to OpenShift's trusted CAs:
 #oc create configmap my-mirror-registry-ca \
   --from-file=updateservice-registry=/var/poc-berlin/certs/domain.crt \
   --from-file=storm4.ocp.berlin.test..5000=/var/poc-berlin/certs/domain.crt \
@@ -1787,9 +1787,8 @@ Add your mirror registry CA to OpenShift's trusted CAs
   -n openshift-config \
   --dry-run=client -o yaml | oc apply -f -
 
-Patch the cluster image config to use the ConfigMap
-#oc patch image.config.openshift.io/cluster --type=merge \
-  -p '{"spec":{"additionalTrustedCA":{"name":"my-mirror-registry-ca"}}}''
+Patch the cluster image config to use the ConfigMap:
+#oc patch image.config.openshift.io/cluster --type=merge -p '{"spec":{"additionalTrustedCA":{"name":"my-mirror-registry-ca"}}}''
 ```
 ### Step3: Deploy OpenShift Update Service (OSUS)
 ```text
@@ -1800,18 +1799,14 @@ Note: Verify pods reach 2/2 READY using oc -n openshift-update-service get pods!
 ### Step 4: Configure Cluster Ingress Router Trust
 Because the Cluster Version Operator (CVO) communicates with OSUS via an internal cluster route, trust the router CA cluster-wide:  
 ```text
-Extract router CA certificate
+Extract router CA certificate:
 #oc get secret router-ca -n openshift-ingress-operator -o jsonpath='{.data.tls\.crt}' | base64 -d > /var/poc-berlin/certs/router-ca.pem
 
-Create private CA ConfigMap
-#oc create configmap my-private-ca-ingress-cert \
-  --from-file=ca-bundle.crt=/var/poc-berlin/certs/router-ca.pem \
-  -n openshift-config \
-  --dry-run=client -o yaml | oc apply -f -
+Create private CA ConfigMap:
+#oc create configmap my-private-ca-ingress-cert --from-file=ca-bundle.crt=/var/poc-berlin/certs/router-ca.pem -n openshift-config --dry-run=client -o yaml | oc apply -f -
 
-Patch cluster proxy
-#oc patch proxy/cluster --type=merge \
-  -p '{"spec":{"trustedCA":{"name":"my-private-ca-ingress-cert"}}}'
+Patch cluster proxy:
+#oc patch proxy/cluster --type=merge -p '{"spec":{"trustedCA":{"name":"my-private-ca-ingress-cert"}}}'
 ```
 ### Step 5: Point Cluster Version Operator to Local Graph
 ```text
