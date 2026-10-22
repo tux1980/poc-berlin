@@ -1775,6 +1775,8 @@ mirror:
       - name: stable-4.22
         minVersion: 4.22.18
         maxVersion: 4.22.19
+
+Remark: Be aware - after changing anything in the ImageSetConfiguration File you have to run "oc-mirror" again!
 ```
 
 ### Step2: Configure Mirror Registry CA Trust
