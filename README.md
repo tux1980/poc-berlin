@@ -1779,7 +1779,7 @@ mirror:
 
 ### Step2: Configure Mirror Registry CA Trust
 ```text
-# 1. Add your mirror registry CA to OpenShift's trusted CAs
+# Add your mirror registry CA to OpenShift's trusted CAs
 oc create configmap my-mirror-registry-ca \
   --from-file=updateservice-registry=/var/poc-berlin/certs/domain.crt \
   --from-file=storm4.ocp.berlin.test..5000=/var/poc-berlin/certs/domain.crt \
@@ -1787,7 +1787,7 @@ oc create configmap my-mirror-registry-ca \
   -n openshift-config \
   --dry-run=client -o yaml | oc apply -f -
 
-# 2. Patch the cluster image config to use the ConfigMap
+# Patch the cluster image config to use the ConfigMap
 oc patch image.config.openshift.io/cluster --type=merge \
   -p '{"spec":{"additionalTrustedCA":{"name":"my-mirror-registry-ca"}}}''
 ```
