@@ -870,7 +870,7 @@ delete:
 
 Then, generate the Delete Manifest:
 oc-mirror delete -c delete-config.yaml --workspace file:///var/poc-berlin/workspace --v2 --generate docker://storm4.ocp.polizei.test:5000/openshift/release
-```text
+```
 
 # Installing OpenShift
 
