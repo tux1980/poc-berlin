@@ -1225,8 +1225,8 @@ Disable download of VM images from RH:
 [URL: Releases in Github / Version History](https://github.com/NetApp/trident/releases)  
 [URL: Dependencies Container images and corresponding Kubernetes versions](https://docs.netapp.com/us-en/trident/trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions)  
 [URL: Install Trident using OpenShift OperatorHub](https://docs.netapp.com/us-en/trident/trident-install/openshift-operator-deploy.html)  
-[URL: ONTAP SAN configuration options and examples]([https://docs.netapp.com/us-en/trident/index.html](https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html#backend-configuration-options))  
-[URL: ONTAP NAS configuration options and examples]([https://github.com/NetApp/trident/releases](https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-examples.html))  
+[URL: ONTAP SAN configuration options and examples]([https://docs.netapp.com/us-en/trident/index.html](https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html#backend-configuration-options)  
+[URL: ONTAP NAS configuration options and examples]([https://github.com/NetApp/trident/releases](https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-examples.html)  
   
 
 ## Main Approach via Marketplace (Recommended) 
