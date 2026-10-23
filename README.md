@@ -1058,19 +1058,23 @@ Fix "Missing Dev File" Message in Operatot Hub
 ```
 
 ### Deactivate & Delete Insights! 
+
+Step1:  
+Pull the "pull-secret" and name it "pull-secret-without-insights.json" 
 ```text
-Step1: Pull the "pull-secret" and name it "pull-secret-without-insights.json" 
 #oc get secret pull-secret -n openshift-config -o jsonpath='{.data.\.dockerconfigjson}' | base64 -d | jq 'del(.auths["cloud.openshift.com"])' > pull-secret-without-insights.json
 ```
 
+Step2:  
+Set the pull-secret with the new file from Step1 "pull-secret-without-insights.json"
 ```text
-Step2:Set the pull-secret with the new file from Step1 "pull-secret-without-insights.json"
 oc set data secret/pull-secret -n openshift-config \
   --from-file=.dockerconfigjson=pull-secret-without-insights.json
 ```
 
+Step3:  
+Change Config Map for "Insights" and set disable=true!
 ```text
-Step3: Change Config Map for "Insights" and set disable=true!
 ------------------
 oc apply -n openshift-insights -f - <<'EOF'
 apiVersion: v1
@@ -1086,28 +1090,10 @@ EOF
 ------------------
 ```
 
-```text
 Step4: check the Cluster Operator Insights
+```text
 #oc get clusteroperator insights -w
 ```
-
-Step2: Scale Deployment to 0!
-```text
-#oc scale deployment/insights-operator -n openshift-insights --replicas=0
-```
-Step3: Remove remaining Pods & Check!
-```text
-Scale deployment to 0 and delete it
-#oc scale deployment/insights-operator -n openshift-insights --replicas=0
-#oc delete deployment/insights-operator -n openshift-insights --ignore-not-found
-
-Delete all CronJobs, Jobs, and DaemonSets
-#oc delete cronjobs --all -n openshift-insights
-#oc delete jobs --all -n openshift-insights
-#oc delete daemonsets --all -n openshift-insights
-```
-
-
 
 ### Check the imagedigestmirrorsets - right names?
 ```text
