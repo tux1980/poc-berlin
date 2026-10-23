@@ -1450,11 +1450,7 @@ Mode: RWX
 #oc project openshift-image-registry
 
 Go and change the "spec" section!
-#oc edit configs.imageregistry.operator.openshift.io cluster
-spec:
-  managementState: Managed
-  pvc:
-    claim: "storage-registry"
+#oc patch configs.imageregistry.operator.openshift.io cluster --type merge -p '{"spec":{"storage":{"pvc":{"claim":""}}}}'
 ```
 # Networks in Kubevirt
 
@@ -1509,7 +1505,7 @@ Extract the secret/htpasswd again locally - when you lost it:
 Then update the secret locally (after adding user with “htpassd -b -B….:
 
 ```text
-#oc set data secret/htpasswd-secret --from-file htpasswd=/tmp/htpasswd -n openshift-config
+#oc set data secret/htpasswd-secret --from-file htpasswd=/var/poc-berlin/day2/htpasswd -n openshift-config
 ```
 
 #### Configure OAuth Provider
