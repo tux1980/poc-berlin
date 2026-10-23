@@ -85,7 +85,7 @@ Disable Internet Access except for the NetApp (10.32.97.3)
 #iptables -A FORWARD -o enp132s0f0 -s 192.168.60.0/24 -j DROP
 
 Access auf NetApp testen:
-#oc debug node/ocp4-node1.pb-poc.ocp.polizei.test -- chroot /host nc -zvw3 10.32.97.3 443
+#oc debug node/ocp4-node1.pb-poc.ocp.berlin.test -- chroot /host nc -zvw3 10.32.97.3 443
 
 Delete Rules - Activate again (if really necessary for some test stuff!)
 #iptables -D FORWARD -o enp132s0f0 -s 192.168.60.0/24 -d 10.32.97.3 -j ACCEPT 
@@ -792,7 +792,7 @@ Find out the latest 3 tags of an image you want to pull in the offline registry:
 ```
 Than you can download a single Image with "oc image" - means with the original OpenShift Command Line Tool
 ```text
-#oc image mirror registry.redhat.io/cert-manager/cert-manager-operator-rhel9:v1.20.1 storm4.ocp.polizei.test:5000/openshift/release/cert-manager/cert-manager-operator-rhel9:v1.20.1 --insecure=true
+#oc image mirror registry.redhat.io/cert-manager/cert-manager-operator-rhel9:v1.20.1 storm4.ocp.berlin.test:5000/openshift/release/cert-manager/cert-manager-operator-rhel9:v1.20.1 --insecure=true
 ```
 ### Sync new Sources
 Sync the new Sources & catalogs AFTER doing oc-mirror - all manifest are getting created automatically in:  
@@ -871,7 +871,7 @@ delete:
     - name: docker.io/library/busybox:latest
 
 Then, generate the Delete Manifest:
-oc-mirror delete -c delete-config.yaml --workspace file:///var/poc-berlin/workspace --v2 --generate docker://storm4.ocp.polizei.test:5000/openshift/release
+oc-mirror delete -c delete-config.yaml --workspace file:///var/poc-berlin/workspace --v2 --generate docker://storm4.ocp.berlin.test:5000/openshift/release
 ```
 
 # Installing OpenShift
@@ -922,8 +922,8 @@ PULL_SECRET=$(cat /var/poc-berlin/auth.json | tr -d '\n')
 
 Or fix via entries in our local .bashrc:
 export SSH_KEY=$(cat ~/.ssh/id_ed25519.pub 2>/dev/null || cat ~/.ssh/id_rsa.pub)
-export REGISTRY_CA=$(cat /var/poc-polizei/certs/domain.crt)                     
-export PULL_SECRET=$(cat /var/poc-polizei/auth.json | tr -d '\n')
+export REGISTRY_CA=$(cat /var/poc-berlin/certs/domain.crt)                     
+export PULL_SECRET=$(cat /var/poc-berlin/auth.json | tr -d '\n')
 export KUBECONFIG=/var/poc-berlin/installer/auth/kubeconfig
 
 ```
@@ -1267,22 +1267,22 @@ First - check out the latest Trident Version available!
 #curl -s "https://quay.io/api/v1/repository/netapp/trident-operator/tag/" | jq -r '.tags[].name' | sort -V
 
 Second - check out if already available on the NetApp Page
-#podman inspect storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:26.06.1
+#podman inspect storm4.ocp.berlin.test:5000/openshift/release/netapp/trident-operator:26.06.1
 
 If not there:
 #podman pull quay.io/netapp/trident-operator:26.06.1
-#podman tag quay.io/netapp/trident-operator:26.06.1 storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:26.06.1
-#podman push --tls-verify=false storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:26.06.1
+#podman tag quay.io/netapp/trident-operator:26.06.1 storm4.ocp.berlin.test:5000/openshift/release/netapp/trident-operator:26.06.1
+#podman push --tls-verify=false storm4.ocp.berlin.test:5000/openshift/release/netapp/trident-operator:26.06.1
 ```
 #### Check Out the Trident Orchestrator CR  
 ```text
-#podman inspect storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:26.06.1
+#podman inspect storm4.ocp.berlin.test:5000/openshift/release/netapp/trident:26.06.1
 #curl -s "https://quay.io/api/v1/repository/netapp/trident/tag/" | jq -r '.tags[].name' | sort -V
 
 If not there:
 #podman pull quay.io/netapp/trident:26.06.1  
-#podman tag quay.io/netapp/trident:26.06.1 storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:26.06.1
-#podman push --tls-verify=false storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:26.06.1
+#podman tag quay.io/netapp/trident:26.06.1 storm4.ocp.berlin.test:5000/openshift/release/netapp/trident:26.06.1
+#podman push --tls-verify=false storm4.ocp.berlin.test:5000/openshift/release/netapp/trident:26.06.1
 ```
 #### Install Trident Operator manuelly
 Sidecars:  
@@ -1336,10 +1336,10 @@ Step2:
 Afterwards change the tag in the yaml Manifest "trident-create-operator-and-orchestretor.yaml" in the day2 directory.
 ```text
 Section Operator Deployment:
-image: storm4.ocp.polizei.test:5000/openshift/release/netapp/trident-operator:27.09.3
+image: storm4.ocp.berlin.test:5000/openshift/release/netapp/trident-operator:27.09.3
 
 Section TridentOrchestrator:
-tridentImage: storm4.ocp.polizei.test:5000/openshift/release/netapp/trident:27.09.3
+tridentImage: storm4.ocp.berlin.test:5000/openshift/release/netapp/trident:27.09.3
 ```
 
 Step3:  
@@ -1902,6 +1902,78 @@ Patch cluster proxy:
 ```text
 #oc adm upgrade recommend
 ```
+# Replace Certs (Optional!)
+
+### Step1: Create a new Cert
+```text
+#openssl req -newkey rsa:4096 -nodes -sha256   -keyout /var/poc-berlin/certs/domain.key   -x509 -days 365   -out /var/poc-berlin/certs/domain.crt   -subj "/CN=storm4.ocp.berlin.test"   -addext "subjectAltName=DNS:storm4.ocp.berlin.test,IP:192.168.60.1"
+
+Restart Registry:
+#podman restart local-registry / or name of your registry.
+```
+
+### Step2: Check result in Registry! 
+Check if the registry shows the new cert "storm4.ocp.berlin.test"
+#openssl s_client -connect storm4.ocp.berlin.test:5000 -servername storm4.ocp.berlin.test </dev/null 2>/dev/null | openssl x509 -noout -text | grep -A 2 "Subject Alternative Name"
+```text
+
+Result has to be "storm4.ocp.berlin.test"  
+```text
+      X509v3 Subject Alternative Name: 
+      DNS:storm4.ocp.berlin.test, IP Address:192.168.60.1
+      Signature Algorithm: sha256WithRSAEncryption
+```
+### Step3: Update the Registry CA Trust in OpenShift 
+Update the cluster's image configuration so OpenShift trusts the new CA certificate for storm4.ocp.berlin.test:5000!  
+```text
+Create or update the CA ConfigMap:
+#oc create configmap my-mirror-registry-ca --from-file=storm4.ocp.berlin.test..5000=/var/poc-berlin/certs/domain.crt -n openshift-config --dry-run=client -o yaml | oc apply -f -
+
+Patch OpenShift to trust the ConfigMap:
+#oc patch image.config.openshift.io/cluster --type=merge -p '{"spec":{"additionalTrustedCA":{"name":"my-mirror-registry-ca"}}}'
+```
+### Step4: Change content of auth.json File!
+```text
+podman login storm4.ocp.berlin.test:5000 --tls-verify=false --authfile /var/poc-berlin/auth.json
+```
+Remark: Maybe delete the old for the old cert afterwards manually! 
+
+### Step5: Patch the Live UpdateService Resource
+When replacing or renewing the registry TLS certificate and switching the domain to cert storm4.ocp.berlin.test - perform the following steps to update OpenShift's cluster trust and OSUS deployment  
+
+```text
+1. Update the UpdateService custom resource endpoints to point to the new domain:
+#oc patch updateservice update-service-oc-mirror -n openshift-update-service --type=merge -p '{"spec":{"graphDataImage":"storm4.ocp.berlin.test:5000/openshift/release/openshift/graph-image:latest","releases":"storm4.ocp.berlin.test:5000/openshift/release/openshift/release-images"}}'
+
+2. Update the local CA secret inside the openshift-update-service:
+---
+#openssl x509 -in /var/poc-berlin/certs/domain.crt -out /tmp/registry-ca.pem -outform PEM
+---
+#oc create configmap ca-certs -n openshift-update-service --from-file=updateservice-registry=/tmp/registry-ca.pem --from-file=storm4.ocp.berlin.test..5000=/tmp/registry-ca.pem --dry-run=client -o yaml | oc apply -f -
+---
+#oc rollout restart deployment/update-service-oc-mirror -n openshift-update-service
+#oc get pod -n openshift-update-service -l app=update-service-oc-mirror
+```
+### Step6: Patch the Live UpdateService Resource
+Check if it is still the old cert:  
+If empty or old - go to the next step and Patch!
+```text
+#oc get ingress.config.openshift.io cluster -o jsonpath='{.spec.domain}'
+
+Patch cluster wide-ingress with the new cert:
+#oc patch ingresscontroller default -n openshift-ingress-operator --type=merge -p '{"spec":{"domain":"apps.pb-poc.ocp.berlin.test"}}'
+
+Override the Console Operator route hostname:
+#oc patch console.operator.openshift.io cluster --type=merge -p '{"spec":{"ingress":{"hostname":"console-openshift-console.apps.pb-poc.ocp.berlin.test"}}}'
+
+Edit the Console Route:
+#oc patch route console -n openshift-console --type=merge -p '{"spec":{"host":"console-openshift-console.apps.pb-poc.ocp.berlin.test"}}'
+
+OAuth-Route in Namespace openshift-authentication / adapt to new name:
+oc patch route oauth-openshift -n openshift-authentication --type=merge -p '{"spec":{"host":"oauth-openshift.apps.pb-poc.ocp.berlin.test"}}'
+
+```
+
 
 # Additional Worker Nodes (Optional!)
 
