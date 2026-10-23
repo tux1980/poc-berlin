@@ -1058,10 +1058,37 @@ Fix "Missing Dev File" Message in Operatot Hub
 ```
 
 ### Deactivate & Delete Insights! 
-
-Step1: Set Insigts CVS to "unmanaged"!
 ```text
-#oc patch clusterversion/version --type=json -p '[{"op": "add", "path": "/spec/overrides", "value": [{"group": "apps/v1", "kind": "Deployment", "name": "insights-operator", "namespace": "openshift-insights", "unmanaged": true}]}]'
+Step1: Pull the "pull-secret" and name it "pull-secret-without-insights.json" 
+#oc get secret pull-secret -n openshift-config -o jsonpath='{.data.\.dockerconfigjson}' | base64 -d | jq 'del(.auths["cloud.openshift.com"])' > pull-secret-without-insights.json
+```
+
+```text
+Step2:Set the pull-secret with the new file from Step1 "pull-secret-without-insights.json"
+oc set data secret/pull-secret -n openshift-config \
+  --from-file=.dockerconfigjson=pull-secret-without-insights.json
+```
+
+```text
+Step3: Change Config Map for "Insights" and set disable=true!
+------------------
+oc apply -n openshift-insights -f - <<'EOF'
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: insights-config
+  namespace: openshift-insights
+data:
+  config.yaml: |
+    alerting:
+      disabled: true
+EOF
+------------------
+```
+
+```text
+Step4: check the Cluster Operator Insights
+#oc get clusteroperator insights -w
 ```
 
 Step2: Scale Deployment to 0!
