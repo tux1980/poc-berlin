@@ -781,7 +781,7 @@ In the case errors happen - change parallel-images & parallel-layers to 1 or 2.
   --retry-times 10 \
   --parallel-images 8 \
   --parallel-layers 8 \
-  docker://storm4.ocp.berlin.test:5000/openshift/release \
+  docker://storm4.ocp.berlin.test:5000/openshift/release
   --v2
 ```
 
@@ -855,7 +855,7 @@ Mirror external Bastion Host! Maybe the NAME is gonna change!
   --v2
 ```
 ## Optional: How to delete old images with oc-mirror! 
-- [OpenShift Documentation - Deleting old Image stuff with oc-mirror](https://docs.openshift.com/it/documentation/openshift_container_platform/4.22/html/disconnected_environments/about-installing-oc-mirror-v2#oc-mirror-workflows-delete-v2_about-installing-oc-mirror-v2)  
+[OpenShift Documentation - Deleting old Image stuff with oc-mirror](https://docs.openshift.com/it/documentation/openshift_container_platform/4.22/html/disconnected_environments/about-installing-oc-mirror-v2#oc-mirror-workflows-delete-v2_about-installing-oc-mirror-v2)  
 In oc-mirror v2, image deletion is a two-step workflow using a DeleteImageSetConfiguration file. Unlike v1, v2 does not prune images automatically, giving you explicit control to avoid accidental data loss.  
 ```text
 Example Deletion File:
