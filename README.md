@@ -1221,21 +1221,42 @@ Disable download of VM images from RH:
 
 # Install Shared Storage
 
-### NetApp Storage
+## NetApp Storage (Two Approaches!)
 [URL: Trident 26.06 documentation](https://docs.netapp.com/us-en/trident/index.html)  
 [URL: Releases in Github / Version History](https://github.com/NetApp/trident/releases)  
 [URL: Dependencies Container images and corresponding Kubernetes versions](https://docs.netapp.com/us-en/trident/trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions)  
 [URL: Install Trident using OpenShift OperatorHub](https://docs.netapp.com/us-en/trident/trident-install/openshift-operator-deploy.html)  
   
 
-First, Install the NetApp Trident Operator / CR TridentOrchestrators via the WebUI  
-  
-Since we working offline, we "might" have to do something about it and establish it more or less manually:  
-In this case:  
+## Main Approach via Marketplace (Recommended) 
+First, Install the NetApp Trident Operator / CR Trident Orchestrators via the WebUI    
 
+#### What we need in the ImageSetConf for using oc-mirror2 in the first place
+imageset-oc-mirror-config.yaml  
+```text
+---------------------
+    - catalog: registry.redhat.io/redhat/certified-operator-index:v4.22
+      packages:
+        - name: trident-operator
+          channels:
+          - name: stable
+---------------------
+```
+And AdditionalImages as well:  
+```text
+additionalImages:
+  - name: registry.k8s.io/sig-storage/csi-provisioner:v6.3.0
+  - name: registry.k8s.io/sig-storage/csi-attacher:v4.11.0
+  - name: registry.k8s.io/sig-storage/csi-resizer:v2.1.0
+  - name: registry.k8s.io/sig-storage/csi-snapshotter:v8.6.0
+  - name: registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.17.0
+  - name: registry.k8s.io/sig-storage/livenessprobe:v2.15.0
+```text
+
+## Second Approach manually (Recommended) 
 #### Check Out the Trident Operator 
 ```text
-First - check out the latest Tag available on the Quay IO Page:
+First - check out the latest Trident Version available!
 #curl -s "https://quay.io/api/v1/repository/netapp/trident-operator/tag/" | jq -r '.tags[].name' | sort -V
 
 Second - check out if already available on the NetApp Page
