@@ -1068,8 +1068,7 @@ Pull the "pull-secret" and name it "pull-secret-without-insights.json"
 Step2:  
 Set the pull-secret with the new file from Step1 "pull-secret-without-insights.json"
 ```text
-oc set data secret/pull-secret -n openshift-config \
-  --from-file=.dockerconfigjson=pull-secret-without-insights.json
+#oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=pull-secret-without-insights.json
 ```
 
 Step3:  
