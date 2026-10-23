@@ -1225,14 +1225,17 @@ Disable download of VM images from RH:
 [URL: Releases in Github / Version History](https://github.com/NetApp/trident/releases)  
 [URL: Dependencies Container images and corresponding Kubernetes versions](https://docs.netapp.com/us-en/trident/trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions)  
 [URL: Install Trident using OpenShift OperatorHub](https://docs.netapp.com/us-en/trident/trident-install/openshift-operator-deploy.html)  
+[URL: ONTAP SAN configuration options and examples]([https://docs.netapp.com/us-en/trident/index.html](https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html#backend-configuration-options))  
+[URL: ONTAP NAS configuration options and examples]([https://github.com/NetApp/trident/releases](https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-examples.html))  
   
 
 ## Main Approach via Marketplace (Recommended) 
 First, Install the NetApp Trident Operator / CR Trident Orchestrators via the WebUI    
 
-#### What we need in the ImageSetConf for using oc-mirror2 in the first place
-imageset-oc-mirror-config.yaml  
+#### Step1: What we need in the ImageSetConf for using oc-mirror2
+
 ```text
+imageset-oc-mirror-config.yaml  
 ---------------------
     - catalog: registry.redhat.io/redhat/certified-operator-index:v4.22
       packages:
@@ -1250,7 +1253,10 @@ additionalImages:
   - name: registry.k8s.io/sig-storage/csi-snapshotter:v8.6.0
   - name: registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.17.0
   - name: registry.k8s.io/sig-storage/livenessprobe:v2.15.0
-```text
+```
+And think, always after executing oc-mirror2 succes
+
+#### Step2: Go into the Operator Hub
 
 ## Second Approach manually (Recommended) 
 #### Check Out the Trident Operator 
