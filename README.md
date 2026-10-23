@@ -551,9 +551,9 @@ Nodes:                       3 Compact Nodes (Master + Worker role combined)
 Ingress Virtual IPs (VIPs):  192.168.60.20
 API VIP:                     192.168.60.10
 Node IPs:
- - ocp4-node1.poc.ocp.berlin.test: 192.168.60.11 (Rendezvous Host!!)  
- - ocp4-node2.poc.ocp.berlin.test: 192.168.60.12  
- - ocp4-node3.poc.ocp.berlin.test: 192.168.60.13
+ - ocp4-node1.pb-poc.ocp.berlin.test: 192.168.60.11 (Rendezvous Host!!)  
+ - ocp4-node2.pb-poc.ocp.berlin.test: 192.168.60.12  
+ - ocp4-node3.pb-poc.ocp.berlin.test: 192.168.60.13
 ```
 
 ## Design / Architecture
@@ -1124,8 +1124,8 @@ A inline Python script then scans the manifest to extract and list all required 
 ### DNS-check against the DNS Resolver
 
 ```text
-#dig @192.168.60.1 api.poc.ocp.berlin.test +short
-#dig @192.168.60.1 console-openshift-console.apps.poc.ocp.berlin.test +short
+#dig @192.168.60.1 api.pb-poc.ocp.berlin.test +short
+#dig @192.168.60.1 console-openshift-console.apps.pb-poc.ocp.berlin.test +short
 ```
 ### CSR Approval in OpenShift / How to check for pending CSRs
 After node reboots, cluster recovery, or network disconnections, these Certificate Signing Requests (CSRs) sometimes remain stuck in a Pending state.  
@@ -1146,9 +1146,9 @@ Or just show and approve:
 ```text
 
 Command Line:
-#oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.poc.ocp.berlin.test:6443"
+#oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.pb-poc.ocp.berlin.test:6443"
 WebUI:
-https://console-openshift-console.apps.poc.ocp.berlin.test
+https://console-openshift-console.apps.pb-poc.ocp.berlin.test
 
 Or:
 Export the kubeconfig after Installation:
@@ -1169,7 +1169,7 @@ An OpenShift context is a set of access parameters stored inside your ~/.kube/co
 oc config get-contexts
 
 # Create Context
-oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.poc.ocp.berlin.test:6443 --context=admin-poc
+oc login -u kubeadmin -p xxxx-xxxxxx-xxxxx-xxxxxx https://api.pb-poc.ocp.berlin.test:6443 --context=admin-poc
 
 # Switch Context:
 oc config use-context admin-poc
@@ -1677,7 +1677,7 @@ Create two virtual machines from the customized RHEL 9 template in namespace via
 We have several possibilities to access a VM - straight via ssh, via the virtctl tool or the WEBUI,....  
 Way1: virtctl
 Download via the OC UI (Command Line Tools)
-#wget --no-check-certificate https://hyperconverged-cluster-cli-download-openshift-cnv.apps.poc.ocp.berlin.test/amd64/linux/virtctl.tar.gz
+#wget --no-check-certificate https://hyperconverged-cluster-cli-download-openshift-cnv.apps.pb-poc.ocp.berlin.test/amd64/linux/virtctl.tar.gz
 ```text
 Jump to the RHEL9 console!
 Approach1:
