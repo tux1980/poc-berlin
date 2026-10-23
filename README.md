@@ -1453,10 +1453,8 @@ Go and change the "spec" section!
 #oc edit configs.imageregistry.operator.openshift.io cluster
 spec:
   managementState: Managed
-  storageClassName: nfs-dynamic # Desired Storage Class!
-  storage:
-    pvc:
-      claim: "storage-registry"
+  pvc:
+    claim: "storage-registry"
 ```
 # Networks in Kubevirt
 
