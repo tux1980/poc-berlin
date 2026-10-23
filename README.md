@@ -1246,7 +1246,9 @@ imageset-oc-mirror-config.yaml
 ```
 And AdditionalImages as well:  
 ```text
-additionalImages:
+additionalImages:                           
+  - name: quay.io/netapp/trident:26.06.2                                      
+  - name: docker.io/netapp/trident-autosupport:26.06
   - name: registry.k8s.io/sig-storage/csi-provisioner:v6.3.0
   - name: registry.k8s.io/sig-storage/csi-attacher:v4.11.0
   - name: registry.k8s.io/sig-storage/csi-resizer:v2.1.0
