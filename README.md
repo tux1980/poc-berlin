@@ -1090,7 +1090,8 @@ EOF
 ------------------
 ```
 
-Step4: check the Cluster Operator Insights
+Step4:   
+Check the Cluster Operator Insights
 ```text
 #oc get clusteroperator insights -w
 ```
