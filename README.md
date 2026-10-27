@@ -1450,7 +1450,7 @@ Mode: RWX
 #oc project openshift-image-registry
 
 Go and change the "spec" section!
-#oc patch configs.imageregistry.operator.openshift.io cluster --type merge -p '{"spec":{"storage":{"pvc":{"claim":""}}}}'
+#oc patch configs.imageregistry.operator.openshift.io cluster --type json -p '[{"op": "replace", "path": "/spec/managementState", "value": "Managed"}, {"op": "replace", "path": "/spec/storage", "value": {"pvc": {"claim": "image-storage"}}}]'
 ```
 # Networks in Kubevirt
 
@@ -1968,8 +1968,75 @@ Edit the Console Route:
 
 OAuth-Route in Namespace openshift-authentication / adapt to new name:
 oc patch route oauth-openshift -n openshift-authentication --type=merge -p '{"spec":{"host":"oauth-openshift.apps.pb-poc.ocp.berlin.test"}}'
-
 ```
+# Change the TLS Cert of a Local Quay registry (Optional!)
+Requirements:  
+The Quay Registry has been installed already! 
+
+### Generate a new Certifacte for the Quay Registry!  
+```text
+#openssl req -x509 -nodes -newkey rsa:4096 \
+  -keyout /var/poc-berlin/certs/ssl-quay.key \
+  -out /var/poc-berlin/certs/ssl-quay.crt \
+  -days 825 \
+  -subj "/CN=storm4.ocp.berlin.test" \
+  -addext "subjectAltName=DNS:storm4.ocp.berlin.test,IP:192.168.60.1"
+```
+
+### Check Config.yaml & Set the new Hostname
+```text
+#grep -E 'SERVER_HOSTNAME|PREFERRED_URL_SCHEME' /var/poc-berlin/day2/mirror-registry/quay-config/config.yaml
+#sed -i.bak  "s/^SERVER_HOSTNAME:.*/SERVER_HOSTNAME: storm4.ocp.berlin.test/" /var/poc-berlin/day2/mirror-registry/quay-config/config.yaml
+```
+
+### Save the old Certs & Copy the new Ones
+```text
+#cd /var/poc-berlin/day2/mirror-registry/quay-config/
+#cp ssl.crt ssl.crt.old (If you have an old one!)
+#cp ssl.key ssl.key.old (If you have an old one!)
+-------------------------
+#cd /var/poc-berlin/day2/mirror-registry/quay-config/
+#cp /var/poc-berlin/certs/ssl-quay.crt ./ssl.crt
+#cp /var/poc-berlin/certs/ssl-quay.key ./ssl.key
+#chmod 644 ./ssl.key
+```
+
+### Restart Quay & Check
+```text
+#systemctl --user restart quay-app
+#systemctl --user status quay-app
+#podman ps | grep quay
+#curl -vkI https://storm4.ocp.berlin.test:8443/v2/
+```
+
+### Check cert & copy CA to all systems that need it!
+```text
+#openssl s_client -connect storm4.ocp.berlin.test:8443 -servername rhel-bastion.local </dev/null 2>/dev/null | openssl x509 -noout -subject -issuer -dates -ext subjectAltName
+-------------------------
+#sudo cp ssl.crt /etc/pki/ca-trust/source/anchors/quay-registry.pem
+#sudo update-ca-trust
+```
+
+### Try the login & add the Cert to OCP to refresh the image trust
+```text
+#podman login rhel-bastion.local:8443
+--------------------------------------
+#oc create configmap my-mirror-registry-ca --from-file=updateservice-registry=/pfad/zu/ssl.crt --from-file=rhel-bastion.local..8443=/pfad/zu/ssl.crt -n openshift-config --dry-run=client -o yaml | oc apply -f -
+
+Check:
+#oc get cm my-mirror-registry-ca -n openshift-config -o jsonpath='{.data}' | jq 'keys'
+```
+
+### edit the image.config.openshift.io CR named "cluster" with the new additionalTrustedCA
+```text
+#oc patch image.config.openshift.io/cluster --type=merge -p '{"spec":{"additionalTrustedCA":{"name":"my-mirror-registry-ca"}}}'
+```
+
+### Restart Marketplace-/Catalog-Pods
+```text
+#oc -n openshift-marketplace get pods
+#oc -n openshift-marketplace delete pod -l marketplace.operatorframework.io/label=1
+```text
 
 # Additional Worker Nodes (Optional!)
 
