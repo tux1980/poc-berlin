@@ -1442,16 +1442,15 @@ There are Pods for that Registry in Namespace "openshift-image-registry"
 #oc get pods -n openshift-image-registry
 ```
 
-### Create PVC "storage-registry
-Namespace: openshift-image-registry  
-Storage Class: nfs-dynamic
-Size: 100 Gi  
+### Create PVC "image-storage"
+Namespace: openshift-image-registry
+PVC Name: image-storage
+Storage Class: netapp-nfs
+Size: 100 Gigabyte
 Mode: RWX
 
 ### Finally, change Registry Deployment 
 ```text
-#oc project openshift-image-registry
-
 Go and change the "spec" section!
 #oc patch configs.imageregistry.operator.openshift.io cluster --type json -p '[{"op": "replace", "path": "/spec/managementState", "value": "Managed"}, {"op": "replace", "path": "/spec/storage", "value": {"pvc": {"claim": "image-storage"}}}]'
 ```
