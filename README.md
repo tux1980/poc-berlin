@@ -28,7 +28,9 @@
 16. [Create "not-rhel" templates!](#create-not-rhel-templates)
 17. [Create Windows Machines!](#create-windows-machines)
 18. [Setting Up the OpenShift Update Service!](#setting-up-the-openshift-update-service)
-19. [Additional Worker Nodes (Optional!)](#additional-worker-nodes-optional)
+19. [Replace Certs (Optional!)](#replace-certs-optional)
+20. [Change the TLS Cert of a Local Quay registry (Optional!)](#change-the-tls-cert-of-a-local-quay-registry-optional)
+21. [Additional Worker Nodes (Optional!)](#additional-worker-nodes-optional)
 ---
 
 # Overview
