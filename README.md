@@ -1287,7 +1287,7 @@ vs-user:                      vsadmin-pocpb
 vs-password:                  *********
 ```
 
-#### Step4: Apply the 3 Trident YAML Manifests
+#### Step4: Apply the 4 Trident YAML Manifests
 Folder:
 /var/poc-berlin/day2
 
@@ -1295,7 +1295,7 @@ Folder:
 #oc apply -f trident-secret.yaml
 ```
 
-Explanation:
+Explanation:  
 Securely stores the ONTAP administrator credentials (username vsadmin-pocpb and
 password) in the cluster, allowing Astra Trident to authenticate against your NetApp SVM
 main.
@@ -1304,7 +1304,7 @@ main.
 #oc apply -f trident-backend-config.yaml
 ```
 
-Explanation:
+Explanation:  
 Configures the logical storage backend connection for Trident. It tells the controller to use the
 ontap-nas-economy driver, connect via the management LIF (10.32.97.3), target the SVM
 main, and carve out space inside your parent volume ocp_nfs_pool_poc_pb.
@@ -1313,12 +1313,16 @@ main, and carve out space inside your parent volume ocp_nfs_pool_poc_pb.
 #oc apply -f trident-storage-class.yaml
 ```
 
-Explanation:
-
+Explanation:  
 Exposes the storage to your cluster users by defining a Kubernetes StorageClass
 (netapp-nas). When users request a PVC using this class, Trident automatically
 handles the background mounting and qtree creation.
 
+```text
+#oc apply -f trident_volumesnapshotclass.yaml
+```
+Explanation:  
+It enables the cluster to create point-in-time storage snapshots and satisfies OpenShift Virtualization (CDI) requirements for smart volume cloning.
 
 #### Step5: Additional Check Commands!
 Check Backend! 
