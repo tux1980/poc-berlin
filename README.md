@@ -1267,9 +1267,8 @@ And think, always after executing oc-mirror2 succes
 
 1.   Install the NetApp Trident Operator with the Web UI!  
 2.   Install the Resource "Trident Orchestartor" also with the Web UI  
-3.   Install the 3 Day2 Files
 
-#### Step3: Create the Resources! (Step3 above: Install the 3 Day2 Files)
+#### Step3: Observe the NetApp Config given by the Storage Team!
 ```text
 NetApp Storage in CoE!
 User:      admin
