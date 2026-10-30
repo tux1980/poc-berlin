@@ -1234,10 +1234,10 @@ Disable download of VM images from RH:
 [URL: ONTAP NAS configuration options and examples](https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-examples.html)  
   
 
-## Main Approach via Marketplace (Recommended) 
-First, Install the NetApp Trident Operator / CR Trident Orchestrators via the WebUI    
+### Main Approach via Marketplace (Recommended) 
+We Install the NetApp Trident Operator / CR Trident Orchestrators via the WebU    
 
-#### Step1: What we need in the ImageSetConf for using oc-mirror2
+#### Step1: Pre-Requirement - What we need in the ImageSetConf for using oc-mirror2
 
 ```text
 imageset-oc-mirror-config.yaml  
@@ -1265,113 +1265,11 @@ And think, always after executing oc-mirror2 succes
 
 #### Step2: Go into the Operator Hub
 
+Step1: Install the NetApp Trident Operator with the Web UI!  
+Step2: Install the Resource "Trident Orchestartor" also with the Web UI  
+Step3: Install the 3 Day2 Files
 
-#### Delete the Trident TBC if something went wrong
-Trident creates a corresponding TridentBackend (tbe) resource for every TridentBackendConfig (tbc)  
-```text
-Figure out tbc and tbe:
-#oc get tbc -n trident
-#oc get tbe -n trident
-
-Delete tbc and tbe:
-#oc delete tbc "NAME_TBC" -n trident
-#oc delete tbe "NAME_TBE" -n trident
-
-Delete Finalizers if the deletion from the prev. Step get stucked:
-#oc patch tbc "NAME_TBC" -n trident --type=merge -p '{"metadata":{"finalizers":[]}}'
-#oc patch tbe "NAME_TBE" -n trident --type=merge -p '{"metadata":{"finalizers":[]}}'
-```
-Once the finalizers are cleared here, Kubernetes drops the stuck resources & allowing us to recreate the backend configuration cleanly with the correct credentials!
-
-## Second Approach manually (Recommended) 
-#### Check Out the Trident Operator 
-```text
-First - check out the latest Trident Version available!
-#curl -s "https://quay.io/api/v1/repository/netapp/trident-operator/tag/" | jq -r '.tags[].name' | sort -V
-
-Second - check out if already available on the NetApp Page
-#podman inspect storm4.ocp.berlin.test:5000/openshift/release/netapp/trident-operator:26.06.1
-
-If not there:
-#podman pull quay.io/netapp/trident-operator:26.06.1
-#podman tag quay.io/netapp/trident-operator:26.06.1 storm4.ocp.berlin.test:5000/openshift/release/netapp/trident-operator:26.06.1
-#podman push --tls-verify=false storm4.ocp.berlin.test:5000/openshift/release/netapp/trident-operator:26.06.1
-```
-#### Check Out the Trident Orchestrator CR  
-```text
-#podman inspect storm4.ocp.berlin.test:5000/openshift/release/netapp/trident:26.06.1
-#curl -s "https://quay.io/api/v1/repository/netapp/trident/tag/" | jq -r '.tags[].name' | sort -V
-
-If not there:
-#podman pull quay.io/netapp/trident:26.06.1  
-#podman tag quay.io/netapp/trident:26.06.1 storm4.ocp.berlin.test:5000/openshift/release/netapp/trident:26.06.1
-#podman push --tls-verify=false storm4.ocp.berlin.test:5000/openshift/release/netapp/trident:26.06.1
-```
-#### Install Trident Operator manuelly
-Sidecars:  
-All in one file here:   
-```text
-/var/poc-berlin/day2/trident-get-csi-sidecars.sh (There you can observe all the images we need)
-* trident-autosupport:26.06
-* sig-storage/csi-node-driver-registrar:v2.17.0
-* sig-storage/csi-provisioner:v6.3.0
-* sig-storage/csi-attacher:v4.11.0
-* sig-storage/csi-resizer:v2.1.0
-* sig-storage/csi-snapshotter:v8.6.0
-```
-#### Install Operator and Trident-Orchestrator
-Be aware:  
-We are creating everything here in one yaml file:  
-```text
-/var/poc-berlin/day2/trident-create-operator-and-orchestretor.yaml
-```
-#### Additional Commands
-Check Backend! 
-```text
-#oc get tbc -n trident
-```
-```text
-Check Storageclass:
-#oc get tridentstorageclass -n trident
-```
-Check Trident Resource Trident-Orchestrator:
-```text
-#oc get torc -n trident
-```
-
-Storgeclass is broken and cannot be deleted?  
-```text
-#oc patch tridentstorageclass netapp-nfs-economy -n trident --type=json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
-``` 
-
-Since we blockes everything via an IPTABLES Rule - after a reboot - apply this again to make sure the cluster is offline but  
-we still can access the NetApp Storage:
-```text
-#iptables -I FORWARD 1 -o enp132s0f0 -s 192.168.60.0/24 -d 10.32.97.3 -j ACCEPT
-#iptables -A FORWARD -o enp132s0f0 -s 192.168.60.0/24 -j DROP
-```
-
-#### Update Trident Operator AND Trident Orchestrator manually
-Step1:  
-You just have to pull, tag & pull again, as it is described above, only change the tag on the end of every command, eg ":27.09.3"  
-  
-Step2:  
-Afterwards change the tag in the yaml Manifest "trident-create-operator-and-orchestretor.yaml" in the day2 directory.
-```text
-Section Operator Deployment:
-image: storm4.ocp.berlin.test:5000/openshift/release/netapp/trident-operator:27.09.3
-
-Section TridentOrchestrator:
-tridentImage: storm4.ocp.berlin.test:5000/openshift/release/netapp/trident:27.09.3
-```
-
-Step3:  
-Apply the changed "yaml" file:  
-```text
-#oc apply -f trident-create-operator-and-orchestretor.yaml
-```
-#### NetApp, create a Volume and assign
-
+#### Step3: Create the Resources! (Step3 above: Install the 3 Day2 Files)
 ```text
 NetApp Storage in CoE!
 User:      admin
@@ -1379,6 +1277,7 @@ Pass:      ********
 ```
 
 ```text
+Our NetApp Config - you can change that: 
 Name Volume:                  ocp_nfs_pool_poc_pb
 Storage VM:                   main
 M-IF:                         10.32.97.3
@@ -1389,10 +1288,9 @@ vs-user:                      vsadmin-pocpb
 vs-password:                  *********
 ```
 
+#### Step4: Apply the 3 Trident YAML Manifests
 Folder:
 /var/poc-berlin/day2
-
-#### Apply the 3 Trident YAML Manifests
 
 ```text
 #oc apply -f trident-secret.yaml
@@ -1421,6 +1319,107 @@ Explanation:
 Exposes the storage to your cluster users by defining a Kubernetes StorageClass
 (netapp-nfs-economy). When users request a PVC using this class, Trident automatically
 handles the background mounting and qtree creation.
+
+
+#### Step5: Additional Check Commands!
+Check Backend! 
+```text
+#oc get tbc -n trident
+```
+```text
+Check Storageclass:
+#oc get tridentstorageclass -n trident
+```
+Check Trident Resource Trident-Orchestrator:
+```text
+#oc get torc -n trident
+```
+
+## Delete the Trident TBC - if something went wrong
+Trident creates a corresponding TridentBackend (tbe) resource for every TridentBackendConfig (tbc)  
+```text
+Figure out tbc and tbe:
+#oc get tbc -n trident
+#oc get tbe -n trident
+
+Delete tbc and tbe:
+#oc delete tbc "NAME_TBC" -n trident
+#oc delete tbe "NAME_TBE" -n trident
+
+Delete Finalizers if the deletion from the prev. Step get stucked:
+#oc patch tbc "NAME_TBC" -n trident --type=merge -p '{"metadata":{"finalizers":[]}}'
+#oc patch tbe "NAME_TBE" -n trident --type=merge -p '{"metadata":{"finalizers":[]}}'
+```
+And maybe also the Storageclass is stucked:  
+Storgeclass is broken and cannot be deleted?  
+```text
+#oc patch tridentstorageclass netapp-nfs-economy -n trident --type=json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+```
+Once the finalizers are cleared here, Kubernetes drops the stuck resources & allowing us to recreate the backend configuration cleanly with the correct credentials!  
+
+## Second Approach manually (Not recommended) 
+#### Check Out the Trident Operator 
+```text
+First - check out the latest Trident Version available - externally to mirror it!
+#curl -s "https://quay.io/api/v1/repository/netapp/trident-operator/tag/" | jq -r '.tags[].name' | sort -V
+
+Second - check out if already available on the internal private Registry!
+#podman inspect storm4.ocp.berlin.test:5000/openshift/release/netapp/trident-operator:26.06.1
+
+If not there:
+#podman pull quay.io/netapp/trident-operator:26.06.1
+#podman tag quay.io/netapp/trident-operator:26.06.1 storm4.ocp.berlin.test:5000/openshift/release/netapp/trident-operator:26.06.1
+#podman push --tls-verify=false storm4.ocp.berlin.test:5000/openshift/release/netapp/trident-operator:26.06.1
+```
+#### Check Out the Trident Orchestrator CR  
+```text
+#podman inspect storm4.ocp.berlin.test:5000/openshift/release/netapp/trident:26.06.1
+#curl -s "https://quay.io/api/v1/repository/netapp/trident/tag/" | jq -r '.tags[].name' | sort -V
+
+If not there:
+#podman pull quay.io/netapp/trident:26.06.1  
+#podman tag quay.io/netapp/trident:26.06.1 storm4.ocp.berlin.test:5000/openshift/release/netapp/trident:26.06.1
+#podman push --tls-verify=false storm4.ocp.berlin.test:5000/openshift/release/netapp/trident:26.06.1
+```
+#### Install Trident Operator manuelly
+Sidecars Requirments:  
+All in one file here:   
+```text
+/var/poc-berlin/day2/trident-get-csi-sidecars.sh (There you can observe all the images we need)
+* trident-autosupport:26.06
+* sig-storage/csi-node-driver-registrar:v2.17.0
+* sig-storage/csi-provisioner:v6.3.0
+* sig-storage/csi-attacher:v4.11.0
+* sig-storage/csi-resizer:v2.1.0
+* sig-storage/csi-snapshotter:v8.6.0
+```
+#### Install Operator and Trident-Orchestrator
+Be aware:  
+We are creating everything here in one yaml file:  
+```text
+/var/poc-berlin/day2/trident-create-operator-and-orchestretor.yaml
+```
+#### Additional Commands - See above in the Operator based Installation!
+
+#### Update Trident Operator AND Trident Orchestrator manually
+Step1:  
+You just have to pull, tag & pull again, as it is described above, only change the tag on the end of every command, eg ":27.09.3"  
+  
+Step2:  
+Afterwards change the tag in the yaml Manifest "trident-create-operator-and-orchestretor.yaml" in the day2 directory.
+```text
+Section Operator Deployment:
+image: storm4.ocp.berlin.test:5000/openshift/release/netapp/trident-operator:27.09.3
+
+Section TridentOrchestrator:
+tridentImage: storm4.ocp.berlin.test:5000/openshift/release/netapp/trident:27.09.3
+```
+
+Step3:  
+Apply the changed "yaml" file:  
+```text
+#oc apply -f trident-create-operator-and-orchestretor.yaml
+```
 
 ### NFS Storage (Optional!)
 
