@@ -1265,9 +1265,9 @@ And think, always after executing oc-mirror2 succes
 
 #### Step2: Go into the Operator Hub
 
-Step1: Install the NetApp Trident Operator with the Web UI!  
-Step2: Install the Resource "Trident Orchestartor" also with the Web UI  
-Step3: Install the 3 Day2 Files
+1.   Install the NetApp Trident Operator with the Web UI!  
+2.   Install the Resource "Trident Orchestartor" also with the Web UI  
+3.   Install the 3 Day2 Files
 
 #### Step3: Create the Resources! (Step3 above: Install the 3 Day2 Files)
 ```text
