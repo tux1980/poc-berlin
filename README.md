@@ -1316,7 +1316,7 @@ main, and carve out space inside your parent volume ocp_nfs_pool_poc_pb.
 Explanation:
 
 Exposes the storage to your cluster users by defining a Kubernetes StorageClass
-(netapp-nfs-economy). When users request a PVC using this class, Trident automatically
+(netapp-nas). When users request a PVC using this class, Trident automatically
 handles the background mounting and qtree creation.
 
 
@@ -1352,7 +1352,7 @@ Delete Finalizers if the deletion from the prev. Step get stucked:
 And maybe also the Storageclass is stucked:  
 Storgeclass is broken and cannot be deleted?  
 ```text
-#oc patch tridentstorageclass netapp-nfs-economy -n trident --type=json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+#oc patch tridentstorageclass netapp-nas -n trident --type=json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
 ```
 Once the finalizers are cleared here, Kubernetes drops the stuck resources & allowing us to recreate the backend configuration cleanly with the correct credentials!  
 
