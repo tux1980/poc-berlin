@@ -1265,6 +1265,24 @@ And think, always after executing oc-mirror2 succes
 
 #### Step2: Go into the Operator Hub
 
+
+#### Delete the Trident TBC if something went wrong
+Trident creates a corresponding TridentBackend (tbe) resource for every TridentBackendConfig (tbc)  
+```text
+Figure out tbc and tbe:
+#oc get tbc -n trident
+#oc get tbe -n trident
+
+Delete tbc and tbe:
+#oc delete tbc "NAME_TBC" -n trident
+#oc delete tbe "NAME_TBE" -n trident
+
+Delete Finalizers if the deletion from the prev. Step get stucked:
+#oc patch tbc "NAME_TBC" -n trident --type=merge -p '{"metadata":{"finalizers":[]}}'
+#oc patch tbe "NAME_TBE" -n trident --type=merge -p '{"metadata":{"finalizers":[]}}'
+```
+Once the finalizers are cleared here, Kubernetes drops the stuck resources & allowing us to recreate the backend configuration cleanly with the correct credentials!
+
 ## Second Approach manually (Recommended) 
 #### Check Out the Trident Operator 
 ```text
@@ -1884,7 +1902,7 @@ Fix registry credentials (required if mirror registry allows unauthenticated rea
 
 Note: Verify pods reach 2/2 READY using oc -n openshift-update-service get pods!
 ```
-### Step 5: Configure Cluster Ingress Router Trust
+### Step 5: Configure Cluster Ingress Router Trust - Optional (Only if you have to!)
 Because the Cluster Version Operator (CVO) communicates with OSUS via an internal cluster route, trust the router CA cluster-wide:  
 ```text
 Extract router CA certificate:
