@@ -1639,9 +1639,64 @@ Chrome Trust / Privacy and Security > Security > Manage Certs / Import CRT route
 # Create two RHEL VM's in Namespace via the OCP Virt UI!
 The following step creates two additional RHEL 9 virtual machines which can be used as test workloads inside OpenShift Virtualization.  
 
-For this purpose, we use an existing RHEL 9 template as the base and create our own customized user template / blueprint from it.  
+For this purpose, we have to get RHEL9 & RHEL10 templates/Images to our offline env. The goal is to keep the original RHEL 9 template unchanged and just attach a boot source to it! We need these PVC's / DV's in our Namespace "openshift-virtualization-os-images"!
 
-The goal is to keep the original RHEL 9 template unchanged and use a dedicated copy which can be adapted for this PoC.  
+### Step1:
+Download images for RHEL8/9/10 from Download Area https://access.redhat.com/downloads/content/rhel
+```text
+Directory: 
+/var/poc-berlin/day2/virtualization/images/rhel
+```
+
+### Step2:
+Build and Push Containerdisks to storm4:5000  
+Execute the Script - It handles validation, building, pushing to storm4.ocp.berlin.test:5000, and automatic cleanup.  
+```text
+If not, log yourself into the registry!
+#podman login --tls-verify=false storm4.ocp.berlin.test:5000
+
+Directory:
+/var/poc-berlin/day2/virtualization/scripts/01-build-push-containerdisks.sh
+Execute this Script and test if the images are in the local registry:
+#podman search storm4.ocp.berlin.test:5000/openshift/release/rhel --tls-verify=false
+
+If you already built or pulled these images locally, check local storage directly with standard podman inspect
+#podman images | grep -E "rhel8-guest|rhel9-guest|rhel10-guest"
+```
+
+
+### Step3: Create Manifest to create the RHEL Images/DV's/PVC's in "openshift-virtualization-os-images"
+```text
+Directory/Manifest: 
+/var/poc-berlin/day2/virtualization/manifests/02-rhel-os-images.yaml
+
+Check afterwards it the DV's and DataSources are there!
+#oc get dv -n openshift-virtualization-os-images 
+NAME     PHASE       PROGRESS   RESTARTS   AGE
+rhel10   Succeeded   100.0%                3m1s
+rhel8    Succeeded   100.0%                3m1s
+rhel9    Succeeded   100.0%                3m1s
+
+#oc get datasource -n openshift-virtualization-os-images rhel8 rhel9 rhel10
+NAME     AGE
+rhel8    9d
+rhel9    9d
+rhel10   4m
+
+And verify the Underlying NetApp PVC's for our RHEL Boot Images
+#oc get pvc -n openshift-virtualization-os-images | grep -E "NAME|rhel"
+NAME     STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS
+rhel10   Bound    pvc-e0dca131-1565-4cc0-bcce-c380682f2419   30Gi       RWX            netapp-nfs
+rhel8    Bound    pvc-228106f8-bc62-4546-bd70-72387186044a   30Gi       RWX            netapp-nfs
+rhel9    Bound    pvc-40f1696d-4501-4fd1-94d0-4954feb76e52   30Gi       RWX            netapp-nfs
+```
+### Step4: Check Boot Sources in UI - they should be there by now! +Create RHE10 Tempalte as well!
+```text
+Directory/Manifest for RHEL10 Template: 
+/var/poc-berlin/day2/virtualization/manifests/03-rhel10-template.yaml
+Check:
+#oc get template rhel10-server-small -n openshift
+```
 
 ### 1. Create Namespace VM and Custom RHEL 9 Template via the UI
 Start with an existing RHEL 9 template in OpenShift Virtualization and create a copy of it. Use existing system Template "
