@@ -1338,6 +1338,13 @@ Check Trident Resource Trident-Orchestrator:
 #oc get torc -n trident
 ```
 
+#### Step6: Finish Reconciliation-Loop of the Orchestrator Resource (Optional!)
+Check with Description it the Trident Orchestrator is in an installing loop & Patch the Object 
+```text
+#oc describe tridentorchestrator trident | tail -n 10
+#oc patch tridentorchestrator trident --type=merge -p '{"spec":{"imageRegistry":null,"nodePrep":null}}'
+```
+
 ## Delete the Trident TBC - if something went wrong
 Trident creates a corresponding TridentBackend (tbe) resource for every TridentBackendConfig (tbc)  
 ```text
