@@ -1698,15 +1698,14 @@ Check:
 #oc get template rhel10-server-small -n openshift
 ```
 
-### 1. Create Namespace VM and Custom RHEL 9 Template via the UI
-Start with an existing RHEL 9 template in OpenShift Virtualization and create a copy of it. Use existing system Template "
-rhel9-server-small" and copy it with the name "rhel9-server-poc" in Namespace VM!  
+### 1. Create Namespace VM and Custom RHEL 9/10 Template via the UI
+Start with the by now existing RHEL 9/10 templates in OpenShift Virtualization and create a copy of it. Use existing system Template "rhel9-server-small" and copy it with the name "rhel9-server-poc" in Namespace VM! Do the same with the "rhel10-server-small" Template!
 The customized template will be adapted with:  
 ```text
 - Create Namespace "VM"
 - Copy Template "rhel9-server-small" 
 - VM-specific settings required for this PoC
-- The original RHEL 9 template remains untouched!!
+- The original RHEL 9/10 template remains untouched!!
 ```
 
 #### 2. Adapt the Cloud-Init Configuration
@@ -1718,11 +1717,11 @@ This allows us to preconfigure the operating system during the first boot, for e
 - hostname
 - user configuration (wmarx & redhat)
 - SSH access
-  * We gonna take out Test Lab Key in Storm4:
+  * We gonna take out Test Lab Key in Storm4 (Or do it in the UI via the "settings"):
     ```text
     #oc create secret generic vm-ssh-key -n vm --from-file=key=/root/.ssh/id_ed25519.pub
     ```
-    Now we can chose this SSH Key via the Web UI in the Template / or VM Manifest.  
+    Now we can chose this SSH Key via the Web UI in the Template / or VM Manifest.
 - initial system settings
 - additional RHEL configuration if required
 
@@ -1731,7 +1730,7 @@ The exact Cloud-Init configuration can be adapted independently for both virtual
 #### 3. Add the Virtual Networks to the Template
 Attach the two virtual networks which were created in the previous steps of this documentation.  
 The virtual machines should use the previously configured OpenShift Virtualization network definitions.  
-For this PoC, the VM template is therefore extended with the required network interfaces before the virtual machines are created.  
+For this PoC the VM template is extended with the required network interfaces before the virtual machines are created.  
 This allows the VMs to communicate through the external and internal VM networks configured earlier.  
 ```text
 Create the required virtual network interfaces (vm/nad-intern & vm/vlan40-net)
@@ -1743,7 +1742,7 @@ Create two virtual machines from the customized RHEL 9 template in namespace via
 
 ```text
 - Create two VM's (srvrhel1 & srvrhel2) / Create from Template
-- Take the "User Template we created Above (rhel9-server-poc)
+- Take the "User Template we created Above (rhel9-server-poc & rhel10-server-poc)
 - Install in Namespace VM
 - Start after Installation!
 ```
