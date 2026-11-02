@@ -1762,7 +1762,9 @@ Approach2 / Example:
 ```
 
 # Create "not-rhel" templates!
-The playbook `config_ocp-v-V3.yml` extends the default OpenShift Virtualization template catalog with additional operating systems which are not provided as ready-to-use templates in our environment.  
+The playbook `ocp-foreign-templates.yaml` extends the default OpenShift Virtualization template catalog with additional operating systems which are not provided as ready-to-use templates in our environment.  
+Directory:  
+/var/poc-berlin/day2/virtualization/scripts/ocp-foreign-templates.yaml
   
 The playbook runs locally on the bastion host and uses the already configured `oc` CLI connection to create and modify OpenShift Virtualization resources.  
 
@@ -1782,9 +1784,9 @@ It creates templates for:
 - FreeBSD 15.1  
 - OpenSUSE 15.6
 ```  
-Execute the Playbook in hetzner-stuff/day2_virt_install/templates:
+Execute the Playbook in /var/poc-berlin/day2/virtualization/scripts:
 ```text
-#ansible-playbook config_ocp-v-V3.yml
+#ansible-playbook ocp-foreign-templates.yaml
 ```
 Test DV's & Templates:
 ```text
