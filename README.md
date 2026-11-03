@@ -1832,7 +1832,7 @@ Execute the Playbook in /var/poc-berlin/day2/virtualization/scripts/
 
 # Create Windows Machines!
 
-### Architecture / Basic Relationship
+#### Architecture / Basic Relationship
 Windows virtual machines in OpenShift Virtualization are deployed using the same storage model as the Linux templates described above.  
 
 Instead of attaching an installation ISO or a manually prepared disk every time, we maintain a **Golden Image** for our Windows Versions and reference it through CDI objects.  
@@ -1889,7 +1889,7 @@ The following Windows images are prepared in the namespace:
 #openshift-virtualization-os-images  
 ```
 
-The file used for this is:  
+What did we do to create these offline available Windows Images:  
 ```text
 Increase RAM for Windows Importer Pods to 8GB:  
 /var/poc-berlin/day2/virtualization/scripts/hco-ram-increase.yaml
@@ -1900,7 +1900,7 @@ Check RAM Increase:
 Create Images for the offline Registry & Windows Data Volumes:
 
 Step1:
-Build & Push the Images (Be aware: I removed Variables at the beginning of the script!)
+Build & Push the Images in the local Registry (Be aware: I removed Auth. Variables at the beginning of the script!)
 /var/poc-berlin/day2/virtualization/scripts/02-build-push-windows-images.sh
 
 Step2:
@@ -1909,26 +1909,24 @@ Check that the local registry has received the images and the local storage dire
 #ls -la /var/poc-berlin/day2/virtualization/images/win*
 ------------------------
 
-Step3: Create the DataVolumes, DV's and Boot-PVC's from these Images!
-/var/poc-berlin/day2/virtualization/scripts/datavolumes_windows.yaml  
-```
+Step3:
+Create the DataVolumes, DV's and Boot-PVC's from these Images!
+This will create 
+/var/poc-berlin/day2/virtualization/scripts/datavolumes_windows.yaml
 
-It provides images for:  
-```text
+It provides images/DV/DataSource & Boot-PVC for:  
 Windows Server 2025    -> win2k25
 Windows Server 2022    -> win2k22
 Windows Server 2019    -> win2k19
 Windows 10             -> win10
 Windows 11             -> win11
 ```
-Each operating system gets its own: 
-```text
-'DataVolume'
-'DataSource' >> and requests a 64 GiB disk.
-```  
 The source images are retrieved from:
 ```text
 quay.io/openshift-cnv/containerdisks
+
+Be Aware, as mentioned above - for Download these Windows Images we need Credentials from an Red Hat employee. Otherwise you might download these
+Images elsewhere.
 ```
 
 # Setting Up the OpenShift Update Service!
@@ -1945,7 +1943,7 @@ mirror:
     channels:
       - name: stable-4.22
         minVersion: 4.22.18
-        maxVersion: 4.22.19
+        maxVersion: 4.22.20 // If you just leave out the "maxVersion" Line it will alwayse take the very last known Image!
   operators:                                                                                                             
     - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.22            
       packages:                                                                 
