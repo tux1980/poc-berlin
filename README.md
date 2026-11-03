@@ -1896,11 +1896,9 @@ Increase RAM for Windows Importer Pods to 8GB:
 
 Check RAM Increase:  
 #oc get hyperconvergeds.v1beta1.hco.kubevirt.io kubevirt-hyperconverged -n openshift-cnv -o yaml | grep -A10 resourceRequirements
----------------------------------
-```text
-
-Create Images for the offline Registry & Windows Data Volumes:
 ```
+Create Images for the offline Registry & Windows Data Volumes:
+```text
 Step1:
 Build & Push the Images in the local Registry (Be aware: I removed Auth. Variables at the beginning of the script!)
 #/var/poc-berlin/day2/virtualization/scripts/02-build-push-windows-images.sh
