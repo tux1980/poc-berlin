@@ -1777,7 +1777,8 @@ Approach2 / Example:
 
 ##### What it does?
 The playbook `ocp-foreign-templates.yaml` extends the default OpenShift Virtualization template catalog with additional operating systems.  
-Directory: /var/poc-berlin/day2/virtualization/scripts/ocp-foreign-templates.yaml  
+Directory:  
+/var/poc-berlin/day2/virtualization/scripts/ocp-foreign-templates.yaml  
 This playbook automatically provisions standard, ready-to-use virtual machine templates for several non-RHEL operating systems in OpenShift Virtualization. It downloads the required base disk images directly into cluster storage and binds them to the templates, establishing a clean foundation for launching non-RHEL VMs.  
 
 ```text
@@ -1791,9 +1792,9 @@ It creates templates/DV's/DataSources/Boot-PVC's for:
 In the Namespace(s) "openshift" / "openshift-virtualization-images"
 ```
 
-### Step1: Execute the Ansible Playbook
+### Step1: Execute Script for Community Images
 Directory with the Script:  
-./var/poc-berlin/day2/virtualization/scripts  01-build-push-community-images.sh
+./var/poc-berlin/day2/virtualization/scripts/01-build-push-community-images.sh
 ```text
 Check - Look out for the Community Images:
 #podman images | grep "storm4.ocp.berlin.test:5000/openshift/release"
