@@ -1648,19 +1648,22 @@ Again, as in the previous step - Cert Trust für *apps Ingress Certificate for B
 -------------------
 Chrome Trust / Privacy and Security > Security > Manage Certs / Import CRT router-root-ca.crt
 ```
-# Create two RHEL VM's in Namespace via the OCP Virt UI!
+# OpenShift Virtualization: Create RHEL VM's in Namespace via the OCP Virt UI!
 The following step creates two additional RHEL 9 virtual machines which can be used as test workloads inside OpenShift Virtualization.  
 
 For this purpose, we have to get RHEL9 & RHEL10 templates/Images to our offline env. The goal is to keep the original RHEL 9 template unchanged and just attach a boot source to it! We need these PVC's / DV's in our Namespace "openshift-virtualization-os-images"!
 
-### Step1:
+### Step1: Download Images for RHEL8/9/10
 Download images for RHEL8/9/10 from Download Area https://access.redhat.com/downloads/content/rhel
 ```text
 Directory: 
-/var/poc-berlin/day2/virtualization/images/rhel
+/var/poc-berlin/day2/virtualization/images/rhel/:
+* rhel-10.2-x86_64-kvm.qcow2
+* rhel-8.10-x86_64-kvm.qcow2
+* rhel-9.8-x86_64-kvm.qcow2
 ```
 
-### Step2:
+### Step2: Build and Push Containerdisks to local Registry
 Build and Push Containerdisks to storm4:5000  
 Execute the Script - It handles validation, building, pushing to storm4.ocp.berlin.test:5000, and automatic cleanup.  
 ```text
@@ -1669,18 +1672,19 @@ If not, log yourself into the registry!
 
 Directory:
 /var/poc-berlin/day2/virtualization/scripts/01-build-push-containerdisks.sh
-Execute this Script and test if the images are in the local registry:
+Execute this Script and test if the images are in the local registry &
+look put for the "guest" Images for rhel8, rhel9 & rhel10
 #podman search storm4.ocp.berlin.test:5000/openshift/release/rhel --tls-verify=false
 
 If you already built or pulled these images locally, check local storage directly with standard podman inspect
 #podman images | grep -E "rhel8-guest|rhel9-guest|rhel10-guest"
 ```
 
-
 ### Step3: Create Manifest to create the RHEL Images/DV's/PVC's in "openshift-virtualization-os-images"
 ```text
-Directory/Manifest: 
+Directory Manifest: 
 /var/poc-berlin/day2/virtualization/manifests/02-rhel-os-images.yaml
+#oc apply -f /var/poc-berlin/day2/virtualization/manifests/02-rhel-os-images.yaml -n openshift-virtualization-os-images
 
 Check afterwards it the DV's and DataSources are there!
 #oc get dv -n openshift-virtualization-os-images 
@@ -1702,55 +1706,51 @@ rhel10   Bound    pvc-e0dca131-1565-4cc0-bcce-c380682f2419   30Gi       RWX     
 rhel8    Bound    pvc-228106f8-bc62-4546-bd70-72387186044a   30Gi       RWX            netapp-nfs
 rhel9    Bound    pvc-40f1696d-4501-4fd1-94d0-4954feb76e52   30Gi       RWX            netapp-nfs
 ```
-### Step4: Check Boot Sources in UI - they should be there by now! +Create RHE10 Tempalte as well!
+### Step4: Check Boot Sources in UI - they should be there by now! + Create RHE10 Tempalte as well!
 ```text
 Directory/Manifest for RHEL10 Template: 
 /var/poc-berlin/day2/virtualization/manifests/03-rhel10-template.yaml
+#oc apply -f /var/poc-berlin/day2/virtualization/manifests/03-rhel10-template.yaml
+
 Check:
 #oc get template rhel10-server-small -n openshift
 ```
 
-### 1. Create Namespace VM and Custom RHEL 9/10 Template via the UI
+### Step5: Create Namespace VM and Custom RHEL 8/9/10 Template via the UI
 Start with the by now existing RHEL 9/10 templates in OpenShift Virtualization and create a copy of it. Use existing system Template "rhel9-server-small" and copy it with the name "rhel9-server-poc" in Namespace VM! Do the same with the "rhel10-server-small" Template!
 The customized template will be adapted with:  
 ```text
 - Create Namespace "VM"
-- Copy Template "rhel9-server-small" 
+- Copy Template "rhel8/9/10-server-small" 
 - VM-specific settings required for this PoC
 - The original RHEL 9/10 template remains untouched!!
 ```
 
-#### 2. Adapt the Cloud-Init Configuration
+##### Adapt Config in Template as you wish!
 
 Modify the Cloud-Init / user-data configuration of the copied RHEL 9 template.
 
 This allows us to preconfigure the operating system during the first boot, for example:
 
-- hostname
-- user configuration (wmarx & redhat)
+- Hostname
+- Networks (Network Attach Defenition we created above)
+- Disks
+- User configuration (wmarx & redhat)
 - SSH access
-  * We gonna take out Test Lab Key in Storm4 (Or do it in the UI via the "settings"):
-    ```text
-    #oc create secret generic vm-ssh-key -n vm --from-file=key=/root/.ssh/id_ed25519.pub
-    ```
-    Now we can chose this SSH Key via the Web UI in the Template / or VM Manifest.
+
+```text
+We gonna take out Test Lab Key from the Bastion Host (Or do it in the UI via the "settings"):
+#oc create secret generic vm-ssh-key -n vm --from-file=key=/root/.ssh/id_ed25519.pub
+```
+Now we can chose this SSH Key via the Web UI in the Template / or VM Manifest.
 - initial system settings
 - additional RHEL configuration if required
 
 The exact Cloud-Init configuration can be adapted independently for both virtual machines!
 
-#### 3. Add the Virtual Networks to the Template
-Attach the two virtual networks which were created in the previous steps of this documentation.  
-The virtual machines should use the previously configured OpenShift Virtualization network definitions.  
-For this PoC the VM template is extended with the required network interfaces before the virtual machines are created.  
-This allows the VMs to communicate through the external and internal VM networks configured earlier.  
-```text
-Create the required virtual network interfaces (vm/nad-intern & vm/vlan40-net)
-```
+### Step6: Create the Virtual Machines from the Template
 
-### 4. Create the Virtual Machines from the Template
-
-Create two virtual machines from the customized RHEL 9 template in namespace via the UI!
+Create virtual machines from the customized RHEL 9 template in namespace via the UI!
 
 ```text
 - Create two VM's (srvrhel1 & srvrhel2) / Create from Template
@@ -1758,7 +1758,7 @@ Create two virtual machines from the customized RHEL 9 template in namespace via
 - Install in Namespace VM
 - Start after Installation!
 ```
-### 5. How to access these VM's now?
+##### How to access these VM's now?
 We have several possibilities to access a VM - straight via ssh, via the virtctl tool or the WEBUI,....  
 Way1: virtctl
 Download via the OC UI (Command Line Tools)
@@ -1775,7 +1775,7 @@ Approach2 / Example:
 
 # Create "Ubuntu/Debian/SuSE/FreeBSD" templates!
 
-### What it does?
+##### What it does?
 The playbook `ocp-foreign-templates.yaml` extends the default OpenShift Virtualization template catalog with additional operating systems.  
 Directory: /var/poc-berlin/day2/virtualization/scripts/ocp-foreign-templates.yaml  
 This playbook automatically provisions standard, ready-to-use virtual machine templates for several non-RHEL operating systems in OpenShift Virtualization. It downloads the required base disk images directly into cluster storage and binds them to the templates, establishing a clean foundation for launching non-RHEL VMs.  
@@ -1789,26 +1789,44 @@ It creates templates/DV's/DataSources/Boot-PVC's for:
 - OpenSUSE
 
 In the Namespace(s) "openshift" / "openshift-virtualization-images"
-```  
-
-Execute the Playbook in /var/poc-berlin/day2/virtualization/scripts/
-```text
-#ansible-playbook ocp-foreign-templates.yaml
 ```
-Test DV's & Templates:
+
+### Step1: Execute the Ansible Playbook
+Directory with the Script:  
+./var/poc-berlin/day2/virtualization/scripts  01-build-push-community-images.sh
+```text
+Check - Look out for the Community Images:
+#podman images | grep "storm4.ocp.berlin.test:5000/openshift/release"
+```
+
+### Step2: Execute the Ansible Playbook for creating the Community Templates
+Requirement:  
+Install Ansible Engine / Ansible Core  
+```text
+Execute the Playbook in /var/poc-berlin/day2/virtualization/scripts/
+#ansible-playbook /var/poc-berlin/day2/virtualization/scripts/ocp-foreign-templates.yaml
+--------------------
+This playbook creates everything we need:
+In the Namespace "openshift":
+* The Templates for SuSE, Debian, FreeBSD & Ubuntu
+In the Namespace "openshift-virtualization-images":
+* DV's
+* DataSources
+* Boot PVC's
+```
+Test DV's, PVC's & Templates:
 ```text
 #oc get templates -n openshift | grep -Ei 'opensuse|freebsd|debian|ubuntu'
 and:
 #oc get dv -n openshift-virtualization-os-images | grep -Ei 'opensuse|freebsd|debian|ubuntu'
-
 and:
-#oc get pvc -n openshift-virtualization-os-images | grep -Ei 'opensuse|freebsd|debian|ubuntu
+#oc get pvc -n openshift-virtualization-os-images | grep -Ei 'opensuse|freebsd|debian|ubuntu'
 ```
 
 And just in case we have to undo everything we did with the Playboook: "ocp-foreign-templates.yaml"  
 Execute the Playbook in /var/poc-berlin/day2/virtualization/scripts/ 
 ```text
-#ansible-playbook ocp-foreign-templates-cleanup.yaml
+#ansible-playbook /var/poc-berlin/day2/virtualization/scripts/ocp-foreign-templates-cleanup.yaml
 ```
 
 # Create Windows Machines!
