@@ -1773,30 +1773,26 @@ Approach2 / Example:
 #ssh wmarx@192.168.70.100 (The IP from the overlay libvirt host net, figure out in the UI)
 ```
 
-# Create "not-rhel" templates!
-The playbook `ocp-foreign-templates.yaml` extends the default OpenShift Virtualization template catalog with additional operating systems which are not provided as ready-to-use templates in our environment.  
+# Create "Ubuntu/Debian/SuSE/FreeBSD" templates!
+
+### What it does?
+The playbook `ocp-foreign-templates.yaml` extends the default OpenShift Virtualization template catalog with additional operating systems.
 Directory:  
-/var/poc-berlin/day2/virtualization/scripts/ocp-foreign-templates.yaml
-  
-The playbook runs locally on the bastion host and uses the already configured `oc` CLI connection to create and modify OpenShift Virtualization resources.  
+/var/poc-berlin/day2/virtualization/scripts/ocp-foreign-templates.yaml  
+This playbook automatically provisions standard, ready-to-use virtual machine templates for several non-RHEL operating systems in OpenShift Virtualization. It downloads the required base disk images directly into cluster storage and binds them to the templates, establishing a clean foundation for launching non-RHEL VMs.
 
-### Create additional VM Templates
-
-The playbook downloads the upstream KubeVirt `common-templates` definition and uses the existing Ubuntu and Fedora templates as a technical base for additional operating systems. The DataVolume objects import the operating system images from external registry or HTTP sources, while the DataSource objects provide stable references to these images for the VM templates.  
-
-For Ubuntu 22.04, the playbook also configures an automatic DataImportCron so that the base image can be refreshed periodically.  
-
-The result is a set of ready-to-use non-RHEL templates with corresponding operating-system images that can be used directly to deploy virtual machines in OpenShift Virtualization.  
 ```text
-It creates templates for:  
+It creates templates/DV's/DataSources/Boot-PVC's for:  
   
-- Ubuntu 22.04  
-- Debian 12  
-- Debian Testing  
-- FreeBSD 15.1  
-- OpenSUSE 15.6
+- Ubuntu
+- Debian
+- FreeBSD
+- OpenSUSE
+
+In the Namespace(s) "openshift" / "openshift-virtualization-images"
 ```  
-Execute the Playbook in /var/poc-berlin/day2/virtualization/scripts:
+
+Execute the Playbook in /var/poc-berlin/day2/virtualization/scripts/
 ```text
 #ansible-playbook ocp-foreign-templates.yaml
 ```
@@ -1805,15 +1801,15 @@ Test DV's & Templates:
 #oc get templates -n openshift | grep -Ei 'opensuse|freebsd|debian|ubuntu'
 and:
 #oc get dv -n openshift-virtualization-os-images | grep -Ei 'opensuse|freebsd|debian|ubuntu'
+
+and:
+#oc get pvc -n openshift-virtualization-os-images | grep -Ei 'opensuse|freebsd|debian|ubuntu
 ```
-The downloaded KubeVirt templates are adjusted to use the OpenShift Virtualization image namespace: 
+
+And just in case we have to undo everything we did with the Playboook: "ocp-foreign-templates.yaml"  
+Execute the Playbook in /var/poc-berlin/day2/virtualization/scripts/ 
 ```text
-#openshift-virtualization-os-images
-```
-And just in case we have to undo everything we did with the Playboook: "config_ocp-v-V3.yml"  
-Execute the Playbook in hetzner-stuff/day2_virt_install/templates:  
-```text
-#ansible-playbook cleanup-virt.yaml
+#ansible-playbook ocp-foreign-templates-cleanup.yaml
 ```
 
 # Create Windows Machines!
