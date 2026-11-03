@@ -1776,10 +1776,9 @@ Approach2 / Example:
 # Create "Ubuntu/Debian/SuSE/FreeBSD" templates!
 
 ### What it does?
-The playbook `ocp-foreign-templates.yaml` extends the default OpenShift Virtualization template catalog with additional operating systems.
-Directory:  
-/var/poc-berlin/day2/virtualization/scripts/ocp-foreign-templates.yaml  
-This playbook automatically provisions standard, ready-to-use virtual machine templates for several non-RHEL operating systems in OpenShift Virtualization. It downloads the required base disk images directly into cluster storage and binds them to the templates, establishing a clean foundation for launching non-RHEL VMs.
+The playbook `ocp-foreign-templates.yaml` extends the default OpenShift Virtualization template catalog with additional operating systems.  
+Directory: /var/poc-berlin/day2/virtualization/scripts/ocp-foreign-templates.yaml  
+This playbook automatically provisions standard, ready-to-use virtual machine templates for several non-RHEL operating systems in OpenShift Virtualization. It downloads the required base disk images directly into cluster storage and binds them to the templates, establishing a clean foundation for launching non-RHEL VMs.  
 
 ```text
 It creates templates/DV's/DataSources/Boot-PVC's for:  
