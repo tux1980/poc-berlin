@@ -1897,24 +1897,24 @@ Increase RAM for Windows Importer Pods to 8GB:
 Check RAM Increase:  
 #oc get hyperconvergeds.v1beta1.hco.kubevirt.io kubevirt-hyperconverged -n openshift-cnv -o yaml | grep -A10 resourceRequirements
 ---------------------------------
-Create Images for the offline Registry & Windows Data Volumes:
+```text
 
+Create Images for the offline Registry & Windows Data Volumes:
+```
 Step1:
 Build & Push the Images in the local Registry (Be aware: I removed Auth. Variables at the beginning of the script!)
-/var/poc-berlin/day2/virtualization/scripts/02-build-push-windows-images.sh
+#/var/poc-berlin/day2/virtualization/scripts/02-build-push-windows-images.sh
 
 Step2:
 Check that the local registry has received the images and the local storage directories are populated
 #podman images | grep "storm4.ocp.berlin.test:5000/openshift/release/win"
 #ls -la /var/poc-berlin/day2/virtualization/images/win*
-------------------------
 
 Step3:
 Create the DataVolumes, DV's and Boot-PVC's from these Images!
-This will create 
-/var/poc-berlin/day2/virtualization/scripts/datavolumes_windows.yaml
+#/var/poc-berlin/day2/virtualization/scripts/datavolumes_windows.yaml
 
-It provides images/DV/DataSource & Boot-PVC for:  
+This yaml Manifest provides images/DV/DataSource & Boot-PVC for:  
 Windows Server 2025    -> win2k25
 Windows Server 2022    -> win2k22
 Windows Server 2019    -> win2k19
