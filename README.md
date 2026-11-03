@@ -1337,6 +1337,18 @@ Check Trident Resource Trident-Orchestrator:
 ```text
 #oc get torc -n trident
 ```
+#### Step6: Align how OpenShift Virtualization clones volumes with how NetApp Trident handles FlexClones (Optional!)
+To prevent temporary snapshot locks and "snapshot is busy deletion" loops when creating VM's, you need to align how OpenShift-V clones volumes with "how" NetApp Trident handles FlexClones. This you can only do after creating a VM further down the road here.  
+```text
+Step1: Name of your Trident backend config:
+#oc get tridentbackendconfig -n trident
+
+Step2: Patch your backend configuration directly so all future clone operations split automatically
+#oc patch tridentbackendconfig "netapp-nfs-backend-v1" -n trident --type=merge -p '{"spec":{"splitOnClone":"true"}}'
+
+Step3: Check it out!
+#oc get tridentbackendconfig "netapp-nfs-backend-v1" -n trident -o jsonpath='{.spec.splitOnClone}'
+```
 
 ## Delete the Trident TBC - if something went wrong
 Trident creates a corresponding TridentBackend (tbe) resource for every TridentBackendConfig (tbc)  
