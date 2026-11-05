@@ -1900,7 +1900,7 @@ Check RAM Increase:
 Create Images for the offline Registry & Windows Data Volumes:
 ```text
 Step1:
-Build & Push the Images in the local Registry (Be aware: I removed Auth. Variables at the beginning of the script!)
+Build & Push the Images in the local Registry (Be aware: I removed Auth. Variables at the beginning of the script, you might have to download these Windows Images another Way!)
 #/var/poc-berlin/day2/virtualization/scripts/02-build-push-windows-images.sh
 
 Step2:
@@ -1921,7 +1921,6 @@ Windows 11             -> win11
 ```
 The source images are retrieved from:
 ```text
-quay.io/openshift-cnv/containerdisks
 
 Be Aware, as mentioned above - for Download these Windows Images we need Credentials from an Red Hat employee. Otherwise you might download these
 Images elsewhere.
