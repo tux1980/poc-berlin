@@ -407,7 +407,7 @@ nmcli connection add type vlan con-name virbr1.40 ifname virbr1.40 dev virbr1 id
 
 ```text
 # Add the persistent host routes (including .14 and .15)
-nmcli connection modify virbr1.40 +ipv4.routes "192.168.60.11/32, 192.168.60.12/32, 192.168.60.13/32, 192.168.60.14/32, 192.168.60.15/32, 192.168.60.10/32, 192.168.60.20/32"
+nmcli connection modify virbr1.40 +ipv4.routes "192.168.60.11/32, 192.168.60.12/32, 192.168.60.13/32, 192.168.60.14/32, 192.168.60.15/32, 192.168.60.10/32, 192.168.60.20/32, 192.168.60.249/32"
 ```
 
 ```text
@@ -1925,6 +1925,57 @@ The source images are retrieved from:
 Be Aware, as mentioned above - for Download these Windows Images we need Credentials from an Red Hat employee. Otherwise you might download these
 Images elsewhere.
 ```
+
+# Setting Up MTV and Migrate VM's!
+
+### Step1: Install vSphere (ESXi) on the Lab env (on the RHEL9 Bastion Host, storm4)
+Download the Image from the Broadcom Page (VMware vSphere Hypervisor 8.0U3e) Image, as ISO:
+Install:
+#virt-install \
+  --name nested-esxi01 \
+  --ram 16384 \
+  --vcpus 6 \
+  --cpu host-passthrough \
+  --os-variant generic \
+  --disk path=/var/lib/libvirt/images/nested-esxi01.qcow2,size=60,bus=sata \
+  --network bridge=virbr1,model=e1000e \
+  --cdrom /var/poc-berlin/day2/virtualization/iso/VMware-VMvisor-Installer-8.0U3e-24677879.x86_64.iso \
+  --graphics vnc,listen=0.0.0.0 \
+  --noautoconsole
+
+
+Keep an open connection via SSH/VPN to the Storm Lab where OpenShift runs!
+Locally from the Fedora or Bastion Host:
+
+Get the Right VNC Display Number:
+#virsh vncdisplay nested-esxi01
+Result here: :3
+
+Then Access via VNC Viewer on your Fedora:
+#vncviewer 192.168.60.1:5903
+
+Atttach also the VM Net from the OpenShift Cluster (virbr2/192.168.70.0/24)
+#virsh attach-interface \
+  --domain nested-esxi01 \
+  --type bridge \
+  --source virbr2 \
+  --model e1000e \
+  --config --live
+  
+Check:
+#virsh domiflist nested-esxi01
+
+After checking the domif is there (virbr2) please reboot the virtual ESXi VM with "virsh".
+
+
+### Step2: Access ESXi via Chrome/Any Browser (VPN Connect to the Storm env.)
+After finishing the Installation open Chrome:
+https://192.168.60.249/ui/  >> and you will see the vSphere UI
+User:  root
+Pass:  redhat123!
+
+
+
 
 # Setting Up the OpenShift Update Service!
 In a disconnected/air-gapped environment, OpenShift cannot reach Red Hat's servers to see available updates. This process configures a local Update Service Operator that reads update paths directly from your mirror registry!  
