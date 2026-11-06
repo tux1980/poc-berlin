@@ -2008,14 +2008,14 @@ Images elsewhere.
 
 # Setting Up VMWARE / MTV and Migrate VM's (Optional!)
 
-## 1. Install MTV Operator and VMWARE on my Lab Bastion Host. 
+### 1. Install MTV Operator and VMWARE on my Lab Bastion Host. 
 
-### Step1: Install mtv-operator via UI + the Forklift Resource
+#### Step1: Install mtv-operator via UI + the Forklift Resource
 The MTV Operator (Migration Toolkit for Virtualization) is the OpenShift package that installs everything needed to migrate virtual machines from platforms like VMware into OpenShift Virtualization.  
 <br>
 The Forklift resource (ForkliftController) is the specific Custom Resource (CR) you deploy to actually activate and configure that migration engine & setting global parameters like the VDDK init image, inventory paths, and controller limits, ect...  
 
-### Step2: Install vSphere (ESXi) on the Lab env (on the RHEL9 Bastion Host, storm4)
+#### Step2: Install vSphere (ESXi) on the Lab env (on the RHEL9 Bastion Host, storm4)
 Download the Image from the Broadcom Page (VMware vSphere Hypervisor 8.0U3e) Image, as ISO:  
 ```text
 Install:
@@ -2062,7 +2062,7 @@ Check:
 After checking the domif is there (virbr2) please reboot the virtual ESXi VM with "virsh".
 #virsh reboot --domain nested-esxi0
 ```
-### Step3: Install Storage
+#### Step3: Install Storage
 You can add storage via the ESXi UI - just add add what is there - I added a local piece of storage on my local bastion host:
 ```text
 #qemu-img create -f qcow2 /var/lib/libvirt/images/nested-esxi01-ds1.qcow2 100G
@@ -2071,7 +2071,7 @@ You can add storage via the ESXi UI - just add add what is there - I added a loc
 Afterwars I could chose that disk from the UI and created my VM Datastore to put VM' into it.
 ```
 
-### Step4: Access ESXi via Chrome/Any Browser (VPN Connect to the Storm env.)
+#### Step4: Access ESXi via Chrome/Any Browser (VPN Connect to the Storm env.)
 After finishing the Installation open Chrome:  
 ```text
 https://192.168.60.249/ui/  >> and you will see the vSphere UI
@@ -2085,6 +2085,14 @@ Now you can install Linux or Windows VM's!
 
 ## 2. Install MTV Operator and VMWARE on my Lab Bastion Host. 
 
+#### Step1: We need the VMWARE Provider in OpenShift
+![Forklift Providers](images/providers.png)
+
+#### Step2:
+
+#### Step3:
+
+#### Step4:
 
 # Change the TLS Cert of a Local Quay registry (Optional!)
 Chapter to come soon.....
