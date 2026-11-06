@@ -28,7 +28,7 @@
 16. [OpenShift Virtualization: Create RHEL VM's](#openshift-virtualization-create-rhel-vms)
 17. [Create "Ubuntu/Debian/SuSE/FreeBSD" templates!](#create-ubuntudebiansusefreebsd-templates)
 18. [Create Windows Machines!](#create-windows-machines)
-19. [Setting Up MTV and Migrate VM's (Optional!)](#setting-up-mtv-and-migrate-vms-optional)
+19. [Setting Up VMWARE / MTV and Migrate VM's (Optional!)](#setting-up-mtv-and-migrate-vms-optional)
 20. [Change the TLS Cert of a Local Quay registry (Optional!)](#change-the-tls-cert-of-a-local-quay-registry-optional)
 21. [Additional Worker Nodes (Optional!)](#additional-worker-nodes-optional)
 
