@@ -1222,7 +1222,6 @@ Disable download of VM images from RH:
 ```
 
 ### Install nmstate/multus Operator via WebUI
-### Install MTV Operator via WebUI
 
 # Install Shared Storage
 
@@ -2007,9 +2006,14 @@ Be Aware, as mentioned above - for Download these Windows Images we need Credent
 Images elsewhere.
 ```
 
-# Setting Up MTV and Migrate VM's (Optional!)
+# Setting Up VMWARE / MTV and Migrate VM's (Optional!)
 
-### Step1: Install vSphere (ESXi) on the Lab env (on the RHEL9 Bastion Host, storm4)
+### Step1: Install mtv-operator via UI + the Forklift Resource
+The MTV Operator (Migration Toolkit for Virtualization) is the OpenShift package that installs everything needed to migrate virtual machines from platforms like VMware into OpenShift Virtualization.  
+<br>
+The Forklift resource (ForkliftController) is the specific Custom Resource (CR) you deploy to actually activate and configure that migration engine & setting global parameters like the VDDK init image, inventory paths, and controller limits, ect...  
+
+### Step2: Install vSphere (ESXi) on the Lab env (on the RHEL9 Bastion Host, storm4)
 Download the Image from the Broadcom Page (VMware vSphere Hypervisor 8.0U3e) Image, as ISO:
 Install:
 #virt-install \
