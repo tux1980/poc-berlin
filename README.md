@@ -2086,6 +2086,15 @@ Now you can install Linux or Windows VM's!
 ## 2. Install MTV Operator and VMWARE on my Lab Bastion Host. 
 
 #### Step1: We need the VMWARE Provider in OpenShift
+To discover and migrate source VMs, register the external VMware vSphere environment as a source provider in MTV.  
+<br>
+**Required VMWARE Provider Settings:**
+* **Provider Type:** `VMware`
+* **Name:** A descriptive name (e.g., `esx01-provider`)
+* **Endpoint:** SDK URL of your vCenter or ESXi host (`https://<vcenter-or-esxi-ip>/sdk`)
+* **Credentials:** Secret containing admin username and password (`username`, `password`)
+* **VDDK Image:** Cluster-accessible init image path (We got a local one on my Fedora/Downloads)
+* **Fingerprint:** SHA-1 certificate thumbprint of the ESXi/vCenter host (if self-signed / untrusted TLS)
 ![Forklift Providers](images/providers.png)
 
 #### Step2:
