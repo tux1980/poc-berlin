@@ -2093,16 +2093,40 @@ To discover and migrate source VMs, register the external VMware vSphere environ
 * **Name:** A descriptive name (e.g., `esx01-provider`)
 * **Endpoint:** SDK URL of your vCenter or ESXi host (`https://<vcenter-or-esxi-ip>/sdk`)
 * **Credentials:** Secret containing admin username and password (`username`, `password`)
-* **VDDK Image:** Cluster-accessible init image path (We got a local one on my Fedora - Downloads/vmware-vddk)
+* **VDDK Image:** Cluster-accessible init image path (We got a local one on my Fedora - Downloads/vmware-vddk) - see step1!
 * **Fingerprint:** SHA-1 certificate thumbprint of the ESXi/vCenter host (if self-signed / untrusted TLS)
 <br>
 ![Forklift Providers](images/providers.png)
 
-#### Step2:
+#### Step2: VDDK File
+* **Directory:** /var/poc-berlin/day2/virtualization/iso
+* **File1:** entrypoint.sh >> the entrypoint for the Dockerfile
+* **File2:** Dockerfile >> to create the VDDK Image for Podman - to use it "offline"
+<br>
+Create and Build the VVDK File:
+```text
+Build VDDK File:
+#podman build --no-cache -t storm4.ocp.berlin.test:5000/openshift-mtv/vddk:v2 -f Dockerfile .
 
-#### Step3:
+Test VDDK Image:
+#podman run --rm storm4.ocp.berlin.test:5000/openshift-mtv/vddk:v2
+You should see:
+Starting VDDK copy to /opt...
+VDDK copy completed successfully.
+lrwxrwxrwx ... /opt/vmware-vix-disklib-distrib/lib64/libvixDiskLib.so -> libvixDiskLib.so.8
 
-#### Step4:
+Push VDDK Image into our offline registry:
+#podman push --tls-verify=false storm4.ocp.berlin.test:5000/openshift-mtv/vddk:v2
+
+Put the Image URL via the UI into the "vsphere provider" (VDDK Setting):
+storm4.ocp.berlin.test:5000/openshift-mtv/vddk:v2
+```
+
+#### Step3: Create Network Plan & Storage Plan
+Via the Migration OpenShift UI!
+
+#### Step4: Create a Migration Plan and Migrate!
+Via the Migration OpenShift UI!
 
 # Change the TLS Cert of a Local Quay registry (Optional!)
 Chapter to come soon.....
