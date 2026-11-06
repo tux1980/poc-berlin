@@ -2008,6 +2008,8 @@ Images elsewhere.
 
 # Setting Up VMWARE / MTV and Migrate VM's (Optional!)
 
+## 1. Install MTV Operator and VMWARE on my Lab Bastion Host. 
+
 ### Step1: Install mtv-operator via UI + the Forklift Resource
 The MTV Operator (Migration Toolkit for Virtualization) is the OpenShift package that installs everything needed to migrate virtual machines from platforms like VMware into OpenShift Virtualization.  
 <br>
@@ -2079,6 +2081,10 @@ Pass:  redhat123!
 Or via TigerVNC on my local Fedora:
 #vncviewer 192.168.60.1:5903
 ```
+Now you can install Linux or Windows VM's!
+
+## 2. Install MTV Operator and VMWARE on my Lab Bastion Host. 
+
 
 # Change the TLS Cert of a Local Quay registry (Optional!)
 Chapter to come soon.....
