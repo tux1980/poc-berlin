@@ -2083,7 +2083,7 @@ Or via TigerVNC on my local Fedora:
 ```
 Now you can install Linux or Windows VM's!
 
-## 2. Install MTV Operator and VMWARE on my Lab Bastion Host. 
+## 2. Install MTV Operator and VMWARE on my Lab Bastion Host
 
 #### Step1: We need the VMWARE Provider in OpenShift
 To discover and migrate source VMs, register the external VMware vSphere environment as a source provider in MTV.  
@@ -2093,16 +2093,18 @@ To discover and migrate source VMs, register the external VMware vSphere environ
 * **Name:** A descriptive name (e.g., `esx01-provider`)
 * **Endpoint:** SDK URL of your vCenter or ESXi host (`https://<vcenter-or-esxi-ip>/sdk`)
 * **Credentials:** Secret containing admin username and password (`username`, `password`)
-* **VDDK Image:** Cluster-accessible init image path (We got a local one on my Fedora - Downloads/vmware-vddk) - see step1!
+* **VDDK Image:** Cluster-accessible init image path (We got a local one on my Fedora - Downloads/vmware-vddk) - see step2!)
 * **Fingerprint:** SHA-1 certificate thumbprint of the ESXi/vCenter host (if self-signed / untrusted TLS)
-<br>
+
 ![Forklift Providers](images/providers.png)
 
 #### Step2: VDDK File
 * **Directory:** /var/poc-berlin/day2/virtualization/iso
-* **File1:** entrypoint.sh >> the entrypoint for the Dockerfile
-* **File2:** Dockerfile >> to create the VDDK Image for Podman - to use it "offline"
+* **File1:** VMware-vix-disklib-8.0.3-23950268.x86_64.tar.gz
+* **File2:** entrypoint.sh >> the entrypoint for the Dockerfile
+* **File3:** Dockerfile >> to create the VDDK Image for Podman - to use it "offline"
 <br>
+
 Create and Build the VVDK File:
 ```text
 Build VDDK File:
