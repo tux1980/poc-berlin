@@ -2131,7 +2131,7 @@ storm4.ocp.berlin.test:5000/openshift-mtv/vddk:v2
 Via the Migration **OpenShift UI!**  
 How does Storage Offline (e.g. with ONTAP from NetApp) actually work?  
 [OpenShift Documentation - OpenShift MTV Migration from vSphere](https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.12/html-single/migrating_your_virtual_machines_to_red_hat_openshift_virtualization/index#assembly_migrating-from-vmware_mtv)  
-[OpenShift Documentation - Offline Storage Plugin]  (https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.12/html/planning_your_migration_to_red_hat_openshift_virtualization/assembly_planning-migration-vmware_mtv#con_about-storage-copy-offload_vmware)  
+[OpenShift Documentation - Offline Storage Plugin](https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.12/html/planning_your_migration_to_red_hat_openshift_virtualization/assembly_planning-migration-vmware_mtv#con_about-storage-copy-offload_vmware)  
 [OpenShift Blog - Offline Storage Migration](https://www.redhat.com/en/blog/accelerate-virtual-machine-migration-with-mtv)  
 
 
