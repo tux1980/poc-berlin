@@ -2000,8 +2000,8 @@ Windows 10             -> win10
 Windows 11             -> win11
 ```
 The source images are retrieved from:
-```text
 
+```text
 Be Aware, as mentioned above - for Download these Windows Images we need Credentials from an Red Hat employee. Otherwise you might download these
 Images elsewhere.
 ```
@@ -2014,7 +2014,8 @@ The MTV Operator (Migration Toolkit for Virtualization) is the OpenShift package
 The Forklift resource (ForkliftController) is the specific Custom Resource (CR) you deploy to actually activate and configure that migration engine & setting global parameters like the VDDK init image, inventory paths, and controller limits, ect...  
 
 ### Step2: Install vSphere (ESXi) on the Lab env (on the RHEL9 Bastion Host, storm4)
-Download the Image from the Broadcom Page (VMware vSphere Hypervisor 8.0U3e) Image, as ISO:
+Download the Image from the Broadcom Page (VMware vSphere Hypervisor 8.0U3e) Image, as ISO:  
+```text
 Install:
 #virt-install \
   --name nested-esxi01 \
@@ -2027,19 +2028,21 @@ Install:
   --cdrom /var/poc-berlin/day2/virtualization/iso/VMware-VMvisor-Installer-8.0U3e-24677879.x86_64.iso \
   --graphics vnc,listen=0.0.0.0 \
   --noautoconsole
-
-
+```
 Keep an open connection via SSH/VPN to the Storm Lab where OpenShift runs!
-Locally from the Fedora or Bastion Host:
-
-Get the Right VNC Display Number:
+Locally from the Fedora or Bastion Host:  
+<br>
+Get the Right VNC Display Number:  
+```text
 #virsh vncdisplay nested-esxi01
 Result here: :3
 
 Then Access via VNC Viewer on your Fedora:
 #vncviewer 192.168.60.1:5903
-
-Atttach also the VM Net from the OpenShift Cluster (virbr2/192.168.70.0/24)
+```
+Atttach also the VM Net "vtn-net" from the OpenShift Cluster (virbr2/192.168.70.0/24)  
+This is the VM Net where we keep our IP's from the Source VMNET to the OpenShift Virtualization Net later.  
+```text
 #virsh attach-interface \
   --domain nested-esxi01 \
   --type bridge \
@@ -2048,16 +2051,34 @@ Atttach also the VM Net from the OpenShift Cluster (virbr2/192.168.70.0/24)
   --config --live
   
 Check:
-#virsh domiflist nested-esxi01
+#virsh domiflist nested-esxi01 > Should look like this:
+ Interface   Type     Source   Model    MAC
+-----------------------------------------------------------
+ vnet40      bridge   virbr1   e1000e   52:54:00:03:8b:10 >> The VM Management Net
+ vnet41      bridge   virbr2   e1000e   52:54:00:dd:2c:d0 >> The Virtual Machine Net
 
 After checking the domif is there (virbr2) please reboot the virtual ESXi VM with "virsh".
+#virsh reboot --domain nested-esxi0
+```
+### Step3: Install Storage
+You can add storage via the ESXi UI - just add add what is there - I added a local piece of storage on my local bastion host:
+```text
+#qemu-img create -f qcow2 /var/lib/libvirt/images/nested-esxi01-ds1.qcow2 100G
+#virsh attach-disk nested-esxi01 /var/lib/libvirt/images/nested-esxi01-ds1.qcow2 sdc --targetbus sata --subdriver qcow2 --config
 
+Afterwars I could chose that disk from the UI and created my VM Datastore to put VM' into it.
+```
 
-### Step2: Access ESXi via Chrome/Any Browser (VPN Connect to the Storm env.)
-After finishing the Installation open Chrome:
+### Step4: Access ESXi via Chrome/Any Browser (VPN Connect to the Storm env.)
+After finishing the Installation open Chrome:  
+```text
 https://192.168.60.249/ui/  >> and you will see the vSphere UI
 User:  root
 Pass:  redhat123!
+
+Or via TigerVNC on my local Fedora:
+#vncviewer 192.168.60.1:5903
+```
 
 # Change the TLS Cert of a Local Quay registry (Optional!)
 Chapter to come soon.....
