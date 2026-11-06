@@ -2129,6 +2129,7 @@ storm4.ocp.berlin.test:5000/openshift-mtv/vddk:v2
 
 #### Step3: Create Network Plan & Storage Plan
 Via the Migration **OpenShift UI!**  
+<br>
 How does Storage Offline (e.g. with ONTAP from NetApp) actually work?  
 [OpenShift Documentation - OpenShift MTV Migration from vSphere](https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.12/html-single/migrating_your_virtual_machines_to_red_hat_openshift_virtualization/index#assembly_migrating-from-vmware_mtv)  
 [OpenShift Documentation - Offline Storage Plugin](https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.12/html/planning_your_migration_to_red_hat_openshift_virtualization/assembly_planning-migration-vmware_mtv#con_about-storage-copy-offload_vmware)  
@@ -2138,8 +2139,70 @@ How does Storage Offline (e.g. with ONTAP from NetApp) actually work?
 #### Step4: Create a Migration Plan and Migrate!
 **Via the Migration OpenShift UI!**
 
-# Change the TLS Cert of a Local Quay registry (Optional!)
-Chapter will come soon.....
+# Change the TLS Cert of a Local installed Quay registry (Optional!)
+Chapter will come soon.....  
+
+Steps roughly dexcribed what we need:  
+* **Generating** a valid TLS certificate with the proper Subject Alternative Name (SAN) and configuring Quay.
+* **Trusting** that Certificate Authority (CA) across your RHEL host and OpenShift cluster.
+* **Mirroring/copying** the images (skopeo or podman) from the old registry to Quay.
+* **Updating MTV/Forklift** global configs to consume images from the new Quay endpoint.
+
+#### Step1: Create the new Cert on the Bastion Host
+Create the Key and Cert:
+```text
+#openssl req -newkey rsa:4096 -nodes -sha256 \
+  -keyout /var/poc-berlin/certs/quay.key \
+  -x509 -days 365 \
+  -out /var/poc-berlin/certs/quay.crt \
+  -subj "/CN=quay.ocp.berlin.test" \
+  -addext "subjectAltName=DNS:quay.ocp.berlin.test,IP:192.168.60.1"
+```
+
+#### Step2: Trust the new SSL Cert
+The next single step is to add quay.crt to your RHEL system's trusted certificate store so local tools  
+(podman, curl, skopeo) trust the Quay registry without requiring --tls-verify=false  
+```text
+#cp /var/poc-berlin/certs/quay.crt /etc/pki/ca-trust/source/anchors/quay.crt 
+#update-ca-trust extract
+Test:
+#openssl verify /etc/pki/ca-trust/source/anchors/quay.crt
+```
+
+#### Step3: OpenShift has to trust the new Cert too!
+Next step is to configure the OpenShift cluster to trust quay.crt so the cluster nodes  
+can pull images from quay.ocp.berlin.test without certificate verification errors!  
+```text
+1. Create the ConfigMap with both keys, the old one AND the new one!
+#oc create configmap quay-ca -n openshift-config --from-file=quay.ocp.berlin.test=/var/poc-berlin/certs/quay.crt
+
+2. Patch the cluster image configuration to use this ConfigMap as an additional trusted CA
+#oc create configmap combined-registry-cas -n openshift-config \
+  --from-file=storm4.ocp.berlin.test..5000=/var/poc-berlin/certs/domain.crt \
+  --from-file=quay.ocp.berlin.test=/var/poc-berlin/certs/quay.crt \
+  --dry-run=client -o yaml | oc apply -f -
+
+Point OpenShift to the new, combined ConfigMap object with both certs
+#oc patch image.config.openshift.io/cluster --type=merge -p '{"spec":{"additionalTrustedCA":{"name":"combined-registry-cas"}}}'
+
+Check the keys:
+#oc get configmap combined-registry-cas -n openshift-config -o jsonpath='{.data}' | jq 'keys'
+```
+#### Step2: Install Quay!
+```text
+# 1. Create directories for Quay configuration and storage
+mkdir -p /var/poc-berlin/quay/{config,storage}
+
+# 2. Copy certificates using the standard filenames expected by Quay
+cp /var/poc-berlin/certs/quay.crt /var/poc-berlin/quay/config/ssl.cert
+cp /var/poc-berlin/certs/quay.key /var/poc-berlin/quay/config/ssl.key
+
+# 3. Ensure permissions (read access for the container)
+chmod -R 755 /var/poc-berlin/quay/config
+chmod 644 /var/poc-berlin/quay/config/ssl.cert
+chmod 600 /var/poc-berlin/quay/config/ssl.key
+```
+
 
 # Additional Worker Nodes (Optional!)
 
