@@ -2007,7 +2007,7 @@ Images elsewhere.
 ```
 
 # Setting Up VMWARE / MTV and Migrate VM's (Optional!)
-[OpenShift Documentation - Storage](https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.12)
+[OpenShift Documentation - Storage](https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.12)  
 [OpenShift KubeVirt - Supported Provider / GitHub](https://github.com/kubev2v/forklift/)
 
 
