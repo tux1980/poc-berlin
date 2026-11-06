@@ -2007,6 +2007,9 @@ Images elsewhere.
 ```
 
 # Setting Up VMWARE / MTV and Migrate VM's (Optional!)
+[OpenShift Documentation - Storage](https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.12)
+[OpenShift KubeVirt - Supported Provider / GitHub](https://github.com/kubev2v/forklift/)
+
 
 ### 1. Install MTV Operator and VMWARE on my Lab Bastion Host. 
 
@@ -2125,13 +2128,18 @@ storm4.ocp.berlin.test:5000/openshift-mtv/vddk:v2
 ```
 
 #### Step3: Create Network Plan & Storage Plan
-Via the Migration OpenShift UI!
+Via the Migration **OpenShift UI!**  
+Remark:  
+How does Storage Offline (e.g. with ONTAP from NetApp) actually work?  
+[OpenShift Documentation - Offline Storage Plugin](https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.12/html/migrating_your_virtual_machines_to_red_hat_openshift_virtualization/assembly_migrating-from-vmware_mtv)
+[OpenShift Blog - Offline Storage Migration](https://www.redhat.com/en/blog/accelerate-virtual-machine-migration-with-mtv)
+
 
 #### Step4: Create a Migration Plan and Migrate!
-Via the Migration OpenShift UI!
+**Via the Migration OpenShift UI!**
 
 # Change the TLS Cert of a Local Quay registry (Optional!)
-Chapter to come soon.....
+Chapter will come soon.....
 
 # Additional Worker Nodes (Optional!)
 
