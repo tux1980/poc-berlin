@@ -2139,6 +2139,7 @@ How does Storage Offline (e.g. with ONTAP from NetApp) actually work?
 #### Step4: Create a Migration Plan and Migrate!
 **Via the Migration OpenShift UI!**
 
+
 # Change the TLS Cert of a Local installed Quay registry (Optional!)
 Chapter will come soon.....  
 
@@ -2188,19 +2189,36 @@ Point OpenShift to the new, combined ConfigMap object with both certs
 Check the keys:
 #oc get configmap combined-registry-cas -n openshift-config -o jsonpath='{.data}' | jq 'keys'
 ```
-#### Step2: Install Quay!
+#### Step2: Install & Run Quay Registry
+The deployment of all components (PostgreSQL-13, Redis-7, Quay v3.18.2), including SSL certificate setup, file system permissions, and initial admin account verification, is fully automated via `deploy-quay.sh`.  
+<br>
+* **Directory Structure**:  
 ```text
-# 1. Create directories for Quay configuration and storage
-mkdir -p /var/poc-berlin/quay/{config,storage}
+/var/poc-berlin/
+├── certs/
+│   ├── quay.crt
+│   └── quay.key
+└── quay/
+    ├── config/
+    │   ├── config.yaml
+    │   ├── ssl.cert
+    │   └── ssl.key
+    ├── postgres-data/       # Persistent DB (UID 26:26)
+    ├── storage/             # Registry Image Blobs (UID 1001:0)
+    ├── deploy-quay.sh       # Automatisches Setup & Startskript
+    └── delete-quay.sh       # Tear-Down Skript
+```
 
-# 2. Copy certificates using the standard filenames expected by Quay
-cp /var/poc-berlin/certs/quay.crt /var/poc-berlin/quay/config/ssl.cert
-cp /var/poc-berlin/certs/quay.key /var/poc-berlin/quay/config/ssl.key
+* **What deploy-quay.sh in /var/poc-berlin/quay actually does:**
+```text
+1. Prepare Directories & Permissions, creates paths for config, storage, and database; sets UID 26:26 for PostgreSQL!
+3. Deploy SSL Certificates & copies certificates (ssl.cert, ssl.key) into the config folder with proper read permissions.
+5. Ensure Podman Network & Creates the quay-net bridge network for container-to-container communication.
+6. Start PostgreSQL & Redis & launches both services, waits for database readiness, and enables the pg_trgm extension.
+7. Generate config.yaml & Creates Quay's configuration with database, Redis, superuser, and local storage settings.
+8. Start Quay Container & runs Quay v3.18.2!
+9. Configure Trust & Create Admin + enables the admin user with a password directly into the SQL database
 
-# 3. Ensure permissions (read access for the container)
-chmod -R 755 /var/poc-berlin/quay/config
-chmod 644 /var/poc-berlin/quay/config/ssl.cert
-chmod 600 /var/poc-berlin/quay/config/ssl.key
 ```
 
 
