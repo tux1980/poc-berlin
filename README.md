@@ -29,7 +29,7 @@
 17. [Create "Ubuntu/Debian/SuSE/FreeBSD" templates!](#create-ubuntudebiansusefreebsd-templates)
 18. [Create Windows Machines!](#create-windows-machines)
 19. [Setting Up VMWARE / MTV and Migrate VM's (Optional!)](#setting-up-vmware--mtv-and-migrate-vms-optional)
-20. [Change the TLS Cert of a Local Quay registry (Optional!)](#change-the-tls-cert-of-a-local-quay-registry-optional)
+20. [Change the TLS Cert of a Local installed Quay registry (Optional!)](#change-the-tls-cert-of-a-local-installed-quay-registry-optional)
 21. [Additional Worker Nodes (Optional!)](#additional-worker-nodes-optional)
 
 ---
