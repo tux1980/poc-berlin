@@ -2252,6 +2252,9 @@ Pass:  redhat123!
 ```
 
 **Sync the old with the new Registry!**
+This script reads all image folders from the old registry and renames deeply  
+nested paths so the new Quay registry accepts them. Then, it automatically copies  
+every image and tag over using skopeo sync.  
 ```text
 curl -sk -u wmarx:Orbit123! https://storm4.ocp.berlin.test:5000/v2/_catalog | jq -r '.repositories[]' | while read -r repo; do
   ns="${repo%%/*}"
