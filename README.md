@@ -2141,8 +2141,7 @@ How does Storage Offline (e.g. with ONTAP from NetApp) actually work?
 
 
 # Change the TLS Cert of a Local installed Quay registry (Optional!)
-Chapter will come soon.....  
-
+ 
 Steps roughly dexcribed what we need:  
 * **Generating** a valid TLS certificate with the proper Subject Alternative Name (SAN) and configuring Quay.
 * **Trusting** that Certificate Authority (CA) across your RHEL host and OpenShift cluster.
@@ -2219,6 +2218,20 @@ The deployment of all components (PostgreSQL-13, Redis-7, Quay v3.18.2), includi
 * **8. Start Quay Container & runs Quay v3.18.2!**
 * **9. Configure Trust & Create Admin + enables the admin user with a password directly into the SQL database**
 
+#### Step5: Restore OpenShift Update Service (OSUS) Mirror Trust
+
+**1. Update cluster-wide CA ConfigMap with the mandatory updateservice-registry key**
+oc create configmap combined-registry-cas -n openshift-config \
+  --from-file=storm4.ocp.berlin.test..5000=/var/poc-berlin/certs/domain.crt \
+  --from-file=quay.ocp.berlin.test=/var/poc-berlin/certs/quay.crt \
+  --from-file=updateservice-registry=/var/poc-berlin/certs/domain.crt \
+  --dry-run=client -o yaml | oc apply -f -
+
+**2. Ensure cluster image config points to the combined ConfigMap**  
+If not already happended in the steps above.....  
+```text
+oc patch image.config.openshift.io/cluster --type=merge -p '{"spec":{"additionalTrustedCA":{"name":"combined-registry-cas"}}}'
+```
 
 # Additional Worker Nodes (Optional!)
 
