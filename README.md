@@ -2213,11 +2213,11 @@ The deployment of all components (PostgreSQL-13, Redis-7, Quay v3.18.2), includi
 
 * **1. Prepare Directories & Permissions, creates paths for config, storage, and database; sets UID 26:26 for PostgreSQL!**
 * **3. Deploy SSL Certificates & copies certificates (ssl.cert, ssl.key) into the config folder with proper read permissions.**
-* 5. Ensure Podman Network & Creates the quay-net bridge network for container-to-container communication.
-* 6. Start PostgreSQL & Redis & launches both services, waits for database readiness, and enables the pg_trgm extension.
-7. Generate config.yaml & Creates Quay's configuration with database, Redis, superuser, and local storage settings.
-8. Start Quay Container & runs Quay v3.18.2!
-9. Configure Trust & Create Admin + enables the admin user with a password directly into the SQL database
+* **5. Ensure Podman Network & Creates the quay-net bridge network for container-to-container communication.**
+* **6. Start PostgreSQL & Redis & launches both services, waits for database readiness, and enables the pg_trgm extension.**
+* **7. Generate config.yaml & Creates Quay's configuration with database, Redis, superuser, and local storage settings.**
+* **8. Start Quay Container & runs Quay v3.18.2!**
+* **9. Configure Trust & Create Admin + enables the admin user with a password directly into the SQL database**
 
 
 # Additional Worker Nodes (Optional!)
