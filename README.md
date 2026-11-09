@@ -2235,6 +2235,39 @@ If not already happended in the steps above.....
 oc patch image.config.openshift.io/cluster --type=merge -p '{"spec":{"additionalTrustedCA":{"name":"combined-registry-cas"}}}'
 ```
 
+#### Step6: Sync the old to the new registry!
+
+**Log In old Registry:**
+```text
+#podman login storm4.ocp.berlin.test:5000 --tls-verify=false
+User:  admin
+Pass:  redhat123!
+```
+
+**Log In new Registry:**
+```text
+#podman login quay.ocp.berlin.test:8447 --authfile /var/poc-berlin/auth.json --tls-verify=false
+User:  admin
+Pass:  redhat123!
+```
+
+**Sync the old with the new Registry!**
+```text
+curl -sk -u wmarx:Orbit123! https://storm4.ocp.berlin.test:5000/v2/_catalog | jq -r '.repositories[]' | while read -r repo; do
+  ns="${repo%%/*}"
+  name="${repo#*/}"
+  name="${name//\//-}"
+
+  echo "==> Syncing: ${repo} -> ${ns}/${name}"
+  skopeo sync \
+    --src docker --dest docker \
+    --src-tls-verify=false --dest-tls-verify=false \
+    --authfile /var/poc-berlin/auth.json \
+    "storm4.ocp.berlin.test:5000/${repo}" \
+    "quay.ocp.berlin.test:8447/${ns}/${name}"
+done
+```
+
 # Additional Worker Nodes (Optional!)
 
 To enable OpenShift to automatically communicate with KVM, spin up new VMs, and register
