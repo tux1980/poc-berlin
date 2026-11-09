@@ -2189,7 +2189,7 @@ Point OpenShift to the new, combined ConfigMap object with both certs
 Check the keys:
 #oc get configmap combined-registry-cas -n openshift-config -o jsonpath='{.data}' | jq 'keys'
 ```
-#### Step2: Install & Run Quay Registry
+#### Step4: Install & Run Quay Registry
 The deployment of all components (PostgreSQL-13, Redis-7, Quay v3.18.2), including SSL certificate setup, file system permissions, and initial admin account verification, is fully automated via `deploy-quay.sh`.  
 <br>
 * **Directory Structure**:  
@@ -2220,7 +2220,6 @@ The deployment of all components (PostgreSQL-13, Redis-7, Quay v3.18.2), includi
 9. Configure Trust & Create Admin + enables the admin user with a password directly into the SQL database
 
 ```
-
 
 # Additional Worker Nodes (Optional!)
 
