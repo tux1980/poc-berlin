@@ -4,7 +4,9 @@
 >
 > This README is a Markdown representation of the original PoC document we created to the PoC in Berlin.
 > The original wording, explanations, environment values and commands are "partially" intentionally retained.
-> The PoC working directory used throughout this README is **`/var/poc-berlin`**. This is a private Repository.
+> The PoC working directory used throughout this README is **`/var/poc-berlin`**. This is a public Repository.
+
+**Important:** All usernames, passwords, credentials, IP addresses, hostnames and other environment-specific values shown in this repository are freely chosen values used exclusively for this isolated lab/test environment - you can chose whatever you want to chose:)
 
 ---
 
