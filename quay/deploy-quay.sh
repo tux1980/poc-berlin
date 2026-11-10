@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# WARNING:
+# Test/PoC environment only.
+# Contains hard-coded lab credentials and Quay secret keys.
+# Do not reuse this configuration for production.
 set -euo pipefail
 
 echo "=== [1/7] Vorbereitung Verzeichnisse und Rechte ==="
