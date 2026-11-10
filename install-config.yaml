@@ -1,5 +1,5 @@
 apiVersion: v1
-baseDomain: ocp.polizei.test
+baseDomain: ocp.berlin.test
 metadata:
   name: pb-poc
 compute:
@@ -24,9 +24,9 @@ networking:
 platform:
   baremetal:
     apiVIPs:
-      - 192.168.60.10    # Virtual IP for api.pb-poc.ocp.polizei.test
+      - 192.168.60.10    # Virtual IP for api.pb-poc.ocp.berlin.test
     ingressVIPs:
-      - 192.168.60.20    # Virtual IP for *.apps.pb-poc.ocp.polizei.test
+      - 192.168.60.20    # Virtual IP for *.apps.pb-poc.ocp.berlin.test
     hosts:
       - name: ocp4-node1
         role: master
@@ -62,8 +62,8 @@ additionalTrustBundle: |
 ${REGISTRY_CA}
 imageDigestSources:
   - mirrors:
-      - storm4.ocp.polizei.test:5000/openshift/release/openshift/release-images
+      - storm4.ocp.berlin.test:5000/openshift/release/openshift/release-images
     source: quay.io/openshift-release-dev/ocp-release
   - mirrors:
-      - storm4.ocp.polizei.test:5000/openshift/release/openshift/release
+      - storm4.ocp.berlin.test:5000/openshift/release/openshift/release
     source: quay.io/openshift-release-dev/ocp-v4.0-art-dev

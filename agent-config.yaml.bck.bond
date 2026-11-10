@@ -7,7 +7,7 @@ hosts:
   # =========================================================================
   # Node 1 (Master 0) - ocp4-node1
   # =========================================================================
-  - hostname: ocp4-node1.pb-poc.ocp.polizei.test
+  - hostname: ocp4-node1.pb-poc.ocp.berlin.test
     role: master
     rootDeviceHints:
       deviceName: "/dev/vda"
@@ -68,7 +68,7 @@ hosts:
   # =========================================================================
   # Node 2 (Master 1) - ocp4-node2
   # =========================================================================
-  - hostname: ocp4-node2.pb-poc.ocp.polizei.test
+  - hostname: ocp4-node2.pb-poc.ocp.berlin.test
     role: master
     rootDeviceHints:
       deviceName: "/dev/vda"
@@ -127,7 +127,7 @@ hosts:
   # =========================================================================
   # Node 3 (Master 2) - ocp4-node3
   # =========================================================================
-  - hostname: ocp4-node3.pb-poc.ocp.polizei.test
+  - hostname: ocp4-node3.pb-poc.ocp.berlin.test
     role: master
     rootDeviceHints:
       deviceName: "/dev/vda"

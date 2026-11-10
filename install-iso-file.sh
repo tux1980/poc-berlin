@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-WORKDIR="/var/poc-polizei"
+WORKDIR="/var/poc-berlin"
 INSTALL_DIR="${WORKDIR}/installer"
 BINARY="${WORKDIR}/openshift-install"
 
@@ -11,7 +11,7 @@ if [ -z "${PULL_SECRET}" ] || [ -z "${SSH_KEY}" ] || [ -z "${REGISTRY_CA}" ]; th
     echo "Example:"
     echo "  export PULL_SECRET='\$(cat /path/to/pull-secret.json)'"
     echo "  export SSH_KEY='\$(cat ~/.ssh/id_rsa.pub)'"
-    echo "  export REGISTRY_CA='\$(cat /var/poc-polizei/certs/domain.crt)'"
+    echo "  export REGISTRY_CA='\$(cat /var/poc-berlin/certs/domain.crt)'"
     exit 1
 fi
 

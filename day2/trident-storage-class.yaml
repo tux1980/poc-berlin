@@ -1,7 +1,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: netapp-nfs-economy
+  name: netapp-nfs
 provisioner: csi.trident.netapp.io
 parameters:
-  backendType: ontap-nas-economy
+  backendType: ontap-nas

@@ -1,6 +1,6 @@
 apiVersion: v1
 data:
-  releaseVersion: 4.22.10
+  releaseVersion: 4.22.18
   stream: |-
     {
       "stream": "rhcos-4.21",
@@ -280,8 +280,8 @@ data:
                   "hyperVGen2": {
                     "publisher": "azureopenshift",
                     "offer": "aro4",
-                    "sku": "420-arm",
-                    "version": "9.6.20251015"
+                    "sku": "aro_422-arm",
+                    "version": "9.8.20260428"
                   }
                 }
               }
@@ -1007,14 +1007,14 @@ data:
                   "hyperVGen1": {
                     "publisher": "azureopenshift",
                     "offer": "aro4",
-                    "sku": "aro_420",
-                    "version": "9.6.20251015"
+                    "sku": "aro_422",
+                    "version": "9.8.20260428"
                   },
                   "hyperVGen2": {
                     "publisher": "azureopenshift",
                     "offer": "aro4",
-                    "sku": "420-v2",
-                    "version": "9.6.20251015"
+                    "sku": "aro_422-v2",
+                    "version": "9.8.20260428"
                   }
                 },
                 "ocp": {
@@ -1022,13 +1022,13 @@ data:
                     "publisher": "redhat",
                     "offer": "rh-ocp-worker",
                     "sku": "rh-ocp-worker-gen1",
-                    "version": "4.18.2025031114"
+                    "version": "4.18.2026012111"
                   },
                   "hyperVGen2": {
                     "publisher": "redhat",
                     "offer": "rh-ocp-worker",
                     "sku": "rh-ocp-worker",
-                    "version": "4.18.2025031114"
+                    "version": "4.18.2026012111"
                   }
                 },
                 "opp": {
@@ -1036,13 +1036,13 @@ data:
                     "publisher": "redhat",
                     "offer": "rh-opp-worker",
                     "sku": "rh-opp-worker-gen1",
-                    "version": "4.18.2025031114"
+                    "version": "4.18.2026012111"
                   },
                   "hyperVGen2": {
                     "publisher": "redhat",
                     "offer": "rh-opp-worker",
                     "sku": "rh-opp-worker",
-                    "version": "4.18.2025031114"
+                    "version": "4.18.2026012111"
                   }
                 },
                 "oke": {
@@ -1050,13 +1050,13 @@ data:
                     "publisher": "redhat",
                     "offer": "rh-oke-worker",
                     "sku": "rh-oke-worker-gen1",
-                    "version": "4.18.2025031114"
+                    "version": "4.18.2026012111"
                   },
                   "hyperVGen2": {
                     "publisher": "redhat",
                     "offer": "rh-oke-worker",
                     "sku": "rh-oke-worker",
-                    "version": "4.18.2025031114"
+                    "version": "4.18.2026012111"
                   }
                 },
                 "ocp-emea": {
@@ -1064,13 +1064,13 @@ data:
                     "publisher": "redhat-limited",
                     "offer": "rh-ocp-worker",
                     "sku": "rh-ocp-worker-gen1",
-                    "version": "4.18.2025031114"
+                    "version": "4.18.2026012111"
                   },
                   "hyperVGen2": {
                     "publisher": "redhat-limited",
                     "offer": "rh-ocp-worker",
                     "sku": "rh-ocp-worker",
-                    "version": "4.18.2025031114"
+                    "version": "4.18.2026012111"
                   }
                 },
                 "opp-emea": {
@@ -1078,13 +1078,13 @@ data:
                     "publisher": "redhat-limited",
                     "offer": "rh-opp-worker",
                     "sku": "rh-opp-worker-gen1",
-                    "version": "4.18.2025031114"
+                    "version": "4.18.2026012111"
                   },
                   "hyperVGen2": {
                     "publisher": "redhat-limited",
                     "offer": "rh-opp-worker",
                     "sku": "rh-opp-worker",
-                    "version": "4.18.2025031114"
+                    "version": "4.18.2026012111"
                   }
                 },
                 "oke-emea": {
@@ -1092,13 +1092,13 @@ data:
                     "publisher": "redhat-limited",
                     "offer": "rh-oke-worker",
                     "sku": "rh-oke-worker-gen1",
-                    "version": "4.18.2025031114"
+                    "version": "4.18.2026012111"
                   },
                   "hyperVGen2": {
                     "publisher": "redhat-limited",
                     "offer": "rh-oke-worker",
                     "sku": "rh-oke-worker",
-                    "version": "4.18.2025031114"
+                    "version": "4.18.2026012111"
                   }
                 }
               }
@@ -2389,8 +2389,8 @@ data:
                     "hyperVGen2": {
                       "publisher": "azureopenshift",
                       "offer": "aro4",
-                      "sku": "420-arm",
-                      "version": "9.6.20251015"
+                      "sku": "aro_422-arm",
+                      "version": "9.8.20260428"
                     }
                   }
                 }
@@ -3116,14 +3116,14 @@ data:
                     "hyperVGen1": {
                       "publisher": "azureopenshift",
                       "offer": "aro4",
-                      "sku": "aro_420",
-                      "version": "9.6.20251015"
+                      "sku": "aro_422",
+                      "version": "9.8.20260428"
                     },
                     "hyperVGen2": {
                       "publisher": "azureopenshift",
                       "offer": "aro4",
-                      "sku": "420-v2",
-                      "version": "9.6.20251015"
+                      "sku": "aro_422-v2",
+                      "version": "9.8.20260428"
                     }
                   },
                   "ocp": {
@@ -3131,13 +3131,13 @@ data:
                       "publisher": "redhat",
                       "offer": "rh-ocp-worker",
                       "sku": "rh-ocp-worker-gen1",
-                      "version": "4.18.2025031114"
+                      "version": "4.18.2026012111"
                     },
                     "hyperVGen2": {
                       "publisher": "redhat",
                       "offer": "rh-ocp-worker",
                       "sku": "rh-ocp-worker",
-                      "version": "4.18.2025031114"
+                      "version": "4.18.2026012111"
                     }
                   },
                   "opp": {
@@ -3145,13 +3145,13 @@ data:
                       "publisher": "redhat",
                       "offer": "rh-opp-worker",
                       "sku": "rh-opp-worker-gen1",
-                      "version": "4.18.2025031114"
+                      "version": "4.18.2026012111"
                     },
                     "hyperVGen2": {
                       "publisher": "redhat",
                       "offer": "rh-opp-worker",
                       "sku": "rh-opp-worker",
-                      "version": "4.18.2025031114"
+                      "version": "4.18.2026012111"
                     }
                   },
                   "oke": {
@@ -3159,13 +3159,13 @@ data:
                       "publisher": "redhat",
                       "offer": "rh-oke-worker",
                       "sku": "rh-oke-worker-gen1",
-                      "version": "4.18.2025031114"
+                      "version": "4.18.2026012111"
                     },
                     "hyperVGen2": {
                       "publisher": "redhat",
                       "offer": "rh-oke-worker",
                       "sku": "rh-oke-worker",
-                      "version": "4.18.2025031114"
+                      "version": "4.18.2026012111"
                     }
                   },
                   "ocp-emea": {
@@ -3173,13 +3173,13 @@ data:
                       "publisher": "redhat-limited",
                       "offer": "rh-ocp-worker",
                       "sku": "rh-ocp-worker-gen1",
-                      "version": "4.18.2025031114"
+                      "version": "4.18.2026012111"
                     },
                     "hyperVGen2": {
                       "publisher": "redhat-limited",
                       "offer": "rh-ocp-worker",
                       "sku": "rh-ocp-worker",
-                      "version": "4.18.2025031114"
+                      "version": "4.18.2026012111"
                     }
                   },
                   "opp-emea": {
@@ -3187,13 +3187,13 @@ data:
                       "publisher": "redhat-limited",
                       "offer": "rh-opp-worker",
                       "sku": "rh-opp-worker-gen1",
-                      "version": "4.18.2025031114"
+                      "version": "4.18.2026012111"
                     },
                     "hyperVGen2": {
                       "publisher": "redhat-limited",
                       "offer": "rh-opp-worker",
                       "sku": "rh-opp-worker",
-                      "version": "4.18.2025031114"
+                      "version": "4.18.2026012111"
                     }
                   },
                   "oke-emea": {
@@ -3201,13 +3201,13 @@ data:
                       "publisher": "redhat-limited",
                       "offer": "rh-oke-worker",
                       "sku": "rh-oke-worker-gen1",
-                      "version": "4.18.2025031114"
+                      "version": "4.18.2026012111"
                     },
                     "hyperVGen2": {
                       "publisher": "redhat-limited",
                       "offer": "rh-oke-worker",
                       "sku": "rh-oke-worker",
-                      "version": "4.18.2025031114"
+                      "version": "4.18.2026012111"
                     }
                   }
                 }

@@ -8,6 +8,6 @@ spec:
   issuerRef:
     name: pb-poc-trust-issuer
     kind: Issuer
-  commonName: "*.apps.pb-poc.ocp.polizei.test"
+  commonName: "*.apps.pb-poc.ocp.berlin.test"
   dnsNames:
-  - "*.apps.pb-poc.ocp.polizei.test"
+  - "*.apps.pb-poc.ocp.berlin.test"

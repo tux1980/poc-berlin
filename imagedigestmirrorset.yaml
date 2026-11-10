@@ -1,0 +1,30 @@
+apiVersion: config.openshift.io/v1
+kind: ImageDigestMirrorSet
+metadata:
+  name: image-digest-mirror
+spec:
+  imageDigestMirrors:
+    # 1. OpenShift Core Release Images
+    - mirrors:
+        - storm4.ocp.berlin.test:5000/openshift/release/openshift/release-images
+        - storm4.ocp.berlin.test:5000/openshift/release
+      source: quay.io/openshift-release-dev/ocp-release
+    - mirrors:
+        - storm4.ocp.berlin.test:5000/openshift/release/openshift/release
+        - storm4.ocp.berlin.test:5000/openshift/release
+      source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+
+    # 2. Red Hat Official & Partner Registries
+    - mirrors:
+        - storm4.ocp.berlin.test:5000/openshift/release
+      source: registry.redhat.io
+    - mirrors:
+        - storm4.ocp.berlin.test:5000/openshift/release
+      source: registry.connect.redhat.com
+
+    # 3. NetApp Trident Operator
+    - mirrors:
+        - storm4.ocp.berlin.test:5000/openshift/release/netapp/trident-operator
+        - storm4.ocp.berlin.test:5000/openshift/release/community-operator-pipeline-prod/trident-operator
+        - storm4.ocp.berlin.test:5000/netapp/trident-operator
+      source: registry.connect.redhat.com/netapp/trident-operator

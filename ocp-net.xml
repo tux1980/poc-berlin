@@ -7,36 +7,36 @@
   <dns>
     <!-- API and API-INT VIP -->
     <host ip='192.168.60.10'>
-      <hostname>api.pb-poc.ocp.polizei.test</hostname>
-      <hostname>api-int.pb-poc.ocp.polizei.test</hostname>
+      <hostname>api.pb-poc.ocp.berlin.test</hostname>
+      <hostname>api-int.pb-poc.ocp.berlin.test</hostname>
     </host>
 
     <!-- Ingress VIP (Apps / Console / OAuth) -->
     <host ip='192.168.60.20'>
-      <hostname>console-openshift-console.apps.pb-poc.ocp.polizei.test</hostname>
-      <hostname>oauth-openshift.apps.pb-poc.ocp.polizei.test</hostname>
+      <hostname>console-openshift-console.apps.pb-poc.ocp.berlin.test</hostname>
+      <hostname>oauth-openshift.apps.pb-poc.ocp.berlin.test</hostname>
     </host>
 
     <!-- Physical Nodes Hostnames -->
     <host ip='192.168.60.11'>
-      <hostname>ocp4-node1.pb-poc.ocp.polizei.test</hostname>
+      <hostname>ocp4-node1.pb-poc.ocp.berlin.test</hostname>
     </host>
     <host ip='192.168.60.12'>
-      <hostname>ocp4-node2.pb-poc.ocp.polizei.test</hostname>
+      <hostname>ocp4-node2.pb-poc.ocp.berlin.test</hostname>
     </host>
     <host ip='192.168.60.13'>
-      <hostname>ocp4-node3.pb-poc.ocp.polizei.test</hostname>
+      <hostname>ocp4-node3.pb-poc.ocp.berlin.test</hostname>
     </host>
     <host ip='192.168.60.14'>
-      <hostname>ocp4-node4.pb-poc.ocp.polizei.test</hostname>
+      <hostname>ocp4-node4.pb-poc.ocp.berlin.test</hostname>
     </host>
     <host ip='192.168.60.15'>                                                   
-      <hostname>ocp4-node5.pb-poc.ocp.polizei.test</hostname>
+      <hostname>ocp4-node5.pb-poc.ocp.berlin.test</hostname>
     </host>
 
     <!-- KVM Host -->
     <host ip='192.168.60.1'>
-      <hostname>storm4.ocp.polizei.test</hostname>
+      <hostname>storm4.ocp.berlin.test</hostname>
     </host>
   </dns>
   <ip address='192.168.60.1' netmask='255.255.255.0'>

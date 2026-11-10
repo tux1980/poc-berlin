@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-INSTALLER_DIR="/var/poc-polizei/installer"
+INSTALLER_DIR="/var/poc-berlin/installer"
 IMAGE_DIR="/var/lib/libvirt/images"
 NODES=("ocp4-node1" "ocp4-node2" "ocp4-node3")
 NODE_IPS=("192.168.60.11" "192.168.60.12" "192.168.60.13")

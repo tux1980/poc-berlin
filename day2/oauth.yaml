@@ -5,21 +5,21 @@ metadata:
     include.release.openshift.io/ibm-cloud-managed: "true"
     include.release.openshift.io/self-managed-high-availability: "true"
     release.openshift.io/create-only: "true"
-  creationTimestamp: "2026-09-04T17:03:56Z"
+  creationTimestamp: "2026-10-23T16:01:01Z"
   generation: 1
   name: cluster
   ownerReferences:
   - apiVersion: config.openshift.io/v1
     kind: ClusterVersion
     name: version
-    uid: 11225e63-3240-408b-b6eb-8451d20fd017
-  resourceVersion: "1652"
-  uid: 73cc0e82-8d0c-4013-97ad-8c55f5f00316
+    uid: 8eba9cf8-3a75-4ddb-a337-7d5e49d0d30f
+  resourceVersion: "1567"
+  uid: ec4084a2-efc4-4b28-8d1a-ccbf20d027fd
 spec:
   identityProviders:
   - htpasswd:
       fileData:
-        name: htpasswd-secret 
+        name: htpasswd-secret
     mappingMethod: claim
     name: poc-pb-users
     type: HTPasswd

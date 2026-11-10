@@ -2,16 +2,18 @@ apiVersion: mirror.openshift.io/v2alpha1
 kind: ImageSetConfiguration
 mirror:
   platform:
+    graph: true
     channels:
       - name: stable-4.22
-        minVersion: 4.22.12
-        maxVersion: 4.22.14
+        minVersion: 4.22.18
+        #maxVersion: 4.22.20
 
   operators:
     # Offizielle Red Hat Operatoren!
     - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.22
       packages:
         - name: kubevirt-hyperconverged
+        - name: cincinnati-operator
         - name: kubernetes-nmstate-operator
         - name: nfd
         - name: cluster-kube-descheduler-operator
@@ -50,8 +52,8 @@ mirror:
     - name: registry.k8s.io/sig-storage/nfs-subdir-external-provisioner:v4.0.2
 
     # NetApp Trident Core & Operator Images direkt von quay.io und docker.io (Version 26.06.1)
-    - name: quay.io/netapp/trident-operator:26.06.1
-    - name: quay.io/netapp/trident:26.06.1
+    - name: quay.io/netapp/trident-operator:26.06.2
+    - name: quay.io/netapp/trident:26.06.2
     - name: docker.io/netapp/trident-autosupport:26.06
 
     # Required Kubernetes CSI Sidecars für NetApp Trident Storage Provider
@@ -61,7 +63,6 @@ mirror:
     - name: registry.k8s.io/sig-storage/csi-snapshotter:v8.6.0
     - name: registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.17.0
     - name: registry.k8s.io/sig-storage/livenessprobe:v2.15.0
-    - name: registry.redhat.io/containerdisks/virtio-win:latest
     - name: nicolaka/netshoot:latest
     - name: registry.redhat.io/ubi9/ubi-minimal:latest
     - name: registry.redhat.io/ubi10/ubi:latest

@@ -1,7 +1,12 @@
 # Workspace ignorieren - cluster-resources explizit zulassen
 workspace/*
-!workspace/working-dir/
-!workspace/working-dir/cluster-resources/
+#workspace/working-dir/
+#workspace/working-dir/cluster-resources/
+
+#Quay Stuff
+quay/postgres-data/
+quay/storage/
+quay/config/
 
 # Archive, Images und Logs
 *.tar
@@ -16,14 +21,16 @@ auth.json
 auth-test.json
 certs/domain.key
 *.key
+certs/
 
 # Temp Stuff und co.
 data/
-harddisk-test/
 installer/
-os-images/
 day1/
+day2/virtualization/
 
 # Sensitive Manifeste
 day2/bmh-redfish.yaml
 day2/trident-secret.yaml
+pull-secret-without-insights.json
+pull-secret-without-mirror.json

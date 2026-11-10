@@ -1,0 +1,8 @@
+apiVersion: mirror.openshift.io/v2alpha1
+kind: DeleteImageSetConfiguration
+delete:
+  platform:
+    channels:
+      - name: stable-4.22
+        minVersion: 4.22.12
+        maxVersion: 4.22.12

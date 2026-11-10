@@ -1,11 +1,11 @@
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
 metadata:
-  name: netapp-nfs-backend
+  name: netapp-nfs-backend-v1
   namespace: trident
 spec:
   version: 1
-  storageDriverName: ontap-nas-economy
+  storageDriverName: ontap-nas
   managementLIF: 10.32.97.3
   svm: main
   credentials:

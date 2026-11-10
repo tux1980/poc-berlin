@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REGISTRY="storm4.ocp.polizei.test:5000/openshift/release"
+REGISTRY="storm4.ocp.berlin.test:5000/openshift/release"
 
 echo "=== Mirroring Sidecars directly into ${REGISTRY} ==="
 
