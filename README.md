@@ -2234,12 +2234,27 @@ Ensure both the legacy storm4 registry, the new Quay registry (port 8447), and t
 #oc create configmap combined-registry-cas -n openshift-config \
   --from-file=storm4.ocp.berlin.test..5000=/var/poc-berlin/certs/domain.crt \
   --from-file=quay.ocp.berlin.test..8447=/var/poc-berlin/certs/quay.crt \
-  --from-file=updateservice-registry=/var/poc-berlin/certs/domain.crt \
+  --from-file=updateservice-registry=/var/poc-berlin/certs/quay.crt \
   --dry-run=client -o yaml | oc apply -f -
 ```
 Verification:  
 ```text
-# oc get configmap combined-registry-cas -n openshift-config -o jsonpath='{.data}' | jq 'keys'
+#oc get configmap combined-registry-cas -n openshift-config -o jsonpath='{.data}' | jq 'keys'
+```
+Assign the UpdateService-Ressource to the new Quay Registry:  
+```text
+#oc patch updateservice update-service-oc-mirror -n openshift-update-service --type=merge -p '{
+  "spec": {
+    "graphDataImage": "quay.ocp.berlin.test:8447/openshift/release/openshift/graph-image:latest",
+    "releases": "quay.ocp.berlin.test:8447/openshift/release/openshift/release-images"
+  }
+}'
+
+Verfiy the new values:
+#oc get updateservice update-service-oc-mirror -n openshift-update-service -o jsonpath='{.spec.releases}{"\n"}'
+
+Maybe you have to restart the CVO Pods to clear the Cache to pull the new update graph:
+#oc delete pod -n openshift-cluster-version -l k8s-app=cluster-version-operator
 ```
 
 ### Step6: Excecute oc-mirror with the new Registry!
