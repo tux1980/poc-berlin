@@ -22,6 +22,7 @@ auth-test.json
 certs/domain.key
 *.key
 certs/
+day2/htpasswd
 
 # Temp Stuff und co.
 data/
