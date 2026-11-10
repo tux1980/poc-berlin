@@ -2177,6 +2177,7 @@ Next step is to configure the OpenShift cluster to trust quay.crt so the cluster
 #oc create configmap combined-registry-cas -n openshift-config \
   --from-file=storm4.ocp.berlin.test..5000=/var/poc-berlin/certs/domain.crt \
   --from-file=quay.ocp.berlin.test..8447=/var/poc-berlin/certs/quay.crt \
+  --from-file=updateservice-registry=/var/poc-berlin/certs/quay.crt \
   --dry-run=client -o yaml | oc apply -f -
 ```
 
@@ -2253,8 +2254,12 @@ Assign the UpdateService-Ressource to the new Quay Registry:
 Verfiy the new values:
 #oc get updateservice update-service-oc-mirror -n openshift-update-service -o jsonpath='{.spec.releases}{"\n"}'
 
-Maybe you have to restart the CVO Pods to clear the Cache to pull the new update graph:
+Maybe you have to restart the CVO Pods to clear the Cache to pull the new update graph & delete the old POD(s) too:
 #oc delete pod -n openshift-cluster-version -l k8s-app=cluster-version-operator
+#oc delete pod --all -n openshift-update-service --grace-period=0 --force
+
+Wait a bit....
+# oc adm upgrade
 ```
 
 ### Step6: Excecute oc-mirror with the new Registry!
