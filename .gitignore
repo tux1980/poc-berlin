@@ -26,7 +26,6 @@ certs/
 # Temp Stuff und co.
 data/
 installer/
-day1/
 day2/virtualization/
 
 # Sensitive Manifeste
