@@ -4,9 +4,7 @@
 >
 > This README is a Markdown representation of the original PoC document we created to the PoC in Berlin.
 > The original wording, explanations, environment values and commands are "partially" intentionally retained.
-> The PoC working directory used throughout this README is **`/var/poc-berlin`**. This is a public Repository.
-
-**Important:** All usernames, passwords, credentials, IP addresses, hostnames and other environment-specific values shown in this repository are freely chosen values used exclusively for this isolated lab/test environment - you can chose whatever you want to chose:)
+> The PoC working directory used throughout this README is **`/var/poc-berlin`**. This is a private Repository.
 
 ---
 
@@ -2181,7 +2179,7 @@ can pull images from quay.ocp.berlin.test without certificate verification error
 2. Patch the cluster image configuration to use this ConfigMap as an additional trusted CA
 #oc create configmap combined-registry-cas -n openshift-config \
   --from-file=storm4.ocp.berlin.test..5000=/var/poc-berlin/certs/domain.crt \
-  --from-file=quay.ocp.berlin.test=/var/poc-berlin/certs/quay.crt \
+  --from-file=quay.ocp.berlin.test..8447=/var/poc-berlin/certs/quay.crt \
   --dry-run=client -o yaml | oc apply -f -
 
 Point OpenShift to the new, combined ConfigMap object with both certs
@@ -2257,7 +2255,13 @@ New working dir of quay: /var/poc-berlin/workspace/quay/working-dir
 ### Step7: Image Files in Openshift (ITMS & IDMS)
 If "oc-mirror" was running successful it will have created the new idms and itms files for you in the cluster-resource directory!
 <br>
+
+Apply new idms and itms files from the Quay Registry:
+#oc apply -f /var/poc-berlin/workspace/quay/working-dir/cluster-resources
+
 **So, delete the old one (be careful here;)**  
+Most likely, the idms and itms just getting configured with the same names, if not, check and delete the old ones -  
+if if is **clear & secured** that the new Quay registry does its job!  
 ```text
 #oc get idms,itms
 NAME                                                      
@@ -2266,10 +2270,10 @@ imagedigestmirrorset.config.openshift.io/idms-release-0
 
 NAME                                                   
 imagetagmirrorset.config.openshift.io/itms-generic-0  
-imagetagmirrorset.config.openshift.io/itms-release-0  
+imagetagmirrorset.config.openshift.io/itms-release-0
 
-Apply new idms and itms files:
-#oc apply -f /var/poc-berlin/workspace/quay/working-dir/cluster-resources
+Delete them (Optional, be careful, only if you sure the new ones from quay are working)
+#oc delete idms,itms --all
 ```
 
 # Additional Worker Nodes (Optional!)
