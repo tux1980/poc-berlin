@@ -29,7 +29,7 @@
 17. [Create "Ubuntu/Debian/SuSE/FreeBSD" templates!](#create-ubuntudebiansusefreebsd-templates)
 18. [Create Windows Machines!](#create-windows-machines)
 19. [Setting Up VMWARE / MTV and Migrate VM's (Optional!)](#setting-up-vmware--mtv-and-migrate-vms-optional)
-20. [Change the TLS Cert of a Local installed Quay registry (Optional!)](#change-the-tls-cert-of-a-local-installed-quay-registry-optional)
+20. [Install Quay registry with new Cert (Optional!)](#Install-quay-registry-with-new-cert-optional)
 21. [Additional Worker Nodes (Optional!)](#additional-worker-nodes-optional)
 
 ---
@@ -2140,7 +2140,7 @@ How does Storage Offline (e.g. with ONTAP from NetApp) actually work?
 **Via the Migration OpenShift UI!**
 
 
-# Change the TLS Cert of a Local installed Quay registry (Optional!)
+# Install Quay registry with new Cert (Optional!)
  
 Steps roughly dexcribed what we need:  
 * **Generating** a valid TLS certificate with the proper Subject Alternative Name (SAN) and configuring Quay.
@@ -2148,7 +2148,7 @@ Steps roughly dexcribed what we need:
 * **Mirroring/copying** the images (skopeo or podman) from the old registry to Quay.
 * **Updating MTV/Forklift** global configs to consume images from the new Quay endpoint.
 
-#### Step1: Create the new Cert on the Bastion Host
+### Step1: Create the new Cert on the Bastion Host
 Create the Key and Cert:
 ```text
 #openssl req -newkey rsa:4096 -nodes -sha256 \
@@ -2159,7 +2159,7 @@ Create the Key and Cert:
   -addext "subjectAltName=DNS:quay.ocp.berlin.test,IP:192.168.60.1"
 ```
 
-#### Step2: Trust the new SSL Cert
+### Step2: Trust the new SSL Cert
 The next single step is to add quay.crt to your RHEL system's trusted certificate store so local tools  
 (podman, curl, skopeo) trust the Quay registry without requiring --tls-verify=false  
 ```text
@@ -2169,7 +2169,7 @@ Test:
 #openssl verify /etc/pki/ca-trust/source/anchors/quay.crt
 ```
 
-#### Step3: OpenShift has to trust the new Cert too!
+### Step3: OpenShift has to trust the new Cert too!
 Next step is to configure the OpenShift cluster to trust quay.crt so the cluster nodes  
 can pull images from quay.ocp.berlin.test without certificate verification errors!  
 ```text
@@ -2188,7 +2188,7 @@ Point OpenShift to the new, combined ConfigMap object with both certs
 Check the keys:
 #oc get configmap combined-registry-cas -n openshift-config -o jsonpath='{.data}' | jq 'keys'
 ```
-#### Step4: Install & Run Quay Registry
+### Step4: Install & Run Quay Registry
 The deployment of all components (PostgreSQL-13, Redis-7, Quay v3.18.2), including SSL certificate setup, file system permissions, and initial admin account verification, is fully automated via `deploy-quay.sh`.  
 <br>
 **Directory Structure**:  
@@ -2218,9 +2218,9 @@ The deployment of all components (PostgreSQL-13, Redis-7, Quay v3.18.2), includi
 * **8. Start Quay Container & runs Quay v3.18.2!**
 * **9. Configure Trust & Create Admin + enables the admin user with a password directly into the SQL database**
 
-#### Step5: Restore OpenShift Update Service (OSUS) Mirror Trust
+### Step5: Restore OpenShift Update Service (OSUS) Mirror Trust
 
-**1. Update cluster-wide CA ConfigMap with the mandatory updateservice-registry key**  
+1. Update cluster-wide CA ConfigMap with the mandatory updateservice-registry key  
 ```text
 oc create configmap combined-registry-cas -n openshift-config \
   --from-file=storm4.ocp.berlin.test..5000=/var/poc-berlin/certs/domain.crt \
@@ -2229,46 +2229,45 @@ oc create configmap combined-registry-cas -n openshift-config \
   --dry-run=client -o yaml | oc apply -f -
 ```
 
-**2. Ensure cluster image config points to the combined ConfigMap**  
+2. Ensure cluster image config points to the combined ConfigMap  
 If not already happended in the steps above.....  
 ```text
 oc patch image.config.openshift.io/cluster --type=merge -p '{"spec":{"additionalTrustedCA":{"name":"combined-registry-cas"}}}'
 ```
 
-#### Step6: Sync the old to the new registry!
-
-**Log In old Registry:**
-```text
-#podman login storm4.ocp.berlin.test:5000 --tls-verify=false
-User:  admin
-Pass:  redhat123!
-```
-
-**Log In new Registry:**
-```text
-#podman login quay.ocp.berlin.test:8447 --authfile /var/poc-berlin/auth.json --tls-verify=false
-User:  admin
-Pass:  redhat123!
-```
-
-**Sync the old with the new Registry!**
+### Step6: Excecute oc-mirror with the new Registry!
 This script reads all image folders from the old registry and renames deeply  
 nested paths so the new Quay registry accepts them. Then, it automatically copies  
 every image and tag over using skopeo sync.  
 ```text
-curl -sk -u wmarx:Orbit123! https://storm4.ocp.berlin.test:5000/v2/_catalog | jq -r '.repositories[]' | while read -r repo; do
-  ns="${repo%%/*}"
-  name="${repo#*/}"
-  name="${name//\//-}"
+New working dir of quay: /var/poc-berlin/workspace/quay/working-dir
+#oc-mirror --v2 \
+  -c /var/poc-berlin/imageset-oc-mirror-config.yaml \
+  --workspace file:///var/poc-berlin/workspace/quay \
+  --authfile /var/poc-berlin/auth.json \
+  --dest-tls-verify=false \
+  --retry-times 10 \
+  --parallel-images 4 \
+  --parallel-layers 4 \
+  docker://quay.ocp.berlin.test:8447/openshift/release
+```
 
-  echo "==> Syncing: ${repo} -> ${ns}/${name}"
-  skopeo sync \
-    --src docker --dest docker \
-    --src-tls-verify=false --dest-tls-verify=false \
-    --authfile /var/poc-berlin/auth.json \
-    "storm4.ocp.berlin.test:5000/${repo}" \
-    "quay.ocp.berlin.test:8447/${ns}/${name}"
-done
+### Step7: Image Files in Openshift (ITMS & IDMS)
+If "oc-mirror" was running successful it will have created the new idms and itms files for you in the cluster-resource directory!
+<br>
+**So, delete the old one (be careful here;)**  
+```text
+#oc get idms,itms
+NAME                                                      
+imagedigestmirrorset.config.openshift.io/idms-operator-0   
+imagedigestmirrorset.config.openshift.io/idms-release-0    
+
+NAME                                                   
+imagetagmirrorset.config.openshift.io/itms-generic-0  
+imagetagmirrorset.config.openshift.io/itms-release-0  
+
+Apply new idms and itms files:
+#oc apply -f /var/poc-berlin/workspace/quay/working-dir/cluster-resources
 ```
 
 # Additional Worker Nodes (Optional!)
