@@ -2211,6 +2211,12 @@ Check the keys:
 ### Step4: Install & Run Quay Registry
 The deployment of all components (PostgreSQL-13, Redis-7, Quay v3.18.2), including SSL certificate setup, file system permissions, and initial admin account verification, is fully automated via `deploy-quay.sh`.  
 <br>
+Step4: Install & Run Quay Registry
+Check latest Version:  
+<br>
+```text
+#skopeo list-tags docker://registry.redhat.io/quay/quay-rhel9 | jq -r '.Tags[]' | grep -E '^v[0-9]+.[0-9]+.[0-9]+$' | sort -V | tail -n 15
+```
 **Directory Structure**:  
 ```text
 /var/poc-berlin/
