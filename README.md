@@ -2179,9 +2179,10 @@ Test:
 ```
 
 ### Step3: OpenShift has to trust the new Cert too!
+<br>
 Next step is to configure the OpenShift cluster to trust quay.crt so the cluster nodes can pull images from quay.ocp.berlin.test without certificate verification errors!  
 ```text
-<br>
+
 1. Create or update the combined ConfigMap with exact port notation (..8447):
 ```text
 #oc create configmap combined-registry-cas -n openshift-config \
