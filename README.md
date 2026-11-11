@@ -1062,6 +1062,16 @@ Fix "Missing Dev File" Message in Operatot Hub
 #oc patch console.operator.openshift.io cluster --type=merge -p '{"spec":{"customization":{"developerCatalog":{"types":{"state":"Disabled","disabled":["Devfile"]}}}}}'
 ```
 
+Disable Default Catalog sources to make sure nothing runs via the deafaults!
+```text
+#oc patch OperatorHub cluster --type json -p '[{"op": "add", "path": "/spec/disableAllDefaultSources", "value": true}]'
+```
+
+Disable automatic updates for all system-defined boot sources in OpenShift Virt (**If** the HCO is installed already!)
+```text
+#oc patch hyperconvergeds.v1beta1.hco.kubevirt.io kubevirt-hyperconverged -n openshift-cnv --type json -p '[{"op": "replace", "path": "/spec/enableCommonBootImageImport","value": false}]'
+```
+
 ### Deactivate & Delete Insights! 
 
 Step1:  
