@@ -2212,7 +2212,6 @@ Check the keys:
 ### Step4: Install & Run Quay Registry
 The deployment of all components (PostgreSQL-13, Redis-7, Quay v3.18.2), including SSL certificate setup, file system permissions, and initial admin account verification, is fully automated via `deploy-quay.sh`.  
 <br>
-Step4: Install & Run Quay Registry  
 
 **Check latest Version:** 
 <br>
