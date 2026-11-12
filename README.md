@@ -1,6 +1,6 @@
 # Airgapped Environment OpenShift PoC
 
-> **Private repository / dedicated PoC environment**
+> **Public repository / dedicated PoC environment**
 >
 > This README is a Markdown representation of the original PoC document we created to the PoC in Berlin.
 > The original wording, explanations, environment values and commands are "partially" intentionally retained.
